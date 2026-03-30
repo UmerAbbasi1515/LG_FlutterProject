@@ -1,0 +1,26 @@
+
+import 'package:flutter/material.dart';
+import 'package:localgovernment_project/utils/styles/text_styles.dart';
+import 'package:sizer/sizer.dart';
+
+class InfoItem4 extends StatelessWidget {
+  final String? label;
+  final String? text;
+  const InfoItem4({
+    super.key, this.label, this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical:0.5.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label??'', style: AppTextStyle.semiBoldBlack10,),
+          Text(text??'', style: AppTextStyle.semiBoldBlack10,),
+        ],
+      ),
+    );
+  }
+}

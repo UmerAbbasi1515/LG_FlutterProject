@@ -1,0 +1,47 @@
+
+import 'package:flutter/material.dart';
+import 'package:localgovernment_project/views/widgets/srno_widget.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../utils/styles/colors.dart';
+
+class StepNoWidget extends StatelessWidget {
+  final String? label;
+  final String? tooltip;
+  final Color? color;
+  final Color? textColor;
+  StepNoWidget({
+    super.key,
+    this.label,
+    this.tooltip,
+    this.color = Colors.black12,
+    this.textColor,
+  });
+
+  final GlobalKey _toolTipKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      key: _toolTipKey,
+      message: tooltip,
+      showDuration: const Duration(seconds: 3),
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      decoration: BoxDecoration(
+          color: AppColors.chartBlueColor,
+          borderRadius: BorderRadius.circular(8)),
+      child: InkWell(
+        onTap: () {
+          final dynamic toolTip = _toolTipKey.currentState;
+          toolTip.ensureTooltipVisible();
+        },
+        child: SrNoWidget(
+          size: 20.sp,
+          text: label,
+          background: color,
+          textColor: textColor,
+        ),
+      ),
+    );
+  }
+}

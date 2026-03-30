@@ -1,0 +1,52 @@
+
+import 'package:flutter/material.dart';
+import 'package:localgovernment_project/utils/constants/assets_path.dart';
+import 'package:localgovernment_project/utils/styles/colors.dart';
+import 'package:localgovernment_project/utils/styles/text_styles.dart';
+import 'package:sizer/sizer.dart';
+
+class AppErrorWidget extends StatelessWidget {
+  final String errorText;
+  final String errorImage;
+  final Function? onRetry;
+  final String? color;
+  const AppErrorWidget(
+      {super.key,
+      this.errorText = '',
+      this.errorImage = AppImagesPath.noDataFound,
+      this.onRetry,
+      this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(errorImage, fit: BoxFit.contain, width: 25.0.w),
+          SizedBox(
+            height: 3.0.h,
+          ),
+          Text(
+            errorText,
+            style: AppTextStyle.semiBoldGrey10,
+          ),
+          SizedBox(
+            height: 1.h,
+          ),
+          if (onRetry != null)
+            IconButton(
+              icon: Icon(
+                Icons.refresh,
+                color: color == '' ? null : AppColors.greyColor,
+              ),
+              onPressed: () {
+                onRetry!();
+              },
+            )
+        ],
+      ),
+    );
+  }
+}

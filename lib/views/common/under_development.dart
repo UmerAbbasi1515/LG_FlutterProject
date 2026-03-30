@@ -1,0 +1,40 @@
+import 'package:flutter/material.dart';
+import 'package:localgovernment_project/views/widgets/common_widgets/error_text_widget.dart';
+import 'package:localgovernment_project/views/widgets/custom_app_bar2.dart';
+
+class UnderDevelopment extends StatefulWidget {
+  final String? title;
+  const UnderDevelopment({super.key, @required this.title});
+
+  @override
+  State<UnderDevelopment> createState() => _UnderDevelopmentState();
+}
+
+class _UnderDevelopmentState extends State<UnderDevelopment> {
+  String? label;
+  double? value;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            CustomAppBar2(
+              title: widget.title??"",
+            ),
+            const Spacer(),
+            const AppErrorWidget(
+              errorText: 'Coming Soon ...',
+            ),
+            const Spacer()
+          ],
+        ));
+  }
+}
