@@ -20,11 +20,21 @@ class UserLanguageServices {
 
     if (response is http.Response) {
       final jsonData = jsonDecode(response.body);
-      final apiResponse = ApiResponse<List<Language>>.fromJson(
-        jsonData,
-        (data) => (data as List).map((e) => Language.fromJson(e)).toList(),
-      );
+      
+  final apiResponse = ApiResponse<List<Language>>.fromJson(
+    jsonData,
+    (data) {
+      if (data == null) return [];
 
+      final list = data is List ? data : data['data'];
+
+      if (list == null) return [];
+
+      return (list as List)
+          .map((e) => Language.fromJson(e))
+          .toList();
+    },
+  );
       return apiResponse;
     }
     throw Exception(AppMetaLabels().invalidResponse);

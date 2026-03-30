@@ -14,7 +14,7 @@ import 'package:localgovernment_project/views/common/no_internet_screen.dart';
 import '../../../data/repository/auth_repository.dart';
 
 class LanguageController extends GetxController {
-  RxList<Language> model = <Language>[].obs;
+  Rx<ApiResponse<List<Language>>> model = ApiResponse<List<Language>>(data: []).obs;
   var loadingData = true.obs;
   RxString error = "".obs;
   RxInt selectedLang = 1.obs;
@@ -39,13 +39,14 @@ class LanguageController extends GetxController {
       loadingData.value = true;
       var result = await CommonRepository.getLanguage();
       loadingData.value = false;
-      if (result is List<Language>) {
+      if (result is ApiResponse<List<Language>>) {
         error.value = '';
         _langSelected = true;
         model.value = result;
         selectedLang.value =
             await GlobalPreferences.getInt(GlobalPreferencesLabels.langId) ??
-                model.first.langId;
+                model.value.data?.first.id;
+        loadingData.value = false;
         update();
       } else {
         error.value = result;
@@ -54,6 +55,8 @@ class LanguageController extends GetxController {
       if (kDebugMode) {
         print('inside Catch $e}');
       }
+    }finally{
+      loadingData.value = false;
     }
   }
 

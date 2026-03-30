@@ -161,10 +161,7 @@ class _CountryPickerState extends State<CountryPicker> {
                                     itemBuilder: (context, index) {
                                       if (cPController.onSearch.value.isEmpty) {
                                         return onSelectCountry(index);
-                                      } else if ((cPController
-                                                      .countryPicker
-                                                      .value
-                                                      .countries![index]
+                                      } else if ((cPController.countryPicker.value.data![index]
                                                       .countryCode ??
                                                   "")
                                               .toLowerCase()
@@ -173,7 +170,7 @@ class _CountryPickerState extends State<CountryPicker> {
                                           (cPController
                                                       .countryPicker
                                                       .value
-                                                      .countries![index]
+                                                      .data![index]
                                                       .dialingCode ??
                                                   "")
                                               .toLowerCase()
@@ -215,7 +212,7 @@ class _CountryPickerState extends State<CountryPicker> {
                   height: 3.0.h,
                   child: Image.network(
                     'http://${cPController
-                            .countryPicker.value.countries![index].flag!}',
+                            .countryPicker.value.data![index].flag!}',
                     fit: BoxFit.contain,
                     errorBuilder: (BuildContext context, Object? exception,
                         StackTrace? stackTrace) {
@@ -227,7 +224,7 @@ class _CountryPickerState extends State<CountryPicker> {
                   padding: EdgeInsets.only(left: 2.0.h),
                   child: Text(
                     cPController
-                        .countryPicker.value.countries![index].countryCode
+                        .countryPicker.value.data![index].countryCode
                         .toString(),
                     style: AppTextStyle.normalWhite13,
                   ),
@@ -235,7 +232,7 @@ class _CountryPickerState extends State<CountryPicker> {
                 Padding(
                   padding: EdgeInsets.only(left: 1.0.h),
                   child: Text(
-                    "(${cPController.countryPicker.value.countries![index].dialingCode.toString()})",
+                    "(${cPController.countryPicker.value.data![index].dialingCode.toString()})",
                     style: AppTextStyle.normalWhite13,
                   ),
                 ),

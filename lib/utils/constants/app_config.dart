@@ -30,11 +30,11 @@ class AppConfig {
     if(isProcutionEnvironment){
       baseUrl = 'https://auth.api.ubspropt.com/api/'; // production url
     }else{
-      baseUrl = 'https://localhost:44387/api/'; // development url
+      baseUrl = 'http://localhost:5107/api/'; // development url
     }
 
 
-    getLanguage = "${baseUrl!}getLanguage";
+    getLanguage = "${baseUrl!}Auth/GetLanguages";
     updateLanguage = "${baseUrl!}Auth/updateLanguage";
     getcountries = "${baseUrl!}Auth/getcountries";
     validateUser = "${baseUrl!}Auth/ValidateUser";

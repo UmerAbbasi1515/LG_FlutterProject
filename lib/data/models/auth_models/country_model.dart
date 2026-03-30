@@ -1,19 +1,4 @@
 
-
-class CountryPickerModel {
-  CountryPickerModel({
-    this.countries,
-  });
-
-  List<Country>? countries;
-
-  factory CountryPickerModel.fromJson(Map<String?, dynamic> json) =>
-      CountryPickerModel(
-        countries: List<Country>.from(
-            json["countries"].map((x) => Country.fromJson(x))),
-      );
-}
-
 class Country {
   Country({
     this.countryId,

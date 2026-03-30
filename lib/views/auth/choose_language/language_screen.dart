@@ -104,7 +104,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                     // shrinkWrap: true,
                                     padding: EdgeInsets.zero,
                                     itemCount: gLController
-                                        .model.length,
+                                        .model.value.data?.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return Column(
@@ -116,8 +116,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                               onTap: () {
                                                 gLController.changeLanguage(
                                                     gLController
-                                                            .model[index]
-                                                            .langId ??
+                                                            .  model.value.data?[index]
+                                                            .id ??
                                                         -1,
                                                     widget.loggedIn ?? false,
                                                     widget.cont ?? false);
@@ -129,15 +129,15 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                                   children: [
                                                     Text(
                                                       (gLController
-                                                                  .model[
+                                                                  .  model.value.data?[
                                                                       index]
-                                                                  .title ==
+                                                                  .nameEn ==
                                                               "Arabic")
                                                           ? "العربية"
                                                           : gLController
-                                                                  .model[
+                                                                  .  model.value.data?[
                                                                       index]
-                                                                  .title ??
+                                                                  .nameEn ??
                                                               "",
                                                       style: AppTextStyle
                                                           .normalWhite15,
@@ -150,9 +150,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                                                   .selectedLang
                                                                   .value ==
                                                               gLController
-                                                                  .model[
+                                                                  .  model.value.data?[
                                                                       index]
-                                                                  .langId
+                                                                  .id
                                                           // index
                                                           ? Icon(
                                                               Icons.check,
@@ -168,8 +168,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                             ),
                                           ),
                                           index ==
-                                                  gLController.model.length -
-                                                      1
+                                                  (gLController.model.value.data?.length ?? 0) - 1
                                               ? const SizedBox()
                                               : const AppDivider(),
                                         ],

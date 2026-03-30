@@ -1,20 +1,24 @@
 
 class Language {
   Language({
-    this.langId,
-    this.title,
+    this.id,
+    this.nameEn,
+    this.active,
   });
 
-  int? langId;
-  String? title;
+  int? id;
+  String? nameEn;
+  bool? active;
 
   factory Language.fromJson(Map<String?, dynamic> json) => Language(
-        langId: json["langId"],
-        title: json["title"],
+        id: json["id"],
+        nameEn: json["nameEn"],
+        active: json["active"],
       );
 
   Map<String?, dynamic> toJson() => {
-        "langId": langId,
-        "title": title,
+        "id": id,
+        "nameEn": nameEn,
+        "active": active,
       };
 }

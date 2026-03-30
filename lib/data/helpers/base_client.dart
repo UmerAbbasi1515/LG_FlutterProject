@@ -74,11 +74,11 @@ class BaseClientClass {
       {String? token}) async {
     token ??= SessionController().getToken();
     var forTestingdata = data;
-    data = {"requestBody": encriptdata(data)};
-    if (kDebugMode) {
-      print('Encripted Data PostWithHeader :::: => $data');
-      print('Encripted Data Testing ::::::::::: :::: => ${json.encode(data)}');
-    }
+    // data = {"requestBody": encriptdata(data)};
+    // if (kDebugMode) {
+    //   print('Encripted Data PostWithHeader :::: => $data');
+    //   print('Encripted Data Testing ::::::::::: :::: => ${json.encode(data)}');
+    // }
     // print('Token PostWithHeader :::: => $token');
     http.Response response;
     try {
