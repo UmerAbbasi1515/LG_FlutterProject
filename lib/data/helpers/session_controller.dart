@@ -5,7 +5,7 @@ class SessionController {
 
   //  _selectedLang = 1 : English
   //  _selectedLang = 2 : Urdu
- 
+
   late UserModel _user;
   String? _loginToken = "";
   String? _token = "";
@@ -13,7 +13,7 @@ class SessionController {
   String? nameUr = "";
   String? _deviceToken = "";
   String? _phone = "";
-  String? _dialingCode = "+971";
+  String? _dialingCode = "+92";
   String? _selectedFlag;
   int? _selectedLang = 1;
   int? userID;
@@ -22,6 +22,7 @@ class SessionController {
   String? _notificationId;
   String? _url = "";
   bool enableSSL = true;
+  String? otpCodeFrombackend = "";
   bool fingerprint = false;
   String? storeAppVerison;
 
@@ -94,10 +95,11 @@ class SessionController {
   }
 
   String? getUserName() {
-    if (_selectedLang == 1)
-      {return _user.nameEn;}
-    else
-      {return _user.nameUr;}
+    if (_selectedLang == 1) {
+      return _user.nameEn;
+    } else {
+      return _user.nameUr;
+    }
   }
 
   String? getUserMobile() {
@@ -124,11 +126,9 @@ class SessionController {
     return _goToDashboard;
   }
 
-   void setUserName(String? name) {
-          nameEn = name;
+  void setUserName(String? name) {
+    nameEn = name;
   }
-
-
 
   void setPhone(String? phone) {
     _phone = phone;
@@ -168,5 +168,9 @@ class SessionController {
 
   String? getUrl() {
     return _url;
+  }
+
+  void resetSession() {
+    _token = '';
   }
 }

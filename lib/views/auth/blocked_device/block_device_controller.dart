@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/utils/constants/global_preferences.dart';
-import 'package:localgovernment_project/views/auth/otp_firebase/validate_user_fb.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/validate_user.dart';
 
 class BlockedDeviceController extends GetxController {
   @override
@@ -30,7 +30,7 @@ class BlockedDeviceController extends GetxController {
         secText.value = blockTime.toString();
       } else {
         timer.cancel();
-        Get.offAll(() => const ValidateUserScreenFB());
+        Get.offAll(() => const ValidateUserScreen());
         // : Get.offAll(() => ValidateUserArabicScreen());
         GlobalPreferencesEncrypted.clearValues();
         GlobalPreferences.setClear();

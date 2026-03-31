@@ -7,7 +7,7 @@ import 'package:localgovernment_project/data/models/auth_models/languae_model.da
 import 'package:localgovernment_project/data/models/common_response_model.dart';
 import 'package:localgovernment_project/utils/constants/app_config.dart';
 import 'package:localgovernment_project/utils/constants/global_preferences.dart';
-import 'package:localgovernment_project/views/auth/otp_firebase/validate_user_fb.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/validate_user.dart';
 import 'package:localgovernment_project/views/auth/splash_screen/splash_screen.dart';
 import 'package:localgovernment_project/views/common/no_internet_screen.dart';
 
@@ -15,7 +15,7 @@ import '../../../data/repository/auth_repository.dart';
 
 class LanguageController extends GetxController {
   Rx<ApiResponse<List<Language>>> model = ApiResponse<List<Language>>(data: []).obs;
-  var loadingData = true.obs;
+  var loadingData = false.obs;
   RxString error = "".obs;
   RxInt selectedLang = 1.obs;
   RxBool isLoginBool = false.obs;
@@ -43,10 +43,6 @@ class LanguageController extends GetxController {
         error.value = '';
         _langSelected = true;
         model.value = result;
-        selectedLang.value =
-            await GlobalPreferences.getInt(GlobalPreferencesLabels.langId) ??
-                model.value.data?.first.id;
-        loadingData.value = false;
         update();
       } else {
         error.value = result;
@@ -76,7 +72,7 @@ class LanguageController extends GetxController {
     }
 
     if (!isLoggedIn) {
-      Get.offAll(() => ValidateUserScreenFB());
+      Get.offAll(() => ValidateUserScreen());
     } else if (!cont && prevLang != langId) {
       await updateLang();
       Get.snackbar("Login", "Go to Dashboard");
@@ -110,7 +106,7 @@ class LanguageController extends GetxController {
     }
     isLoginBool.value == true
         ? Get.to(() => const SplashScreen())
-        : Get.to(() => const ValidateUserScreenFB());
+        : Get.to(() => const ValidateUserScreen());
   }
 
 

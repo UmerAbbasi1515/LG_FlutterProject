@@ -16,14 +16,24 @@ class AuthServices {
     var url = AppConfig().validateUser;
     var response = await BaseClientClass.postwithheader(url??"", data,
         token: SessionController().getLoginToken());
-    if (response is http.Response) {
-      final jsonData = jsonDecode(response.body);
-      final apiResponse = ApiResponse<LoginData>.fromJson(
-          jsonData,
-          (data) => LoginData.fromJson(data),
-        );
-      return apiResponse;
+      if (response is http.Response) {
+        final jsonData = jsonDecode(response.body);
+
+        // ✅ Safe null check
+        if (jsonData['data'] != null) {
+          return ApiResponse<LoginData>.fromJson(
+            jsonData,
+            (data) => LoginData.fromJson(data),
+          );
+        } else {
+          // ✅ Return empty response instead of throwing
+          return ApiResponse<LoginData>(
+            data: null,
+            message: jsonData['message'],
+            statusCode: jsonData['statusCode'],
+          );
     }
+  }
       throw Exception(AppMetaLabels().invalidResponse);
   }
 

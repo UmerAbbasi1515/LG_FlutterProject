@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
-import 'package:localgovernment_project/views/auth/otp_firebase/validate_user_fb.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/validate_user.dart';
 import 'package:sizer/sizer.dart';
 
 class AlertWidget extends StatelessWidget {
@@ -66,7 +66,7 @@ class AlertWidget extends StatelessWidget {
                 ),
                 onPressed: () {
                   Navigator.pop(context);
-                  Get.offAll(() =>  const ValidateUserScreenFB());
+                  Get.offAll(() =>  const ValidateUserScreen());
                   // vUOController.otpAttemptsCounter.value = 0;
                 },
                 child: Text(

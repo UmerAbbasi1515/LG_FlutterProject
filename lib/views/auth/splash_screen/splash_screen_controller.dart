@@ -4,7 +4,7 @@ import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/utils/constants/global_preferences.dart';
 import 'package:localgovernment_project/views/auth/blocked_device/block_device_screen.dart';
 import 'package:localgovernment_project/views/auth/choose_language/language_screen.dart';
-import 'package:localgovernment_project/views/auth/otp_firebase/validate_user_fb.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/validate_user.dart';
 
 class SplashScreenController extends GetxController {
   bool isLoginBool = false;
@@ -63,11 +63,12 @@ class SplashScreenController extends GetxController {
               ));
         }
         // Changed here must update *********>
-        if (isLoginBool) {
-          Get.snackbar("Success", "Login successfully go to dashboard");
-        } else {
-          Get.to(() => ValidateUserScreenFB());
-        }
+        // if (isLoginBool) {
+        //   Get.snackbar("Success", "Login successfully go to dashboard");
+        // } else {
+        //   Get.to(() => ValidateUserScreen());
+        // }
+        Get.to(() => ValidateUserScreen());
       }
     });
   

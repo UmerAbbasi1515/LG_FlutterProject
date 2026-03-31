@@ -12,7 +12,12 @@
           "package_name": "com.government.project"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "737857466946-9k0a2hrssbii2isi7a3dpn0pfdu1hb31.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyA7VCtuyV3bxkRF2ACxPHo7SVJywURSDUA"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "737857466946-9k0a2hrssbii2isi7a3dpn0pfdu1hb31.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "737857466946-hu5rndkles4aa2g08b5iofmq6flo47j9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.government.project"
+              }
+            }
+          ]
         }
       }
     }

@@ -97,7 +97,6 @@ class BaseClientClass {
           .timeout(const Duration(seconds: timeOutDuration));
       if (kDebugMode) {
         print('Request: ${response.request}');
-        // print('Headers: ${response.request.headers}');
         print('End: $url');
       }
       if (kDebugMode) {

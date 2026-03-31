@@ -9,12 +9,12 @@ import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/loading_indicator_white.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:localgovernment_project/views/auth/otp_firebase/otp_firebase_controller.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/validate_user_controller.dart';
 import 'package:sizer/sizer.dart';
 
 class PinCodeField extends StatefulWidget {
   final String? otpCodeForVerifyOTP;
-  FirebaseAuthController? controller;
+  ValidateFirebaseUserController? controller;
   PinCodeField({super.key, this.otpCodeForVerifyOTP, this.controller});
 
   @override
@@ -32,21 +32,21 @@ class _PinCodeFieldState extends State<PinCodeField> {
     return Form(
       key: formKey,
       child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 0.1.h, horizontal: 1.0.w),
+          padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 1.0.w),
           child: Directionality(
               textDirection: TextDirection.ltr,
               child: PinInput(
-                length: 4,
+                length: 6,
                 builder: (context, cells) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: cells.map((cell) {
                       return Container(
-                        width: 50,
-                        height: 50,
-                        margin: EdgeInsets.symmetric(horizontal: 8),
+                        width: 9.w,
+                        height: 12.w,
+                        margin: EdgeInsets.symmetric(horizontal: 2.w),
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
+                          shape: BoxShape.rectangle,
                           color:
                               cell.isFocused ? Colors.blue : Colors.grey[200],
                         ),
@@ -64,6 +64,12 @@ class _PinCodeFieldState extends State<PinCodeField> {
                   if (kDebugMode) {
                     print('PIN: $pin');
                   }
+                   FocusScope.of(context).unfocus();
+                  setState(() {
+                    widget.controller!.validOTP.value = true;
+                    widget.controller!.error.value = '';
+                  });
+                  widget.controller!.signInWithPhoneNumber(pin);
                 },
               ))),
     );
@@ -78,7 +84,7 @@ class ResendOtpFB extends StatefulWidget {
 }
 
 class _ResendOtpFBState extends State<ResendOtpFB> {
-  final FirebaseAuthController authController = Get.find();
+  final ValidateFirebaseUserController authController = Get.find();
 
   @override
   Widget build(BuildContext context) {

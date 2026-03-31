@@ -4,16 +4,16 @@ class AppMetaLabels {
   ///////////////////////////////
   /// Get Otp Screen Labels Testing
   ///////////////////////////////
-   String invalidResponse = SessionController().getLanguage() == 1
-      ? 'Invalid Response'
-      : 'غلط جواب';
-   String appName = SessionController().getLanguage() == 1
+  String invalidResponse =
+      SessionController().getLanguage() == 1 ? 'Invalid Response' : 'غلط جواب';
+  String appName = SessionController().getLanguage() == 1
       ? 'Local Governmnet Project'
       : 'لوکل گورنمنٹ پروجیکٹ';
 
-
   /////////
 
+  String biometric =
+      SessionController().getLanguage() == 1 ? 'Biometric' : "البصمة";
   String login =
       SessionController().getLanguage() == 1 ? "Login" : 'تسجيل الدخول';
   String color = SessionController().getLanguage() == 1 ? "Colour" : 'اللون';
@@ -138,6 +138,10 @@ class AppMetaLabels {
       ? "OTP has expired"
       : "انتهت صلاحية رمز التحقق لمرة واحدة";
 
+  String invalidOTP = SessionController().getLanguage() == 1
+      ? "Invalid OTP"
+      : "انتهت صلاحية رمز التحقق لمرة واحدة";
+
   String verify = SessionController().getLanguage() == 1
       ? "Verify and Proceed"
       : "تحقق وتابع";
@@ -161,7 +165,6 @@ class AppMetaLabels {
   String fabPropertiesSource = SessionController().getLanguage() == 1
       ? '"FAB Properties" Would Like to access the '
       : "أبوظبي الأول العقارية ترغب في الوصول إلى";
-
 
   String cont = SessionController().getLanguage() == 1 ? 'Continue' : 'متابعة';
 
@@ -315,7 +318,6 @@ class AppMetaLabels {
   //     ? "+971 2 681 1511 (outside UAE)"
   //     : "+971 2 681 1511 (من خارج الإمارات العربية المتحدة)	";
 
-
   ///////////////////////////////////
   /// public login screen
   /// ///////////////////////
@@ -338,7 +340,6 @@ class AppMetaLabels {
   String propertiesDetail = SessionController().getLanguage() == 1
       ? "Property Details"
       : "تفاصيل العقار";
-
 
   String propertyDetails = SessionController().getLanguage() == 1
       ? "Property Details "
@@ -829,8 +830,6 @@ class AppMetaLabels {
   String aNewVersion = SessionController().getLanguage() == 1
       ? 'A new version of the app'
       : 'إصدار جديد من التطبيق ';
-
-
 
   String isAvailableAndFeatures =
       SessionController().getLanguage() == 1 ? 'is available.\n' : 'متاح. \n';

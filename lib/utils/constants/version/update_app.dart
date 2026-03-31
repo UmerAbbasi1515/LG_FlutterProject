@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:launch_review/launch_review.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'dart:ui' as ui;
 import 'package:localgovernment_project/utils/constants/assets_path.dart';
@@ -21,8 +21,25 @@ class AppUpdate extends StatefulWidget {
 }
 
 class _AppUpdateState extends State<AppUpdate> {
+final InAppReview inAppReview = InAppReview.instance;
+  @override
+  Future<void> initState() async {
+    super.initState();
+  // Don't await here, schedule it after build is complete
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
+    await _requestReview();
+  });
+  }
+Future<void> _requestReview() async {
+  if (await inAppReview.isAvailable()) {
+    await inAppReview.requestReview();
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
+    
     if (kDebugMode) {
       print(AppImagesPath.appStore);
       print(AppImagesPath.playStore);
@@ -147,12 +164,8 @@ class _AppUpdateState extends State<AppUpdate> {
                                     print('iOS');
                                   }
                                   try {
-                                    LaunchReview.launch(
-                                      androidAppId: "com.fab.properties",
-                                      writeReview: false,
-                                      isiOSBeta: false,
-                                      iOSAppId: '1588897544',
-                                    );
+                                    
+                                    await inAppReview.openStoreListing(appStoreId: '1588897544');
                                   } catch (e) {
                                     SnakBarWidget.getSnackBarErrorBlue(
                                         AppMetaLabels().error,
@@ -163,10 +176,8 @@ class _AppUpdateState extends State<AppUpdate> {
                                     if (kDebugMode) {
                                       print('Android');
                                     }
-                                    LaunchReview.launch(
-                                      androidAppId:
-                                          "com.fab.fabpropertiesEnterprise",
-                                    );
+                                    
+                                    await inAppReview.openStoreListing(appStoreId: 'om.fab.fabpropertiesEnterprise');
                                   } catch (e) {
                                     SnakBarWidget.getSnackBarErrorBlue(
                                         AppMetaLabels().error,

@@ -7,7 +7,7 @@ import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
 import 'package:localgovernment_project/views/auth/country_picker/country_picker_controller.dart';
-import 'package:localgovernment_project/views/auth/otp_firebase/otp_firebase_controller.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/validate_user_controller.dart';
 import 'package:localgovernment_project/views/auth/choose_language/language_screen.dart';
 import 'package:localgovernment_project/views/widgets/New/phone_no_field.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/app_logo_widget.dart';
@@ -19,17 +19,18 @@ import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 import '../country_picker/country_picker.dart';
 
-class ValidateUserScreenFB extends StatefulWidget {
-  const ValidateUserScreenFB({super.key});
+class ValidateUserScreen extends StatefulWidget {
+  const ValidateUserScreen({super.key});
 
   @override
-  State<ValidateUserScreenFB> createState() => _ValidateUserScreenFBState();
+  State<ValidateUserScreen> createState() => _ValidateUserScreenState();
 }
 
-class _ValidateUserScreenFBState extends State<ValidateUserScreenFB> {
+class _ValidateUserScreenState extends State<ValidateUserScreen> {
   final CountryPickerController countryController =
       Get.put(CountryPickerController());
-  FirebaseAuthController authController = Get.put(FirebaseAuthController());
+  ValidateFirebaseUserController authController =
+      Get.put(ValidateFirebaseUserController());
 
   @override
   Widget build(BuildContext context) {
@@ -173,11 +174,13 @@ class _ValidateUserScreenFBState extends State<ValidateUserScreenFB> {
                                   child: Container(
                                     width: 85.0.w,
                                     decoration: BoxDecoration(
-                                      color: const Color.fromRGBO(255, 59, 48, 0.6),
+                                      color: const Color.fromRGBO(
+                                          255, 59, 48, 0.6),
                                       borderRadius:
                                           BorderRadius.circular(1.0.h),
                                       border: Border.all(
-                                        color: const Color.fromRGBO(255, 59, 48, 1),
+                                        color: const Color.fromRGBO(
+                                            255, 59, 48, 1),
                                       ),
                                     ),
                                     child: Padding(
@@ -272,10 +275,18 @@ class _ValidateUserScreenFBState extends State<ValidateUserScreenFB> {
                                           authController.validateMobile(phone);
                                       if (kDebugMode) {
                                         print(
-                                          'Phone Validation ::: $phoneNbrValidation');
+                                            'Phone  ::: $phone');
+                                        print(
+                                            'Phone Validation ::: $phoneNbrValidation');
                                       }
+                                        if (phoneNbrValidation ==
+                                          "Invalid Mobile Number") {
+                                            SnakBarWidget.getSnackBarError(AppMetaLabels().error, AppMetaLabels().invalidPhoneNumber);
+                                          }else{
+                                            await authController.validateMobileUser();
+                                          }
 
-                                      await authController.validateMobileUser();
+                                      
                                     }
                                   },
                                 ),
@@ -364,7 +375,6 @@ class _ValidateUserScreenFBState extends State<ValidateUserScreenFB> {
                               ),
                             ),
                           ),
-                         
                         ],
                       ),
                     ),

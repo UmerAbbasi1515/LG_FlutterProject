@@ -1,32 +1,36 @@
 
 class Country {
   Country({
-    this.countryId,
-    this.countryName,
-    this.countryCode,
+    this.id,
+    this.nameEn,
+    this.nameUr,
     this.dialingCode,
     this.flag,
+    this.active,
   });
 
-  int? countryId;
-  String? countryName;
-  String? countryCode;
+  int? id;
+  String? nameEn;
+  String? nameUr;
   String? dialingCode;
   String? flag;
+  bool? active;
 
   factory Country.fromJson(Map<String?, dynamic> json) => Country(
-        countryId: json["countryId"],
-        countryName: json["countryName"],
-        countryCode: json["countryCode"],
+        id: json["id"],
+        nameEn: json["nameEn"],
+        nameUr: json["nameUr"],
         dialingCode: json["dialingCode"],
         flag: json["flag"],
+        active: json["active"],
       );
 
   Map<String?, dynamic> toJson() => {
-        "countryId": countryId,
-        "countryName": countryName,
-        "countryCode": countryCode,
+        "id": id,
+        "nameEn": nameEn,
+        "nameUr": nameUr,
         "dialingCode": dialingCode,
         "flag": flag,
+        "active": active,
       };
 }

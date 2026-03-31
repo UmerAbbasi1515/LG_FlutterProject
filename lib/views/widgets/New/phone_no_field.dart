@@ -4,14 +4,14 @@ import 'package:get/get.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
-import 'package:localgovernment_project/views/auth/otp_firebase/otp_firebase_controller.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/validate_user_controller.dart';
 import 'package:sizer/sizer.dart';
 
 class PhoneNoFieldFB extends StatelessWidget {
   PhoneNoFieldFB({super.key});
   static final TextEditingController phoneController = TextEditingController();
   final tooltipKey = GlobalKey<State<Tooltip>>();
-  final vUController = Get.put(FirebaseAuthController());
+  final vUController = Get.put(ValidateFirebaseUserController());
 
   @override
   Widget build(BuildContext context) {

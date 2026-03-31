@@ -59,12 +59,12 @@ class _CountryPickerState extends State<CountryPicker> {
                               children: [
                                 Text(
                                   AppMetaLabels().change,
-                                  style: AppTextStyle.normalWhite9,
+                                  style: AppTextStyle.normalWhite11.copyWith(fontFamily: 'TestFont'),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(top: 1.0.h),
                                   child: Text(
-                                    '${AppMetaLabels().countryCode} ${cPController.loadingData.value}',
+                                    AppMetaLabels().countryCode,
                                     style: AppTextStyle.semiBoldWhite13,
                                   ),
                                 ),
@@ -85,6 +85,7 @@ class _CountryPickerState extends State<CountryPicker> {
                         ),
                       ),
                     ),
+
                     Obx(() {
                       return cPController.loadingData.value == true
                           ? const SizedBox()
@@ -137,6 +138,7 @@ class _CountryPickerState extends State<CountryPicker> {
                               ),
                             );
                     }),
+
                     Obx(() {
                       return cPController.loadingData.value == true
                           ? Padding(
@@ -162,9 +164,7 @@ class _CountryPickerState extends State<CountryPicker> {
                                       if (cPController.onSearch.value.isEmpty) {
                                         return onSelectCountry(index);
                                       } else if ((cPController.countryPicker.value.data![index]
-                                                      .countryCode ??
-                                                  "")
-                                              .toLowerCase()
+                                                      .id.toString())
                                               .contains(cPController
                                                   .onSearch.value) ||
                                           (cPController
@@ -207,25 +207,25 @@ class _CountryPickerState extends State<CountryPicker> {
             padding: EdgeInsets.fromLTRB(2.0.h, 1.3.h, 2.0.h, 1.3.h),
             child: Row(
               children: [
-                SizedBox(
-                  width: 7.0.w,
-                  height: 3.0.h,
-                  child: Image.network(
-                    'http://${cPController
-                            .countryPicker.value.data![index].flag!}',
-                    fit: BoxFit.contain,
-                    errorBuilder: (BuildContext context, Object? exception,
-                        StackTrace? stackTrace) {
-                      return const Icon(Icons.error);
-                    },
-                  ),
-                ),
+                // SizedBox(
+                //   width: 7.0.w,
+                //   height: 3.0.h,
+                //   child: Image.network(
+                //     'http://${cPController
+                //             .countryPicker.value.data![index].flag!}',
+                //     fit: BoxFit.contain,
+                //     errorBuilder: (BuildContext context, Object? exception,
+                //         StackTrace? stackTrace) {
+                //       return const Icon(Icons.error);
+                //     },
+                //   ),
+                // ),
                 Padding(
                   padding: EdgeInsets.only(left: 2.0.h),
                   child: Text(
-                    cPController
-                        .countryPicker.value.data![index].countryCode
-                        .toString(),
+                    (cPController.countryPicker.value.data![index].nameEn!.length >= 2
+                    ? cPController.countryPicker.value.data![index].nameEn!.substring(0, 2)
+                    : cPController.countryPicker.value.data![index].nameEn).toString(),
                     style: AppTextStyle.normalWhite13,
                   ),
                 ),

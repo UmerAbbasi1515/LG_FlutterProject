@@ -19,35 +19,35 @@ class SplashScreen extends StatefulWidget {
 class SplashScreenState extends State<SplashScreen> {
   final splashScreenController = Get.put(SplashScreenController());
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   @override
   void initState() {
-    _getFcmToken();
+    // _getFcmToken();
     _setupNotificationListeners();
     super.initState();
   }
 
-  void _getFcmToken() async {
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      if (kDebugMode == true) {
-        String? token = await _firebaseMessaging.getAPNSToken();
-        if (kDebugMode) {
-          print('FCM Token: $token');
-        }
-      } else {
-        String? token = await _firebaseMessaging.getToken();
-        if (kDebugMode) {
-          print('FCM Token: $token');
-        }
-      }
-    }else{
-      FirebaseMessaging.instance.getToken().then((String? token) {
-      if (kDebugMode) {
-        print("FCM Token: $token");
-      }
-    });
-    }
-  }
+  // void _getFcmToken() async {
+  //   if (defaultTargetPlatform == TargetPlatform.iOS) {
+  //     if (kDebugMode == false) {
+  //       String? token = await _firebaseMessaging.getAPNSToken();
+  //       if (kDebugMode) {
+  //         print('FCM Token: $token');
+  //       }
+  //     } else {
+  //       String? token = await _firebaseMessaging.getToken();
+  //       if (kDebugMode) {
+  //         print('FCM Token: $token');
+  //       }
+  //     }
+  //   }else{
+  //     FirebaseMessaging.instance.getToken().then((String? token) {
+  //     if (kDebugMode) {
+  //       print("FCM Token: $token");
+  //     }
+  //   });
+  //   }
+  // }
   
 
 

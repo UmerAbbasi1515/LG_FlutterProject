@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/data/helpers/base_client.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
@@ -15,7 +16,7 @@ class CountryPickerController extends GetxController {
   RxString error = "".obs;
 
   RxInt selectedIndex = (-1).obs;
-  RxString selectedDialingCode = '+971'.obs;
+  RxString selectedDialingCode = '+92'.obs;
 
   @override
   void onInit() {
@@ -40,7 +41,9 @@ class CountryPickerController extends GetxController {
       loadingData.value = false;
       if (result is ApiResponse<List<Country>>) {
         countryPicker.value = result;
-        
+        if (kDebugMode) {
+          print(countryPicker.value);
+        }
         length = countryPicker.value.data!.length;
        
         Country selectedCountry  =
@@ -51,7 +54,6 @@ class CountryPickerController extends GetxController {
 
         selectedIndex.value =
             countryPicker.value.data!.indexOf(selectedCountry);
-        update();
       } else {
         error.value = result;
       }

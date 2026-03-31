@@ -1,12 +1,9 @@
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/utils/push_notifications_service.dart';
 import 'package:localgovernment_project/views/auth/splash_screen/splash_screen.dart';
@@ -57,15 +54,11 @@ Future<void> main() async {
 
   await firebaseMessaging();
 
-  if (kDebugMode && Platform.isIOS) {
-    await FirebaseAuth.instance.setSettings(
-      appVerificationDisabledForTesting: true,
-    );
-  }
+ 
 
   // await FirebaseAppCheck.instance.activate();
 
-  await FlutterDownloader.initialize(debug: true);
+  // await FlutterDownloader.initialize(debug: true);
 
   await dotenv.load(fileName: ".env");
 

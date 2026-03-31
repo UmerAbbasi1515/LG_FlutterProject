@@ -15,10 +15,12 @@ import 'package:localgovernment_project/utils/constants/app_const.dart';
 import 'package:localgovernment_project/utils/constants/global_preferences.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
+import 'package:localgovernment_project/views/Dashboard/tenant_dashboard/tenant_dashboard_screen.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/validate_user_controller.dart';
 import 'package:localgovernment_project/views/auth/blocked_device/block_device_screen.dart';
 import 'package:localgovernment_project/views/common/no_internet_screen.dart';
 
-class VerifyUserOtpControllerFB extends GetxController {
+class OTPController extends GetxController {
   var model = ApiResponse<OtpData>().obs;
   var validateUserModel = ApiResponse<OtpData>().obs;
   RxBool validOTP = true.obs;
@@ -39,7 +41,7 @@ class VerifyUserOtpControllerFB extends GetxController {
 
   @override
   void onInit() {
-    _getDeviceTokken();
+    // _getDeviceTokken();
     _getDeviceDetails();
     otpAttemptsCounter.value = 0;
     resendCounter.value = 0;
@@ -58,23 +60,30 @@ class VerifyUserOtpControllerFB extends GetxController {
         await CommonRepository.verifyOtp(otp, otpCodeForVerifyOTP, status);
     if (result is ApiResponse<OtpData>) {
       model.value = result;
-      validOTP.value = true;
-      changeColor = AppColors.whiteColor;
 
-      ////////////////////////////
-      /// SessionController ///
-      ////////////////////////////
-      SessionController().setUser(model.value.data?.user);
-      SessionController().setLoginToken(model.value.data?.token);
-      SessionController().setToken(model.value.data?.token);
-      var phone = SessionController().getPhone();
-      SessionController().setPhone(phone);
+      if (model.value.message != "user verification failed" &&
+          model.value.data?.user != null) {
+        validOTP.value = true;
+        changeColor = AppColors.whiteColor;
 
-      /////////////////////////////////////
-      /// GlobalPreferencesEncrypted ///
-      ////////////////////////////////////
-      saveDataLocally();
-      
+        ////////////////////////////
+        /// SessionController ///
+        ////////////////////////////
+        SessionController().setUser(model.value.data?.user);
+        SessionController().setLoginToken(model.value.data?.token);
+        SessionController().setToken(model.value.data?.token);
+        var phone = SessionController().getPhone();
+        SessionController().setPhone(phone);
+
+        /////////////////////////////////////
+        /// GlobalPreferencesEncrypted ///
+        ////////////////////////////////////
+        saveDataLocally();
+        Get.off(() => TenantDashboard());
+      }else{
+        ValidateFirebaseUserController controller = Get.put(ValidateFirebaseUserController());
+        controller.error.value = AppMetaLabels().incorrectCode;
+      }
     } else {
       validOTP.value = false;
       changeColor = AppColors.redColor;
@@ -115,7 +124,7 @@ class VerifyUserOtpControllerFB extends GetxController {
 
     GlobalPreferencesEncrypted.setString(
       GlobalPreferencesLabels.userID,
-      model.value.data?.user.id.toString()??"",
+      model.value.data?.user.id.toString() ?? "",
     );
 
     GlobalPreferences.setbool(
@@ -123,7 +132,6 @@ class VerifyUserOtpControllerFB extends GetxController {
       true,
     );
   }
-
 
   //////////////////////////////////////////
   /////   _getDeviceDetails
@@ -141,10 +149,10 @@ class VerifyUserOtpControllerFB extends GetxController {
   /////   getDeviceTokken
   //////////////////////////////////////////
 
-  Future<void> _getDeviceTokken() async {
+  Future<void> getDeviceTokken() async {
     FirebaseMessaging.instance.requestPermission();
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      if (kDebugMode == true) {
+      if (kDebugMode == false) {
         await FirebaseMessaging.instance.getAPNSToken().then(
           (String? token) {
             assert(token != null);
@@ -170,7 +178,6 @@ class VerifyUserOtpControllerFB extends GetxController {
         if (kDebugMode) {
           print("FCM Token: $token");
         }
-        // Use the token (e.g., send it to your server)
       });
     }
   }

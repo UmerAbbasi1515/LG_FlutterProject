@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -11,13 +13,13 @@ import 'package:localgovernment_project/utils/constants/app_const.dart';
 import 'package:localgovernment_project/utils/constants/global_preferences.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/views/auth/blocked_device/block_device_screen.dart';
-import 'package:localgovernment_project/views/auth/otp_firebase/verify_user_otp_fb.dart';
-import 'package:localgovernment_project/views/auth/otp_firebase/verify_user_otp_fb_controller.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/otp_screen.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/otp_controller.dart';
 import 'package:localgovernment_project/views/common/no_internet_screen.dart';
 import 'package:localgovernment_project/views/widgets/New/phone_no_field.dart';
 import 'package:localgovernment_project/views/widgets/snackbar_widget.dart';
 
-class FirebaseAuthController extends GetxController {
+class ValidateFirebaseUserController extends GetxController {
   static String? verificationId;
   RxBool isCodeSent = false.obs;
   RxBool verifying = false.obs;
@@ -30,7 +32,6 @@ class FirebaseAuthController extends GetxController {
   RxBool isPhoneValid = false.obs;
 
   bool resendEnabled = true;
-
   FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -98,7 +99,6 @@ class FirebaseAuthController extends GetxController {
     }
   }
 
-
   RxInt resendCounter = 0.obs;
   RxInt otpAttemptsCounter = 0.obs;
   RxBool resendProgressBar = true.obs;
@@ -140,7 +140,7 @@ class FirebaseAuthController extends GetxController {
   }
 
 // in this func we will update the public profile for new user
-  VerifyUserOtpControllerFB controller = Get.put(VerifyUserOtpControllerFB());
+  OTPController controller = Get.put(OTPController());
   void signInWithPhoneNumber(String code) async {
     if (resending.value == true) {
     } else {
@@ -155,7 +155,12 @@ class FirebaseAuthController extends GetxController {
         }
         error.value = '';
         isCodeSent.value = false;
-        controller.verifyOtpBtn(code, verificationId ?? "", "1");
+        var otpCodeFrombackend = SessionController().otpCodeFrombackend;
+        if (kDebugMode) {
+          print(otpCodeFrombackend);
+        }
+        controller.verifyOtpBtn(code, otpCodeFrombackend ?? "", "1");
+        // controller.verifyOtpBtn(code, verificationId ?? "", "1");
         // next logic
       } on FirebaseAuthException catch (e) {
         verifying.value = false;
@@ -192,10 +197,18 @@ class FirebaseAuthController extends GetxController {
         } else if (e.message!
             .contains("We have blocked all requests from this device")) {
           error.value = AppMetaLabels().tooManyReqtryLater;
+        } else if (e.message!.contains(
+            "The multifactor verification code used to create the auth credential is invalid. Re-collect the verification code and be sure to use the verification code provided by the user.")) {
+          error.value = AppMetaLabels().incorrectCode;
         } else {
           error.value = e.message ?? "";
         }
-        controller.verifyOtpBtn(code, verificationId ?? "", "0");
+        var otpCodeFrombackend = SessionController().otpCodeFrombackend;
+        if (kDebugMode) {
+          print(otpCodeFrombackend);
+        }
+        controller.verifyOtpBtn(code, otpCodeFrombackend ?? "", "0");
+        // controller.verifyOtpBtn(code, verificationId ?? "", "0");
       } catch (e) {
         loadingData.value = false;
         if (kDebugMode) {
@@ -276,7 +289,7 @@ class FirebaseAuthController extends GetxController {
     resendProgressBarLoading.value = false;
     PhoneNoFieldFB.phoneController.clear();
 
-    Get.to(() => VerifyUserOtpScreenFB(
+    Get.to(() => OTPScreen(
           otpCodeForVerifyOTP: model.value.data?.otpCode ?? "",
         ));
 
@@ -348,9 +361,23 @@ class FirebaseAuthController extends GetxController {
       if (result is ApiResponse<LoginData>) {
         model.value = result;
 
-        await verifyPhone(
-          SessionController().getPhone() ?? "",
-        );
+        if (model.value.message != "user not found" &&
+            model.value.data != null) {
+          if (kDebugMode && Platform.isIOS) {
+            await FirebaseAuth.instance.setSettings(
+              appVerificationDisabledForTesting: true,
+            );
+          }
+          SessionController().otpCodeFrombackend = model.value.data?.otpCode;
+          var otpCodeFrombackend = SessionController().otpCodeFrombackend;
+          if (kDebugMode) {
+            print(otpCodeFrombackend);
+          }
+          await verifyPhone(SessionController().getPhone() ?? "");
+        } else {
+          SnakBarWidget.getSnackBarErrorBlue(
+              AppMetaLabels().error, model.value.message ?? "");
+        }
         loadingData.value = false;
       } else {
         errorValidateUser.value = result;

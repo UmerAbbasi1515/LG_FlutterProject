@@ -1,14 +1,14 @@
 // ignore_for_file: deprecated_member_use
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/utils/constants/app_const.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
-import 'package:localgovernment_project/views/auth/country_picker/country_picker_controller.dart';
-import 'package:localgovernment_project/views/auth/otp_firebase/otp_firebase_controller.dart';
-import 'package:localgovernment_project/views/auth/otp_firebase/verify_user_otp_fb_controller.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/validate_user_controller.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/otp_controller.dart';
 import 'package:localgovernment_project/views/widgets/New/pin_field_widget.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/background_image_widget.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/button_widget.dart';
@@ -16,17 +16,17 @@ import 'package:localgovernment_project/views/widgets/common_widgets/loading_ind
 import 'package:sizer/sizer.dart';
 import 'package:get/get.dart';
 
-class VerifyUserOtpScreenFB extends StatefulWidget {
+class OTPScreen extends StatefulWidget {
   final String? otpCodeForVerifyOTP;
-  const VerifyUserOtpScreenFB({super.key, this.otpCodeForVerifyOTP});
+  const OTPScreen({super.key, this.otpCodeForVerifyOTP});
 
   @override
-  State<VerifyUserOtpScreenFB> createState() => _VerifyUserOtpScreenFBState();
+  State<OTPScreen> createState() => _OTPScreenState();
 }
 
-class _VerifyUserOtpScreenFBState extends State<VerifyUserOtpScreenFB> {
-  FirebaseAuthController authController = Get.find();
-  VerifyUserOtpControllerFB controller = Get.put(VerifyUserOtpControllerFB());
+class _OTPScreenState extends State<OTPScreen> {
+  ValidateFirebaseUserController authController = Get.find();
+  OTPController controller = Get.put(OTPController());
 
   String getPhone() {
     var p = SessionController().getPhone();
@@ -42,7 +42,7 @@ class _VerifyUserOtpScreenFBState extends State<VerifyUserOtpScreenFB> {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
         // Navigate the user away from the login screens
-        autoVerifyOtpBtn();
+        // autoVerifyOtpBtn();
       } else {
       }
     });
@@ -53,7 +53,11 @@ class _VerifyUserOtpScreenFBState extends State<VerifyUserOtpScreenFB> {
   }
 
   autoVerifyOtpBtn() async {
-    await controller.verifyOtpBtn('auto Verified', 'auto Verified', "1");
+     var otpCodeFrombackend = SessionController().otpCodeFrombackend ;
+          if (kDebugMode) {
+            print(otpCodeFrombackend);
+          }
+    await controller.verifyOtpBtn('159159', otpCodeFrombackend??"", "1");
   }
 
   @override
@@ -272,7 +276,7 @@ class _VerifyUserOtpScreenFBState extends State<VerifyUserOtpScreenFB> {
                                 : ButtonWidget(
                                     buttonText: AppMetaLabels().verify,
                                     onPress: () {
-                                      // vUOController.verifyOtpBtn();
+                                      // controller.verifyOtpBtn();
                                     },
                                   ),
                           ),
@@ -286,14 +290,11 @@ class _VerifyUserOtpScreenFBState extends State<VerifyUserOtpScreenFB> {
                                   authController.errorValidateUser.value = '';
                                   authController.resendProgressBar.value = true;
                                 });
-                                SessionController().setDialingCode(
-                                  '+971',
-                                );
-                                final CountryPickerController
-                                    countryController =
-                                    Get.put(CountryPickerController());
-                                countryController.selectedDialingCode.value =
-                                    '+971';
+                                // final CountryPickerController
+                                //     countryController =
+                                //     Get.put(CountryPickerController());
+                                // // countryController.selectedDialingCode.value =
+                                // //     '+92';
                                 Get.back();
                               },
                               child: Text(

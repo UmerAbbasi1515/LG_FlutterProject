@@ -1,6 +1,6 @@
 import UIKit
 import Flutter
-import flutter_downloader
+// import flutter_downloader
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -11,9 +11,9 @@ import flutter_downloader
   ) -> Bool {
 
     // ✅ REQUIRED for flutter_downloader
-    FlutterDownloaderPlugin.setPluginRegistrantCallback { registry in
-      GeneratedPluginRegistrant.register(with: registry)
-    }
+    // FlutterDownloaderPlugin.setPluginRegistrantCallback { registry in
+    //   GeneratedPluginRegistrant.register(with: registry)
+    // }
 
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)

@@ -25,13 +25,22 @@ dependencies:
   encrypt: ^5.0.3
   sizer: ^3.1.3
   in_app_update: ^4.2.3
-  launch_review: any
+  in_app_review: ^2.0.9
   encrypted_shared_preferences: ^3.0.1
   shared_preferences: ^2.3.2
   animated_text_kit: ^4.2.2
   package_info_plus: ^9.0.0
-  flutter_downloader: ^1.11.8
+  # flutter_downloader: ^1.11.8
   flutter_phoenix: ^1.1.1
+  contained_tab_bar_view_with_custom_page_navigator: ^0.1.3
+  badges: ^3.1.2
+  toggle_switch: ^2.3.0
+  google_fonts: ^6.2.1
+  flutter_html: ^3.0.0
+  flutter_slidable: ^4.0.3
+  permission_handler: ^12.0.1
+  path_provider: ^2.1.5
+  open_file: ^3.5.11
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +78,11 @@ flutter:
     - family: GraphikRegular
       fonts:
         - asset: assets/fonts/GraphikRegular.ttf
+
     - family: GraphikSemibold
       fonts:
         - asset: assets/fonts/GraphikSemibold.ttf
+    
+    - family: TestFont
+      fonts:
+        - asset: assets/fonts/GraphikRegular.ttf
