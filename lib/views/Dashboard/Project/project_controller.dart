@@ -76,4 +76,6 @@ class ProjectController extends GetxController {
       loadingProjectsData.value = false;
     }
   }
+
+
 }

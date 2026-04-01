@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
+import 'package:localgovernment_project/views/Dashboard/Project/feedback_complaint_screen.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/button_widget.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/divider_widget.dart';
 import 'package:localgovernment_project/views/widgets/custom_app_bar2.dart';
@@ -207,7 +209,9 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                       padding: EdgeInsets.only(top: 2.h),
                       child: ButtonWidgetPermBlue(
                         buttonText: "Feedback/Complaint",
-                        onPress: () {},
+                        onPress: () {
+                          Get.to(() => FeedbackComplaintScreen());
+                        },
                       ),
                     ),
                   ],

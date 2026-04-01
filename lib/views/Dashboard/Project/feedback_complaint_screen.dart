@@ -55,7 +55,8 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen> {
   Future<void> startRecording() async {
     if (await recorder.hasPermission()) {
       final dir = await getApplicationDocumentsDirectory();
-      final path = '${dir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.m4a';
+      final path =
+          '${dir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.m4a';
 
       await recorder.start(
         const RecordConfig(),
@@ -103,7 +104,6 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen> {
         body: Column(
           children: [
             CustomAppBar2(title: "Feedback / Complaint"),
-
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
@@ -125,9 +125,36 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen> {
                       ),
 
                       if (imageFile != null)
-                        Image.file(imageFile!, height: 100),
+                        Stack(
+                          children: [
+                            Image.file(
+                              imageFile!,
+                              width: 20.0.w,
+                              height: 9.0.h,
+                              fit: BoxFit.cover,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  imageFile = null;
+                                });
+                              },
+                              child: Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                    color: const Color.fromRGBO(
+                                        255, 255, 255, 0.5),
+                                    borderRadius: BorderRadius.circular(24)),
+                                padding: const EdgeInsets.all(2),
+                                child: Icon(Icons.cancel_outlined,
+                                    color: Colors.red),
+                              ),
+                            )
+                          ],
+                        ),
 
-                      SizedBox(height: 2.h),
+                      SizedBox(height: 1.h),
 
                       /// VIDEO
                       ButtonWidgetPermBlue(
@@ -135,10 +162,9 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen> {
                         onPress: pickVideo,
                       ),
 
-                      if (videoFile != null)
-                        const Text("Video Selected"),
+                      if (videoFile != null) const Text("Video Selected"),
 
-                      SizedBox(height: 2.h),
+                      SizedBox(height: 1.h),
 
                       /// AUDIO RECORD
                       Row(
@@ -148,23 +174,44 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen> {
                               buttonText: isRecording
                                   ? "Stop Recording"
                                   : "Start Recording",
-                              onPress: isRecording
-                                  ? stopRecording
-                                  : startRecording,
+                              onPress:
+                                  isRecording ? stopRecording : startRecording,
                             ),
                           ),
                         ],
                       ),
 
                       if (audioFile != null)
-                        Column(
+                        Stack(
                           children: [
-                            SizedBox(height: 1.h),
-                            Text("Audio Recorded"),
-                            ButtonWidgetPermBlue(
-                              buttonText: "Play Audio",
-                              onPress: playAudio,
+                            Column(
+                              children: [
+                                SizedBox(height: 1.h),
+                                Text("Audio Recorded"),
+                                ButtonWidgetPermBlue(
+                                  buttonText: "Play Audio",
+                                  onPress: playAudio,
+                                ),
+                              ],
                             ),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  audioFile = null;
+                                });
+                              },
+                              child: Container(
+                                width: 28,
+                                height: 28,
+                                decoration: BoxDecoration(
+                                    color: const Color.fromRGBO(
+                                        255, 255, 255, 0.5),
+                                    borderRadius: BorderRadius.circular(24)),
+                                padding: const EdgeInsets.all(2),
+                                child: Icon(Icons.cancel_outlined,
+                                    color: Colors.red),
+                              ),
+                            )
                           ],
                         ),
 
