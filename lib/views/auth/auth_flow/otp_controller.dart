@@ -15,7 +15,7 @@ import 'package:localgovernment_project/utils/constants/app_const.dart';
 import 'package:localgovernment_project/utils/constants/global_preferences.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
-import 'package:localgovernment_project/views/Dashboard/tenant_dashboard/tenant_dashboard_screen.dart';
+import 'package:localgovernment_project/views/Dashboard/dashboard_tabs/dashboard_tabs_screen.dart';
 import 'package:localgovernment_project/views/auth/auth_flow/validate_user_controller.dart';
 import 'package:localgovernment_project/views/auth/blocked_device/block_device_screen.dart';
 import 'package:localgovernment_project/views/common/no_internet_screen.dart';
@@ -79,7 +79,7 @@ class OTPController extends GetxController {
         /// GlobalPreferencesEncrypted ///
         ////////////////////////////////////
         saveDataLocally();
-        Get.off(() => TenantDashboard());
+        Get.off(() => TenantDashboardTabs());
       }else{
         ValidateFirebaseUserController controller = Get.put(ValidateFirebaseUserController());
         controller.error.value = AppMetaLabels().incorrectCode;

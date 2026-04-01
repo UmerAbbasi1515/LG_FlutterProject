@@ -18,3 +18,19 @@ class AppBackgroundConcave extends StatelessWidget {
     );
   }
 }
+
+class AppBackgroundConcaveProfile extends StatelessWidget {
+  const AppBackgroundConcaveProfile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 100.0.w,
+      height: 30.0.h,
+      child: Image.asset(
+        AppImagesPath.concave,
+        fit: BoxFit.fill,
+      ),
+    );
+  }
+}

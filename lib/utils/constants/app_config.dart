@@ -14,7 +14,9 @@ class AppConfig {
   String? validateUser;
   String? verifyUserOTP;
   String? getUserProfile;
+  String? updateUserProfile;
   String? getProjects;
+  String? getProjectsFilter;
 
   factory AppConfig() {
     return _instance;
@@ -39,8 +41,9 @@ class AppConfig {
     getcountries = "${baseUrl!}Auth/getcountries";
     validateUser = "${baseUrl!}Auth/ValidateUser";
     verifyUserOTP = "${baseUrl!}Auth/VerifyUserOTP";
-    verifyUserOTP = "${baseUrl!}Auth/VerifyUserOTP";
-    getProjects = "${baseUrl!}Profile/GetUserProfile";
+    getUserProfile = "${baseUrl!}Profile/GetUserProfile";
+    updateUserProfile = "${baseUrl!}Profile/updateUserProfile";
     getProjects = "${baseUrl!}Project/GetProjects";
+    getProjectsFilter = "${baseUrl!}Project/GetProjectsFilter";
   }
 }

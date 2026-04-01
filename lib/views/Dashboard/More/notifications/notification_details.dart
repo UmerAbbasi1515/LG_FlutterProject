@@ -6,7 +6,7 @@ import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/fonts.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
-import 'package:localgovernment_project/views/More/tenant_notifications/tenant_notifications_controller.dart';
+import 'package:localgovernment_project/views/Dashboard/More/notifications/notifications_controller.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/divider_widget.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/error_text_widget.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/loading_indicator_blue.dart';

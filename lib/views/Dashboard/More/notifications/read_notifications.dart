@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
-import 'package:localgovernment_project/views/More/tenant_notifications/tenant_all_notifications.dart';
-import 'package:localgovernment_project/views/More/tenant_notifications/tenant_notifications_controller.dart';
-import 'package:localgovernment_project/views/More/tenant_notifications/tenant_unread_notifications.dart';
+import 'package:localgovernment_project/views/Dashboard/More/notifications/all_notifications.dart';
+import 'package:localgovernment_project/views/Dashboard/More/notifications/notifications_controller.dart';
+import 'package:localgovernment_project/views/Dashboard/More/notifications/unread_notifications.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/divider_widget.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/loading_indicator_blue.dart';
 import 'package:sizer/sizer.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-import '../../../data/helpers/session_controller.dart';
+import '../../../../data/helpers/session_controller.dart';
 
 class TenantNotifications extends StatefulWidget {
   const TenantNotifications({super.key});

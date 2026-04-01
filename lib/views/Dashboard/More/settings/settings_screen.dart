@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,7 +7,6 @@ import 'package:localgovernment_project/utils/constants/global_preferences.dart'
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
-import 'package:localgovernment_project/views/Dashboard/tenant_dashboard/tenant_dashboard_get_data_controller.dart';
 import 'package:localgovernment_project/views/auth/choose_language/language_screen.dart';
 import 'package:localgovernment_project/views/widgets/custom_app_bar2.dart';
 import 'package:sizer/sizer.dart';
@@ -21,8 +20,6 @@ class TenantSettings extends StatefulWidget {
 }
 
 class TenantSettingsState extends State<TenantSettings> {
-  final TenantDashboardGetDataController tDGDController =
-      Get.put(TenantDashboardGetDataController());
   int fPOption = 0;
   @override
   void initState() {

@@ -4,10 +4,9 @@ import 'package:localgovernment_project/utils/constants/assets_path.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
-import 'package:localgovernment_project/views/Dashboard/tenant_dashboard/tenant_dashboard_get_data_controller.dart';
-import 'package:localgovernment_project/views/More/profile.dart';
-import 'package:localgovernment_project/views/More/tenant_notifications/tenant_notifications.dart';
-import 'package:localgovernment_project/views/More/tenant_settings/tenant_settings.dart';
+import 'package:localgovernment_project/views/Dashboard/More/profile/profile_screen.dart';
+import 'package:localgovernment_project/views/Dashboard/More/notifications/read_notifications.dart';
+import 'package:localgovernment_project/views/Dashboard/More/settings/settings_screen.dart';
 import 'package:localgovernment_project/views/auth/auth_flow/validate_user.dart';
 import 'package:localgovernment_project/views/common/about_app.dart/about_app.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/divider_widget.dart';
@@ -35,8 +34,6 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
     }
   }
 
-  final TenantDashboardGetDataController tDGDController =
-      Get.put(TenantDashboardGetDataController());
 
   @override
   void initState() {

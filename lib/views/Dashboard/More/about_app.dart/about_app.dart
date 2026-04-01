@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
-import 'package:localgovernment_project/views/More/about_app.dart/about_app_controller.dart';
+import 'package:localgovernment_project/views/Dashboard/More/about_app.dart/about_app_controller.dart';
 import 'dart:ui' as ui;
-import '../../widgets/custom_app_bar2.dart';
+import '../../../widgets/custom_app_bar2.dart';
 
 class AboutApp extends StatelessWidget {
   AboutApp({super.key});

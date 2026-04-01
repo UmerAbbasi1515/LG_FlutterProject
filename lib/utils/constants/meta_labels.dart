@@ -9,7 +9,9 @@ class AppMetaLabels {
   String appName = SessionController().getLanguage() == 1
       ? 'Local Governmnet Project'
       : 'لوکل گورنمنٹ پروجیکٹ';
-
+  String totalProjects = SessionController().getLanguage() == 1
+      ? 'Total Projects'
+      : 'عقودك الايجارية';
   /////////
 
   String biometric =
@@ -244,8 +246,8 @@ class AppMetaLabels {
   // : "إخلاء المسؤولية: يرجي عدم  مشاركة يرجى عدم مشاركة الكود الخاص بك مع اى شخص أخر    لها علاقة بالغرض";
   // : "إخلاء المسؤولية: يُرجى عدم إدخال أي بيانات شخصية أو حساسة في أي مربع نص حر لا علاقة له بالغرض.";
 
-  String saveMPIN = SessionController().getLanguage() == 1
-      ? "Save MPIN"
+  String save = SessionController().getLanguage() == 1
+      ? "Save"
       : "حفظ رقم التعريف الشخصي ";
 
   ///////////////////////////////

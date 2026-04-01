@@ -388,4 +388,5 @@ class ValidateFirebaseUserController extends GetxController {
     }
     isUpdating.value = false;
   }
+
 }

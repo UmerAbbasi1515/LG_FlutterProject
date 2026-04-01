@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/utils/constants/assets_path.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
-import 'package:localgovernment_project/views/Dashboard/tenant_dashboard/tenant_dashboard_screen.dart';
-import 'package:localgovernment_project/views/Dashboard/tenant_dashboard/tenant_dashboard_tabs/tenant_dashboard_tabs_controller.dart';
-import 'package:localgovernment_project/views/More/more.dart';
+import 'package:localgovernment_project/views/Dashboard/Project/project_screen.dart';
+import 'package:localgovernment_project/views/Dashboard/dashboard_tabs/dashboard_tabs_controller.dart';
+import 'package:localgovernment_project/views/Dashboard/More/more.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/backbround_concave.dart';
 import 'package:localgovernment_project/views/widgets/custom_nav_bar.dart';
 
@@ -41,14 +41,8 @@ class TenantDashboardTabsState extends State<TenantDashboardTabs> {
   @override
   Widget build(BuildContext context) {
     _buildScreens = [
-      TenantDashboard(
-        parentContext: context,
-        managePayments: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        manageContracts: (index) {
+      ProjectScreen(
+        projects: (index) {
           setState(() {
             _selectedIndex = index;
           });
@@ -95,13 +89,8 @@ class TenantDashboardTabsState extends State<TenantDashboardTabs> {
                             icon: AppImagesPath.menu,
                             title: AppMetaLabels().more,
                             onTap: (pos) async {
-                              int res =
-                                  await Get.to(() => const TenantMoreScreen());
-                              if (res != null) {
-                                setState(() {
-                                  _selectedIndex = res;
-                                });
-                              }
+                              await Get.to(() => const TenantMoreScreen());
+                              
                             },
                             position: 4,
                           )

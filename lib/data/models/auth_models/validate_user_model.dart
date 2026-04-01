@@ -34,6 +34,8 @@ class UserModel {
    String? nameUr;
    String? phone;
    String? email;
+   String? address;
+   String? addressUr;
 
   UserModel({
      this.id,

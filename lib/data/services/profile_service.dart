@@ -1,38 +1,49 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:localgovernment_project/data/helpers/base_client.dart';
-import 'package:localgovernment_project/data/models/profile_model.dart';
+import 'package:localgovernment_project/data/helpers/session_controller.dart';
+import 'package:localgovernment_project/data/models/auth_models/validate_user_model.dart';
+import 'package:localgovernment_project/data/models/common_response_model.dart';
 import 'package:localgovernment_project/utils/constants/app_config.dart';
+import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 
 class TenantProfileServices {
-  static Future<dynamic> getData() async {
+  static Future<dynamic> getProfile() async {
+    var data = { };
     var url = AppConfig().getUserProfile;
-
-    var response = await BaseClientClass.post(url ?? "", {});
-
+    var response = await BaseClientClass.postwithheader(url ?? "", data,
+        token: SessionController().getLoginToken());
     if (response is http.Response) {
-      TenantProfileModel data = tenantProfileModelFromJson(response.body);
-      return data;
+      final jsonData = jsonDecode(response.body);
+      final apiResponse = ApiResponse<UserModel>.fromJson(
+        jsonData,
+        (data) => UserModel.fromJson(data),
+      );
+      return apiResponse;
     }
-    return response;
+    throw Exception(AppMetaLabels().invalidResponse);
   }
 
   static Future<dynamic> updateProfile(
       String name, String mobileNo, String email, String address) async {
-    var url = AppConfig().getUserProfile;
-
     var data = {
-      "caseNo": 0.toString(),
-      "description": null,
-      "personName": name,
-      "personMobile": mobileNo,
-      "personEmail": email,
+      "name": name,
+      "mobileNo": mobileNo,
+      "email": email,
       "address": address
     };
-
-    var resp = await BaseClientClass.post(url ?? "", data);
-    if (resp is http.Response) {
-      return tenantUpdateProfileModelFromJson(resp.body);
+    var url = AppConfig().updateLanguage;
+    var response = await BaseClientClass.postwithheader(url ?? "", data,
+        token: SessionController().getLoginToken());
+    if (response is http.Response) {
+      final jsonData = jsonDecode(response.body);
+      final apiResponse = ApiResponse<UserModel>.fromJson(
+        jsonData,
+        (data) => UserModel.fromJson(data),
+      );
+      return apiResponse;
     }
-    return resp;
+    throw Exception(AppMetaLabels().invalidResponse);
   }
 }

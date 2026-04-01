@@ -8,7 +8,6 @@ import 'package:localgovernment_project/data/models/common_response_model.dart';
 import 'package:localgovernment_project/utils/constants/app_config.dart';
 import 'package:localgovernment_project/utils/constants/global_preferences.dart';
 import 'package:localgovernment_project/views/auth/auth_flow/validate_user.dart';
-import 'package:localgovernment_project/views/auth/splash_screen/splash_screen.dart';
 import 'package:localgovernment_project/views/common/no_internet_screen.dart';
 
 import '../../../data/repository/auth_repository.dart';
@@ -104,9 +103,10 @@ class LanguageController extends GetxController {
         GlobalPreferences.setbool(GlobalPreferencesLabels.isEnglish, false);
       }
     }
-    isLoginBool.value == true
-        ? Get.to(() => const SplashScreen())
-        : Get.to(() => const ValidateUserScreen());
+    Get.to(() => const ValidateUserScreen());
+    // isLoginBool.value == true
+    //     ? Get.to(() => const SplashScreen())
+    //     : Get.to(() => const ValidateUserScreen());
   }
 
 
