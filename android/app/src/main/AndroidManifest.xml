@@ -18,7 +18,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
-        android:label="localgovernment_project"
+        android:label="Local Government Project"
+        android:enableOnBackInvokedCallback="true" 
+        android:usesCleartextTraffic="true" 
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

@@ -108,7 +108,7 @@ class BaseClientClass {
         print('Response :: BCC SocketException:: No internet connection');
       }
       await Get.to(() => const NoInternetScreen());
-      Get.offAll(() => const SplashScreen());
+      // Get.offAll(() => const SplashScreen());
       return 'No internet connection';
     } on TimeoutException {
       if (kDebugMode) {

@@ -380,7 +380,8 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
                                     width: 20.0.w,
                                     height: 9.0.h,
                                     decoration: BoxDecoration(
-                                      color: Colors.black87,
+                                      color:
+                                          AppColors.chartlightBlueColorCharges,
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
@@ -582,7 +583,7 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
       context: context,
       builder: (_) => StatefulBuilder(
         builder: (context, setDialogState) => Dialog(
-          backgroundColor: Colors.black,
+          backgroundColor: AppColors.chartlightBlueColorCharges,
           insetPadding: EdgeInsets.zero,
           child: Stack(
             children: [
