@@ -67,4 +67,35 @@ class ProjectServices {
     }
     throw Exception(AppMetaLabels().invalidResponse);
   }
+
+  static Future<dynamic> submitProjectFeedback(FeedBackRequestModel param) async {
+    var data = {
+      "name": param.name??"", 
+      "email": param.email,
+      "phone": param.phone,
+      "complaintFeedbackText": param.complaintFeedbackText,
+      "audio": param.audioFile,
+      "video": param.videoFile,
+      "image": param.imageFile,
+    };
+    var url = AppConfig().addProjectsFeedback;
+    if (kDebugMode) {
+      print(url);
+    }
+
+    var response = await BaseClientClass.postwithheader(url ?? "", data);
+
+    if (response is http.Response) {
+      final jsonData = jsonDecode(response.body);
+
+      final apiResponse = ApiResponse<dynamic>.fromJson(
+        jsonData,
+        (data) {
+          if (data == null) return [];
+        },
+      );
+      return apiResponse;
+    }
+    throw Exception(AppMetaLabels().invalidResponse);
+  }
 }

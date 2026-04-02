@@ -17,6 +17,7 @@ class AppConfig {
   String? updateUserProfile;
   String? getProjects;
   String? getProjectsFilter;
+  String? addProjectsFeedback;
 
   factory AppConfig() {
     return _instance;
@@ -45,5 +46,6 @@ class AppConfig {
     updateUserProfile = "${baseUrl!}Profile/updateUserProfile";
     getProjects = "${baseUrl!}Project/GetProjects";
     getProjectsFilter = "${baseUrl!}Project/GetProjectsFilter";
+    addProjectsFeedback = "${baseUrl!}Project/AddProjectsFeedback";
   }
 }

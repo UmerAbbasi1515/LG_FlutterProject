@@ -210,7 +210,9 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                       child: ButtonWidgetPermBlue(
                         buttonText: "Feedback/Complaint",
                         onPress: () {
-                          Get.to(() => FeedbackComplaintScreen());
+                          Get.to(() => FeedbackComplaintScreen(
+                                selectproject: widget.selectedProject,
+                              ));
                         },
                       ),
                     ),

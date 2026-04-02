@@ -77,5 +77,29 @@ class ProjectController extends GetxController {
     }
   }
 
-
+  var resultAddFeddback = ApiResponse<dynamic>();
+  Future<void> submitFeedBack(FeedBackRequestModel feebackrquestModel) async {
+    try {
+      bool isInternetConnected = await BaseClientClass.isInternetConnected();
+      if (!isInternetConnected) {
+        await Get.to(() => const NoInternetScreen());
+      }
+      loadingProjectsData.value = true;
+      var result =
+          await ProjectRepository.submitProjectFeedback(feebackrquestModel);
+      if (result is ApiResponse<dynamic>) {
+        error.value = '';
+        resultAddFeddback = result;
+        update();
+      } else {
+        error.value = result;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('inside Catch $e}');
+      }
+    } finally {
+      loadingProjectsData.value = false;
+    }
+  }
 }

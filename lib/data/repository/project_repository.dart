@@ -1,3 +1,4 @@
+import 'package:localgovernment_project/data/models/project_model/project_model.dart';
 import 'package:localgovernment_project/data/services/Project_service/project_service.dart';
 
 class ProjectRepository {
@@ -7,4 +8,8 @@ class ProjectRepository {
     String search,
   ) =>
       ProjectServices.getProjectsWithFilter(searchType, search);
+  static Future<dynamic> submitProjectFeedback(
+    FeedBackRequestModel param,
+  ) =>
+      ProjectServices.submitProjectFeedback(param);
 }

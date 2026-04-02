@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:localgovernment_project/data/models/project_model/project_model.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
+import 'package:localgovernment_project/views/widgets/snackbar_widget.dart';
 import 'package:record/record.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
@@ -15,8 +17,11 @@ import 'package:sizer/sizer.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:math';
 
+import 'project_controller.dart';
+
 class FeedbackComplaintScreen extends StatefulWidget {
-  const FeedbackComplaintScreen({super.key});
+  final ProjectVM selectproject;
+  const FeedbackComplaintScreen({super.key, required this.selectproject});
 
   @override
   State<FeedbackComplaintScreen> createState() =>
@@ -25,6 +30,7 @@ class FeedbackComplaintScreen extends StatefulWidget {
 
 class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
     with TickerProviderStateMixin {
+  final controller = Get.put(ProjectController());
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
@@ -223,6 +229,12 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
     _waveController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 800))
           ..repeat();
+
+    nameController.text = SessionController().getLanguage() == 1
+        ? SessionController().getUser().nameEn ?? ""
+        : SessionController().getUser().nameUr ?? "";
+    emailController.text = SessionController().getUser().email ?? "";
+    phoneController.text = SessionController().getUser().phone ?? "";
   }
 
   @override
@@ -255,10 +267,11 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
                       buildTextField("Name", nameController),
                       buildTextField("Email", emailController),
                       buildTextField("Phone / WhatsApp", phoneController),
-                      buildTextField("Write complaint...", complaintController,
+                      buildTextFieldComplaint(
+                          "Write complaint...", complaintController,
                           maxLines: 5),
 
-                      SizedBox(height: 1.h),
+                      SizedBox(height: 2.h),
 
                       // #region Image
                       ButtonWidgetPermBlueIcon(
@@ -342,7 +355,7 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
                         ),
                       // #endregion
 
-                      SizedBox(height: 1.h),
+                      SizedBox(height: 0.2.h),
 
                       // #region Video
                       ButtonWidgetPermBlueIcon(
@@ -410,7 +423,7 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
                         ),
                       // #endregion
 
-                      SizedBox(height: 1.h),
+                      SizedBox(height: 0.2.h),
 
                       // #region Audio
                       _buildAudioUI(),
@@ -422,9 +435,47 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
                       ButtonWidgetPermBlue(
                         buttonText: "Submit",
                         onPress: () {
-                          if (kDebugMode) {
-                            print(audioFile?.path);
-                          } // ready for API
+                          // Mandatory fields validation
+                          if (nameController.text.trim().isEmpty) {
+                            SnakBarWidget.getSnackBarError(
+                                "Error", "Name is required");
+                            return;
+                          }
+                          if (emailController.text.trim().isEmpty) {
+                            SnakBarWidget.getSnackBarError(
+                                "Error", "Email is required");
+                            return;
+                          }
+                          if (phoneController.text.trim().isEmpty) {
+                            SnakBarWidget.getSnackBarError(
+                                "Error", "Phone is required");
+                            return;
+                          }
+
+                          // At least one of these must be provided
+                          final bool hasText =
+                              complaintController.text.trim().isNotEmpty;
+                          final bool hasImage = imageFile != null;
+                          final bool hasVideo = videoFile != null;
+                          final bool hasAudio = audioFile != null;
+
+                          if (!hasText && !hasImage && !hasVideo && !hasAudio) {
+                            SnakBarWidget.getSnackBarError("Error",
+                                "Please provide at least one of: text, image, video, or audio");
+                            return;
+                          }
+
+                          FeedBackRequestModel feedbackRequestModel =
+                              FeedBackRequestModel(
+                                  name: nameController.text,
+                                  email: emailController.text,
+                                  phone: phoneController.text,
+                                  projectId: widget.selectproject.id.toString(),
+                                  complaintFeedbackText: nameController.text,
+                                  videoFile: videoFile,
+                                  audioFile: audioFile,
+                                  imageFile: imageFile);
+                          controller.submitFeedBack(feedbackRequestModel);
                         },
                       ),
                     ],
@@ -589,23 +640,6 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
     videoController!.play();
   }
 
-  Widget buildTextField(String hint, TextEditingController controller,
-      {int maxLines = 1}) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 2.h),
-      child: TextField(
-        controller: controller,
-        maxLines: maxLines,
-        decoration: InputDecoration(
-          hintText: hint,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(1.5.h),
-          ),
-        ),
-      ),
-    );
-  }
-
 // The UI Widget
   Widget _buildAudioUI() {
     return Column(
@@ -733,6 +767,41 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
             ),
           ),
       ],
+    );
+  }
+
+  Widget buildTextField(String hint, TextEditingController controller,
+      {int maxLines = 1}) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 2.h),
+      child: TextField(
+        controller: controller,
+        maxLines: maxLines,
+        enabled: false,
+        decoration: InputDecoration(
+          hintText: hint,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(1.5.h),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildTextFieldComplaint(String hint, TextEditingController controller,
+      {int maxLines = 1}) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 2.h),
+      child: TextField(
+        controller: controller,
+        maxLines: maxLines,
+        decoration: InputDecoration(
+          hintText: hint,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(1.5.h),
+          ),
+        ),
+      ),
     );
   }
 }
