@@ -34,6 +34,21 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
     }
   }
 
+  String getInitials(String fullName) {
+    if (fullName.trim().isEmpty) return '';
+
+    List<String> parts = fullName.trim().split(RegExp(r'\s+'));
+
+    // If only one name → return first letter
+    if (parts.length == 1) {
+      return parts[0][0].toUpperCase();
+    }
+
+    // If multiple names → take first letter of each word
+    String initials = parts.map((e) => e[0].toUpperCase()).join();
+
+    return initials;
+  }
 
   @override
   void initState() {
@@ -53,7 +68,7 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
           children: [
             SizedBox(
               width: 100.0.w,
-              height: 35.0.h,
+              height: 38.0.h,
               child: Image.asset(
                 AppImagesPath.concave,
                 fit: BoxFit.fill,
@@ -121,19 +136,12 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 1.0.h),
-                          child: Text(
-                            AppMetaLabels().tenant,
-                            style: AppTextStyle.normalWhite10,
-                          ),
-                        ),
                       ],
                     ),
                   ),
                   Container(
                     height: 16.h,
-                    padding: EdgeInsets.all(2.5.h),
+                    padding: EdgeInsets.all(2.0.h),
                     child: InkWell(
                       onTap: () {
                         Get.off(() => const TenantProfile());
@@ -147,7 +155,8 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                           child: Padding(
                             padding: EdgeInsets.all(3.0.h),
                             child: Text(
-                              name,
+                              getInitials(
+                                  SessionController().getUser().nameEn ?? ""),
                               style: AppTextStyle.semiBoldWhite16
                                   .copyWith(fontSize: 24.sp),
                             ),
@@ -158,7 +167,7 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                   ),
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(top: 3.h),
+                      padding: EdgeInsets.only(top: 1.h),
                       child: SingleChildScrollView(
                         child: Padding(
                           padding: EdgeInsets.only(left: 5.0.h),
@@ -303,9 +312,9 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                                                                               1.h)),
                                                                   child:
                                                                       Padding(
-                                                                    padding:
-                                                                        EdgeInsets.all(
-                                                                            1.h),
+                                                                    padding: EdgeInsets
+                                                                        .all(1
+                                                                            .h),
                                                                     child:
                                                                         Center(
                                                                       child:
@@ -350,7 +359,8 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                                                         ),
                                                         const Spacer(),
                                                         Icon(
-                                                          Icons.arrow_forward_ios,
+                                                          Icons
+                                                              .arrow_forward_ios,
                                                           color: AppColors
                                                               .blackColor,
                                                           size: 2.0.h,
@@ -382,7 +392,7 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                               ),
                               ListTile(
                                 onTap: () {
-                                  Get.to(() =>  AboutApp()); // ✅ const added
+                                  Get.to(() => AboutApp()); // ✅ const added
                                 },
                                 leading: Icon(
                                   Icons.info_outline,

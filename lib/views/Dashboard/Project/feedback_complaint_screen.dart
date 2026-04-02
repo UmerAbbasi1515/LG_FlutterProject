@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:localgovernment_project/utils/styles/colors.dart';
+import 'package:localgovernment_project/utils/styles/text_styles.dart';
 import 'package:record/record.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,6 +12,8 @@ import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/views/widgets/custom_app_bar2.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/button_widget.dart';
 import 'package:sizer/sizer.dart';
+import 'package:video_player/video_player.dart';
+import 'dart:math';
 
 class FeedbackComplaintScreen extends StatefulWidget {
   const FeedbackComplaintScreen({super.key});
@@ -18,40 +23,72 @@ class FeedbackComplaintScreen extends StatefulWidget {
       _FeedbackComplaintScreenState();
 }
 
-class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen> {
+class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
+    with TickerProviderStateMixin {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final complaintController = TextEditingController();
-
-  File? imageFile;
-  File? videoFile;
-  File? audioFile;
-
   final ImagePicker picker = ImagePicker();
 
-  /// AUDIO
+  // #region Pick Image
+  File? imageFile;
+  Future<void> pickImage(String type) async {
+    if (type == "Camera") {
+      final picked = await picker.pickImage(source: ImageSource.camera);
+      if (picked != null) {
+        setState(() => imageFile = File(picked.path));
+      }
+    } else {
+      final picked = await picker.pickImage(source: ImageSource.gallery);
+      if (picked != null) {
+        setState(() => imageFile = File(picked.path));
+      }
+    }
+  }
+  // #endregion
+
+  // #region Video
+  File? videoFile;
+  Future<void> pickVideo(String type) async {
+    if (type == "Camera") {
+      final picked = await picker.pickVideo(source: ImageSource.camera);
+      if (picked != null) {
+        setState(() => videoFile = File(picked.path));
+      }
+    } else {
+      final picked = await picker.pickVideo(source: ImageSource.gallery);
+      if (picked != null) {
+        setState(() => videoFile = File(picked.path));
+      }
+    }
+  }
+
+  VideoPlayerController? videoController;
+  Future<void> playVideo(File file) async {
+    videoController?.dispose();
+    videoController = VideoPlayerController.file(file);
+    await videoController!.initialize();
+    setState(() {}); // ✅ this is why await is needed
+  }
+  // #endregion
+
+  // #region Recording
+  bool isRecording = false;
+  bool isDone = false;
+  bool isPlaying = false;
+  int recordSeconds = 0;
+  Timer? _recordTimer;
+  Timer? _playTimer;
+  int playSeconds = 0;
+
   final recorder = AudioRecorder();
   final player = AudioPlayer();
-  bool isRecording = false;
+  File? audioFile;
 
-  /// Pick Image
-  Future<void> pickImage() async {
-    final picked = await picker.pickImage(source: ImageSource.gallery);
-    if (picked != null) {
-      setState(() => imageFile = File(picked.path));
-    }
-  }
+  late AnimationController _blinkController;
+  late AnimationController _waveController;
 
-  /// Pick Video
-  Future<void> pickVideo() async {
-    final picked = await picker.pickVideo(source: ImageSource.gallery);
-    if (picked != null) {
-      setState(() => videoFile = File(picked.path));
-    }
-  }
-
-  /// Start Recording
   Future<void> startRecording() async {
     if (await recorder.hasPermission()) {
       final dir = await getApplicationDocumentsDirectory();
@@ -67,7 +104,6 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen> {
     }
   }
 
-  /// Stop Recording
   Future<void> stopRecording() async {
     final path = await recorder.stop();
     setState(() {
@@ -78,7 +114,6 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen> {
     });
   }
 
-  /// Play Audio
   Future<void> playAudio() async {
     if (audioFile != null) {
       await player.setFilePath(audioFile!.path);
@@ -86,10 +121,117 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen> {
     }
   }
 
+// Waveform bars heights (28 bars)
+  final List<double> _barHeights = List.generate(28, (_) => 4.0);
+  final Random _random = Random();
+
+  void _startRecording() async {
+    await startRecording(); // your existing function
+    setState(() {
+      isRecording = true;
+      isDone = false;
+      recordSeconds = 0;
+    });
+
+    _recordTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      setState(() => recordSeconds++);
+    });
+
+    // Animate waveform
+    Timer.periodic(const Duration(milliseconds: 80), (t) {
+      if (!isRecording) {
+        t.cancel();
+        return;
+      }
+      setState(() {
+        for (int i = 0; i < _barHeights.length - 1; i++) {
+          _barHeights[i] = _barHeights[i + 1];
+        }
+        _barHeights[_barHeights.length - 1] = 4 + _random.nextDouble() * 24;
+      });
+    });
+  }
+
+  void _togglePlay() {
+    if (!isDone) return;
+    if (!isPlaying) {
+      playAudio(); // your existing function
+      setState(() {
+        isPlaying = true;
+        playSeconds = 0;
+      });
+      _playTimer?.cancel(); // ✅ cancel any existing timer first
+      _playTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+        setState(() {
+          playSeconds++;
+          if (playSeconds >= recordSeconds) {
+            _playTimer?.cancel(); // ✅ cancel when done
+            _playTimer = null;
+            isPlaying = false;
+            playSeconds = 0;
+          }
+        });
+      });
+    } else {
+      _playTimer?.cancel(); // ✅ cancel on pause
+      _playTimer = null;
+      setState(() {
+        isPlaying = false;
+      });
+    }
+  }
+
+  void _stopRecording() async {
+    await stopRecording();
+    _recordTimer?.cancel(); // ✅ cancel record timer
+    _recordTimer = null;
+    setState(() {
+      isRecording = false;
+      isDone = true;
+    });
+  }
+
+  void _deleteAudio() {
+    _playTimer?.cancel(); // ✅
+    _recordTimer?.cancel(); // ✅
+    _playTimer = null;
+    _recordTimer = null;
+    setState(() {
+      audioFile = null;
+      isDone = false;
+      isRecording = false;
+      isPlaying = false;
+      recordSeconds = 0;
+      playSeconds = 0;
+      for (int i = 0; i < _barHeights.length; i++) {
+        _barHeights[i] = 4.0;
+      }
+    });
+  }
+
+  String _formatSeconds(int s) =>
+      '${(s ~/ 60)}:${(s % 60).toString().padLeft(2, '0')}';
+
+  // #endregion
+
+  @override
+  void initState() {
+    super.initState();
+    _blinkController =
+        AnimationController(vsync: this, duration: Duration(seconds: 1))
+          ..repeat();
+    _waveController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 800))
+          ..repeat();
+  }
+
   @override
   void dispose() {
     recorder.dispose();
     player.dispose();
+    videoController?.dispose();
+    _blinkController.dispose();
+    _waveController.dispose();
     super.dispose();
   }
 
@@ -116,106 +258,165 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen> {
                       buildTextField("Write complaint...", complaintController,
                           maxLines: 5),
 
-                      SizedBox(height: 2.h),
+                      SizedBox(height: 1.h),
 
-                      /// IMAGE
-                      ButtonWidgetPermBlue(
+                      // #region Image
+                      ButtonWidgetPermBlueIcon(
                         buttonText: "Upload Image",
-                        onPress: pickImage,
+                        onPress: _showImageSourceDialog,
+                        icon: Icons.image_outlined,
                       ),
-
                       if (imageFile != null)
-                        Stack(
-                          children: [
-                            Image.file(
-                              imageFile!,
-                              width: 20.0.w,
-                              height: 9.0.h,
-                              fit: BoxFit.cover,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  imageFile = null;
-                                });
-                              },
-                              child: Container(
-                                width: 28,
-                                height: 28,
-                                decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(
-                                        255, 255, 255, 0.5),
-                                    borderRadius: BorderRadius.circular(24)),
-                                padding: const EdgeInsets.all(2),
-                                child: Icon(Icons.cancel_outlined,
-                                    color: Colors.red),
-                              ),
-                            )
-                          ],
-                        ),
-
-                      SizedBox(height: 1.h),
-
-                      /// VIDEO
-                      ButtonWidgetPermBlue(
-                        buttonText: "Upload Video",
-                        onPress: pickVideo,
-                      ),
-
-                      if (videoFile != null) const Text("Video Selected"),
-
-                      SizedBox(height: 1.h),
-
-                      /// AUDIO RECORD
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ButtonWidgetPermBlue(
-                              buttonText: isRecording
-                                  ? "Stop Recording"
-                                  : "Start Recording",
-                              onPress:
-                                  isRecording ? stopRecording : startRecording,
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 4.w),
+                            child: Stack(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => Dialog(
+                                        backgroundColor: AppColors
+                                            .chartlightBlueColorCharges,
+                                        insetPadding: EdgeInsets.zero,
+                                        child: Stack(
+                                          children: [
+                                            Center(
+                                              child: InteractiveViewer(
+                                                // ✅ allows pinch to zoom
+                                                child: Image.file(
+                                                  imageFile!,
+                                                  fit: BoxFit.contain,
+                                                  width: double.infinity,
+                                                  height: double.infinity,
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 40,
+                                              right: 16,
+                                              child: IconButton(
+                                                icon: const Icon(Icons.close,
+                                                    color: Colors.white,
+                                                    size: 30),
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Image.file(
+                                    imageFile!,
+                                    width: 20.0.w,
+                                    height: 9.0.h,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      imageFile = null;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 28,
+                                    height: 28,
+                                    decoration: BoxDecoration(
+                                        color: const Color.fromRGBO(
+                                            255, 255, 255, 0.5),
+                                        borderRadius:
+                                            BorderRadius.circular(24)),
+                                    padding: const EdgeInsets.all(2),
+                                    child: Icon(Icons.cancel_outlined,
+                                        color: Colors.red),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      // #endregion
 
-                      if (audioFile != null)
-                        Stack(
-                          children: [
-                            Column(
+                      SizedBox(height: 1.h),
+
+                      // #region Video
+                      ButtonWidgetPermBlueIcon(
+                        buttonText: "Upload Video",
+                        onPress: _showVideoSourceDialog,
+                        icon: Icons.videocam_outlined,
+                      ),
+                      if (videoFile != null)
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 4.w),
+                            child: Stack(
+                              alignment: Alignment.center,
                               children: [
-                                SizedBox(height: 1.h),
-                                Text("Audio Recorded"),
-                                ButtonWidgetPermBlue(
-                                  buttonText: "Play Audio",
-                                  onPress: playAudio,
+                                InkWell(
+                                  onTap: () {
+                                    _showVideoDialog(videoFile!);
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    width: 20.0.w,
+                                    height: 9.0.h,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black87,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    _showVideoDialog(videoFile!);
+                                    setState(() {});
+                                  },
+                                  child: const Icon(Icons.play_circle,
+                                      color: Colors.white, size: 40),
+                                ),
+                                Positioned(
+                                  // ✅ top left
+                                  top: 0,
+                                  left: 0,
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        videoFile = null;
+                                      });
+                                    },
+                                    child: Container(
+                                      width: 28,
+                                      height: 28,
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromRGBO(
+                                            255, 255, 255, 0.5),
+                                        borderRadius: BorderRadius.circular(24),
+                                      ),
+                                      padding: const EdgeInsets.all(0),
+                                      child: const Icon(Icons.cancel_outlined,
+                                          color: Colors.red),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  audioFile = null;
-                                });
-                              },
-                              child: Container(
-                                width: 28,
-                                height: 28,
-                                decoration: BoxDecoration(
-                                    color: const Color.fromRGBO(
-                                        255, 255, 255, 0.5),
-                                    borderRadius: BorderRadius.circular(24)),
-                                padding: const EdgeInsets.all(2),
-                                child: Icon(Icons.cancel_outlined,
-                                    color: Colors.red),
-                              ),
-                            )
-                          ],
+                          ),
                         ),
+                      // #endregion
 
-                      SizedBox(height: 3.h),
+                      SizedBox(height: 1.h),
+
+                      // #region Audio
+                      _buildAudioUI(),
+                      // #endregion
+
+                      SizedBox(height: 2.h),
 
                       /// SUBMIT
                       ButtonWidgetPermBlue(
@@ -237,6 +438,157 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen> {
     );
   }
 
+  void _showImageSourceDialog() {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(2.h)),
+      ),
+      builder: (context) => Padding(
+        padding: EdgeInsets.all(2.h),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Select Image Source", // or hardcode "Select Image Source"
+              style: AppTextStyle.semiBoldBlack12,
+            ),
+            SizedBox(height: 2.h),
+            ListTile(
+              leading:
+                  Icon(Icons.camera_alt_outlined, color: AppColors.blueColor),
+              title: Text("Camera", style: AppTextStyle.normalBlack12),
+              onTap: () {
+                Navigator.pop(context);
+                pickImage("Camera");
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.photo_library_outlined,
+                  color: AppColors.blueColor),
+              title: Text("Gallery", style: AppTextStyle.normalBlack12),
+              onTap: () {
+                Navigator.pop(context);
+                pickImage("Gallery");
+              },
+            ),
+            SizedBox(height: 1.h),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showVideoSourceDialog() {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(2.h)),
+      ),
+      builder: (context) => Padding(
+        padding: EdgeInsets.all(2.h),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Select Image Source", // or hardcode "Select Image Source"
+              style: AppTextStyle.semiBoldBlack12,
+            ),
+            SizedBox(height: 2.h),
+            ListTile(
+              leading:
+                  Icon(Icons.camera_alt_outlined, color: AppColors.blueColor),
+              title: Text("Camera", style: AppTextStyle.normalBlack12),
+              onTap: () {
+                Navigator.pop(context);
+                pickVideo("Camera");
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.photo_library_outlined,
+                  color: AppColors.blueColor),
+              title: Text("Gallery", style: AppTextStyle.normalBlack12),
+              onTap: () {
+                Navigator.pop(context);
+                pickVideo("Gallery");
+              },
+            ),
+            SizedBox(height: 1.h),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showVideoDialog(File videoFile) async {
+    await playVideo(videoFile); // ✅ wait for init + setState
+
+    if (!mounted) return;
+
+    // ✅ play BEFORE showing dialog
+    videoController!.play();
+    showDialog(
+      context: context,
+      builder: (_) => StatefulBuilder(
+        builder: (context, setDialogState) => Dialog(
+          backgroundColor: Colors.black,
+          insetPadding: EdgeInsets.zero,
+          child: Stack(
+            children: [
+              Center(
+                child: videoController != null &&
+                        videoController!.value.isInitialized
+                    ? AspectRatio(
+                        aspectRatio: videoController!.value.aspectRatio,
+                        child: VideoPlayer(videoController!),
+                      )
+                    : const CircularProgressIndicator(color: Colors.white),
+              ),
+              Positioned(
+                top: 40,
+                right: 16,
+                child: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                  onPressed: () {
+                    videoController?.pause();
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              Positioned(
+                bottom: 30,
+                left: 0,
+                right: 0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        videoController?.value.isPlaying == true
+                            ? Icons.pause_circle
+                            : Icons.play_circle,
+                        color: Colors.white,
+                        size: 50,
+                      ),
+                      onPressed: () {
+                        setDialogState(() {
+                          videoController?.value.isPlaying == true
+                              ? videoController?.pause()
+                              : videoController?.play();
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    videoController!.play();
+  }
+
   Widget buildTextField(String hint, TextEditingController controller,
       {int maxLines = 1}) {
     return Padding(
@@ -251,6 +603,167 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen> {
           ),
         ),
       ),
+    );
+  }
+
+// The UI Widget
+  Widget _buildAudioUI() {
+    return Column(
+      children: [
+        // Record / Stop button
+        SizedBox(
+          width: 90.0.w,
+          child: ElevatedButton.icon(
+            onPressed: isRecording ? _stopRecording : _startRecording,
+            icon: Icon(
+              isRecording ? Icons.stop_rounded : Icons.mic,
+              size: 18,
+              color: isRecording ? Colors.red.shade800 : Colors.white,
+            ),
+            label: Text(
+              isRecording
+                  ? "Stop recording"
+                  : isDone
+                      ? "Record again"
+                      : "Start recording",
+              style: TextStyle(
+                color: isRecording ? Colors.red.shade800 : Colors.white,
+              ),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor:
+                  isRecording ? Colors.red.shade50 : AppColors.blueColor,
+              side: isRecording
+                  ? BorderSide(color: Colors.red.shade200)
+                  : BorderSide.none,
+              padding: EdgeInsets.symmetric(vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(1.3.h),
+              ),
+              elevation: 0,
+            ),
+          ),
+        ),
+
+        // Waveform row (shown while recording OR done)
+        if (isRecording || isDone)
+          Container(
+            margin: EdgeInsets.only(top: 12, left: 3.w, right: 2.w),
+            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            height: 6.h,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                // Play/Pause or blinking record dot
+                GestureDetector(
+                  onTap: isDone ? _togglePlay : null,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: isRecording ? Colors.red : AppColors.blueColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: isRecording
+                        ? _BlinkingIcon() // see below
+                        : Icon(
+                            isPlaying ? Icons.pause : Icons.play_arrow,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                // Waveform bars
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: _barHeights.map((h) {
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 80),
+                        width: 3,
+                        height: isDone ? 4 + (h / 28) * 24 : h,
+                        margin: const EdgeInsets.symmetric(horizontal: 1),
+                        decoration: BoxDecoration(
+                          color: AppColors.blueColor,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+
+                SizedBox(width: 8),
+
+                // Timer
+                Text(
+                  isPlaying
+                      ? _formatSeconds(playSeconds)
+                      : _formatSeconds(recordSeconds),
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'monospace',
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+
+                // Delete button (only when done)
+                if (isDone)
+                  GestureDetector(
+                    onTap: _deleteAudio,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 8),
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade50,
+                        shape: BoxShape.circle,
+                        border:
+                            Border.all(color: Colors.red.shade200, width: 0.5),
+                      ),
+                      child: Icon(Icons.close,
+                          color: Colors.red.shade700, size: 14),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _BlinkingIcon extends StatefulWidget {
+  @override
+  State<_BlinkingIcon> createState() => _BlinkingIconState();
+}
+
+class _BlinkingIconState extends State<_BlinkingIcon>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _c;
+
+  @override
+  void initState() {
+    super.initState();
+    _c = AnimationController(vsync: this, duration: const Duration(seconds: 1))
+      ..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _c,
+      child: const Icon(Icons.stop_rounded, color: Colors.white, size: 18),
     );
   }
 }

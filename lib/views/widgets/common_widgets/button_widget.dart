@@ -92,3 +92,46 @@ class ButtonWidgetPermBlue extends StatelessWidget {
     );
   }
 }
+
+class ButtonWidgetPermBlueIcon extends StatelessWidget {
+  final VoidCallback? onPress;
+  final String? buttonText;
+  final IconData? icon; // ✅ optional icon
+
+  const ButtonWidgetPermBlueIcon(
+      {super.key, this.buttonText, this.onPress, this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 90.0.w,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(1.3.h),
+          ),
+          backgroundColor: AppColors.blueColor,
+          disabledBackgroundColor: AppColors.blueColor.withOpacity(0.5),
+          disabledForegroundColor: Colors.white.withOpacity(0.6),
+          padding: EdgeInsets.symmetric(horizontal: 6.0.h, vertical: 1.5.h),
+        ),
+        onPressed: onPress,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, color: AppColors.whiteColor, size: 2.2.h),
+              SizedBox(width: 1.w),
+            ],
+            Text(
+              buttonText ?? "",
+              style: AppTextStyle.buttonTextStyle.copyWith(
+                  fontWeight: FontWeight.bold, color: AppColors.whiteColor),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

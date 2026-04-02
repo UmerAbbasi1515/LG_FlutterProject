@@ -82,11 +82,6 @@ flutter:
     - family: GraphikRegular
       fonts:
         - asset: assets/fonts/GraphikRegular.ttf
-
     - family: GraphikSemibold
       fonts:
         - asset: assets/fonts/GraphikSemibold.ttf
-    
-    - family: TestFont
-      fonts:
-        - asset: assets/fonts/GraphikRegular.ttf

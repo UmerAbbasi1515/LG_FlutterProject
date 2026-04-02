@@ -32,8 +32,7 @@ Future<void> firebaseMessaging() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {});
 
   // Background handler
-  FirebaseMessaging.onBackgroundMessage(
-      _firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 }
 
 @pragma('vm:entry-point')
@@ -41,20 +40,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
 
-
 Future<void> main() async {
-  
   WidgetsFlutterBinding.ensureInitialized();
 
-   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
   // Request permission (important for iOS)
   await FirebaseMessaging.instance.requestPermission();
 
   await firebaseMessaging();
-
- 
 
   // await FirebaseAppCheck.instance.activate();
 
@@ -89,20 +84,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-
   @override
   Widget build(BuildContext context) {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return GetMaterialApp(
           localizationsDelegates: const [],
-
           supportedLocales: const [
             Locale('en'),
             Locale('ur'),
           ],
-
           builder: (BuildContext context, Widget? child) {
             final MediaQueryData data = MediaQuery.of(context).copyWith(
               textScaler: const TextScaler.linear(1.0),
@@ -113,10 +104,9 @@ class _MyAppState extends State<MyApp> {
               child: child!,
             );
           },
-
           debugShowCheckedModeBanner: false,
-
           theme: ThemeData(
+            fontFamily: 'GraphikRegular',
             appBarTheme: const AppBarTheme(
               backgroundColor: Colors.white,
             ),
@@ -126,9 +116,7 @@ class _MyAppState extends State<MyApp> {
               backgroundColor: Colors.white54,
             ),
           ),
-
           home: const SplashScreen(),
-
           onInit: () {
             PushNotificationService().setupInteractedMessage();
           },
