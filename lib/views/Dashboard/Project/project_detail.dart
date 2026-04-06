@@ -38,12 +38,12 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                       SessionController().getLanguage() == 1
                           ? widget.selectedProject.nameEn ?? ""
                           : widget.selectedProject.nameUr ?? "",
-                      style: AppTextStyle.semiBoldBlack12,
+                      style: AppTextStyle.semiBoldBlack13,
                     ),
                     const Spacer(),
                     Text(
                       widget.selectedProject.id.toString(),
-                      style: AppTextStyle.semiBoldBlack12,
+                      style: AppTextStyle.semiBoldBlack13,
                     ),
                   ],
                 ),
@@ -139,7 +139,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                     children: [
                                       Text(
                                         "Halka",
-                                        style: AppTextStyle.normalGrey10,
+                                        style: AppTextStyle.normalGrey12,
                                       ),
                                       SizedBox(
                                         height: 1.0.h,
@@ -152,7 +152,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                             : widget.selectedProject.halka
                                                     ?.halkaNameUr ??
                                                 "",
-                                        style: AppTextStyle.semiBoldBlack10,
+                                        style: AppTextStyle.semiBoldBlack13,
                                       ),
                                     ],
                                   ),
@@ -160,7 +160,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                     children: [
                                       Text(
                                         "Union Councile",
-                                        style: AppTextStyle.normalGrey10,
+                                        style: AppTextStyle.normalGrey12,
                                       ),
                                       SizedBox(
                                         height: 1.0.h,
@@ -173,7 +173,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                             : widget.selectedProject.uc
                                                     ?.ucNameUr ??
                                                 "",
-                                        style: AppTextStyle.semiBoldBlack10,
+                                        style: AppTextStyle.semiBoldBlack13,
                                       ),
                                     ],
                                   ),
@@ -181,7 +181,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                     children: [
                                       Text(
                                         "Ward",
-                                        style: AppTextStyle.normalGrey10,
+                                        style: AppTextStyle.normalGrey12,
                                       ),
                                       SizedBox(
                                         height: 1.0.h,
@@ -194,7 +194,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                             : widget.selectedProject.ward
                                                     ?.wardNameUr ??
                                                 "",
-                                        style: AppTextStyle.semiBoldBlack10,
+                                        style: AppTextStyle.semiBoldBlack13,
                                       ),
                                     ],
                                   ),
@@ -229,14 +229,14 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
       children: [
         Text(
           text1,
-          style: AppTextStyle.normalBlack10,
+          style: AppTextStyle.normalBlack12,
         ),
         const Spacer(),
         Padding(
           padding: EdgeInsets.only(top: 1.8.h),
           child: Text(
             text2,
-            style: AppTextStyle.semiBoldBlack10,
+            style: AppTextStyle.semiBoldBlack13,
           ),
         ),
       ],

@@ -66,7 +66,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                 ),
                                 Text(
                                   AppMetaLabels().login,
-                                  style: AppTextStyle.semiBoldWhite13,
+                                  style: AppTextStyle.semiBoldWhite15,
                                 ),
                                 IconButton(
                                     onPressed: () {
@@ -98,7 +98,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                             AppMetaLabels().oneTimePassword,
                             textAlign: TextAlign.center,
                             // style: AppTextStyle.semiBoldWhite10,
-                            style: AppTextStyle.normalWhite10,
+                            style: AppTextStyle.normalWhite12,
                           ),
                           Padding(
                             padding: EdgeInsets.only(
@@ -110,7 +110,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                               child: Text(
                                 AppMetaLabels().mobileNumber,
                                 textAlign: TextAlign.center,
-                                style: AppTextStyle.normalWhite10,
+                                style: AppTextStyle.normalWhite12,
                               ),
                             ),
                           ),
@@ -143,7 +143,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                                 countryController
                                                     .selectedDialingCode.value,
                                                 style:
-                                                    AppTextStyle.normalWhite12,
+                                                    AppTextStyle.normalWhite13,
                                               );
                                             }),
                                           ),
@@ -364,12 +364,12 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                 children: [
                                   Text(
                                     AppMetaLabels().cancel,
-                                    style: AppTextStyle.normalWhite11,
+                                    style: AppTextStyle.normalWhite13,
                                   ),
                                   Container(
                                     color: AppColors.whiteColor,
                                     height: 0.1.h,
-                                    width: 12.0.w,
+                                    width: 8.0.w,
                                   ),
                                 ],
                               ),

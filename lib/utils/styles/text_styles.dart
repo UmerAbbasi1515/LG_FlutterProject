@@ -337,6 +337,16 @@ class AppTextStyle {
     fontFamily: AppFonts.graphikSemibold,
     fontSize: 16.0.sp,
   );
+  static TextStyle semiBoldWhite17 = TextStyle(
+    color: AppColors.whiteColor,
+    fontFamily: AppFonts.graphikSemibold,
+    fontSize: 17.0.sp,
+  );
+  static TextStyle semiBoldWhite18 = TextStyle(
+    color: AppColors.whiteColor,
+    fontFamily: AppFonts.graphikSemibold,
+    fontSize: 18.0.sp,
+  );
 
   ///////////////////////
   /// Normal Blue Style

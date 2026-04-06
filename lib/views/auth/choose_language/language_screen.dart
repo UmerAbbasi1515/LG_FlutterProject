@@ -61,7 +61,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                             children: [
                               Text(
                                 AppMetaLabels().choose,
-                                style: AppTextStyle.normalWhite9,
+                              style: AppTextStyle.normalWhite11,
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 1.0.h),

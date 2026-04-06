@@ -129,4 +129,15 @@ class AppImagesPath {
   static const String faqsLand = '$landlordRoot/faqsLand.png';
   static const String arrowDownwardLand = '$landlordRoot/arrowdown.png';
   static const String view360Land = '$landlordRoot/view360Land.png';
+
+  // LGP
+    static const String lgpRoot = 'assets/images/lgp';
+    static const String mainSvg = '$lgpRoot/LGP-LGP-main.svg';
+    static const String main1x = '$lgpRoot/LGP-main1x.png';
+    static const String main4x = '$lgpRoot/LGP-main4x.png';
+    static const String splashImage0 = '$lgpRoot/img_0.png';
+    static const String splashImage1 = '$lgpRoot/img_1.png';
+    static const String splashImage2 = '$lgpRoot/img_2.png';
+    static const String splashImage3 = '$lgpRoot/img_3.png';
+    static const String splashMainImage = '$lgpRoot/splash.jpeg';
 }

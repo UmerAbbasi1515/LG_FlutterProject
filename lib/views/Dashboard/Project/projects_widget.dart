@@ -92,7 +92,9 @@ class _ProjectsWidgetState extends State<ProjectsWidget> {
                       ? SizedBox(
                           height: 10.h,
                           width: 6.h,
-                          child: Center(child: const LoadingIndicatorBlue()),
+                          child: Center(
+                            child: const LoadingIndicatorBlue(),
+                          ),
                         )
                       : getContractsController.error.value != '' ||
                               getContractsController.model.value.data!.isEmpty
@@ -155,7 +157,7 @@ class _ProjectsWidgetState extends State<ProjectsWidget> {
                                                                       .nameUr ??
                                                                   "",
                                                           style: AppTextStyle
-                                                              .semiBoldBlack12,
+                                                              .semiBoldBlack13,
                                                           overflow: TextOverflow
                                                               .ellipsis,
                                                         ),
@@ -169,7 +171,7 @@ class _ProjectsWidgetState extends State<ProjectsWidget> {
                                                                 .adpYear ??
                                                             "",
                                                         style: AppTextStyle
-                                                            .semiBoldBlack12,
+                                                            .semiBoldBlack13,
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                       ),
@@ -217,7 +219,7 @@ class _ProjectsWidgetState extends State<ProjectsWidget> {
                                                                       .descriptionUr ??
                                                                   "",
                                                           style: AppTextStyle
-                                                              .semiBoldBlack12,
+                                                              .semiBoldBlack13,
                                                           overflow: TextOverflow
                                                               .ellipsis,
                                                         ),
@@ -244,7 +246,7 @@ class _ProjectsWidgetState extends State<ProjectsWidget> {
                                                                 .locationUr ??
                                                             "",
                                                     style: AppTextStyle
-                                                        .normalGrey10,
+                                                        .normalGrey12,
                                                   ),
                                                 ],
                                               ),

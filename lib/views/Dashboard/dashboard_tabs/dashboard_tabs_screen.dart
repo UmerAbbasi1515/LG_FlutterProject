@@ -77,7 +77,7 @@ class TenantDashboardTabsState extends State<TenantDashboardTabs> {
                             icon: _selectedIndex == 0
                                 ? AppImagesPath.home2
                                 : AppImagesPath.home,
-                            title: AppMetaLabels().dashboard,
+                            title: AppMetaLabels().projects,
                             onTap: (pos) {
                               setState(() {
                                 _selectedIndex = pos;

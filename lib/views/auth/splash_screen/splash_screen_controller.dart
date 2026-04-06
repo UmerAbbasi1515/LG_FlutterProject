@@ -14,6 +14,7 @@ class SplashScreenController extends GetxController {
   bool setLanguage = false;
   bool? isEnglish;
 
+
   @override
   void onInit() async {
     await prefsData();
@@ -68,26 +69,24 @@ class SplashScreenController extends GetxController {
         // } else {
         //   Get.to(() => ValidateUserScreen());
         // }
+       await Future.delayed(Duration(seconds: 2));
         Get.to(() => ValidateUserScreen());
       }
     });
-  
   }
-
- 
 
   Future<void> setUserName() async {
     String name = await GlobalPreferencesEncrypted.getString(
         GlobalPreferencesLabels.userName);
     String nameAr = await GlobalPreferencesEncrypted.getString(
         GlobalPreferencesLabels.userNameAr);
-    
+
     String userName = "";
-        if(SessionController().getLanguage() == 1){
-          userName = name;
-        }else{
-       userName = nameAr;
-        }
+    if (SessionController().getLanguage() == 1) {
+      userName = name;
+    } else {
+      userName = nameAr;
+    }
     SessionController().setUserName(userName);
   }
 

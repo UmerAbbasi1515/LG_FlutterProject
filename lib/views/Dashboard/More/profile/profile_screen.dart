@@ -183,7 +183,7 @@ class _TenantProfileState extends State<TenantProfile> {
                                   children: [
                                     Text(
                                       AppMetaLabels().personalInfo,
-                                      style: AppTextStyle.semiBoldBlack12,
+                                      style: AppTextStyle.semiBoldBlack14,
                                     ),
                                     SizedBox(height: 2.h),
                                     _profileField(
@@ -283,7 +283,7 @@ class _TenantProfileState extends State<TenantProfile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: AppTextStyle.normalGrey10),
+          Text(label, style: AppTextStyle.normalGrey12),
           SizedBox(height: 0.5.h),
           isEditing
               ? Directionality(
@@ -292,7 +292,7 @@ class _TenantProfileState extends State<TenantProfile> {
                   child: TextField(
                     controller: controller,
                     keyboardType: keyboardType,
-                    style: AppTextStyle.semiBoldBlack11,
+                    style: AppTextStyle.semiBoldBlack12,
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: EdgeInsets.symmetric(
@@ -315,7 +315,7 @@ class _TenantProfileState extends State<TenantProfile> {
                       forceLeftToRight ? TextDirection.ltr : TextDirection.ltr,
                   child: Text(
                     staticValue,
-                    style: AppTextStyle.semiBoldBlack11,
+                    style: AppTextStyle.semiBoldBlack13,
                   ),
                 ),
         ],

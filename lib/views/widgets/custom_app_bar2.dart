@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/utils/constants/assets_path.dart';
@@ -59,7 +58,7 @@ class CustomAppBar2 extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title!,
-                    style: AppTextStyle.semiBoldWhite14,
+                    style: AppTextStyle.semiBoldWhite15,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),
@@ -114,19 +113,19 @@ class CustomAppBar2ForVendorTechniance extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(
-                        icon: Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
-                          size: 3.h,
-                        ),
-                        onPressed: () {
-                          if (onBackPressed != null) {
-                            onBackPressed!();
-                          } else {
-                            Get.back();
-                          }
-                        },
-                      ),
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                    size: 3.h,
+                  ),
+                  onPressed: () {
+                    if (onBackPressed != null) {
+                      onBackPressed!();
+                    } else {
+                      Get.back();
+                    }
+                  },
+                ),
                 Text(title!, style: AppTextStyle.semiBoldWhite14),
                 SizedBox(
                   width: 5.h,

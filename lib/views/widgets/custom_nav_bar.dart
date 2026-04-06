@@ -96,7 +96,7 @@ class NavBarItem extends StatelessWidget {
           SizedBox(
             height: 1.h,
           ),
-          Text(title!, style: AppTextStyle.normalBlack10)
+          Text(title!, style: AppTextStyle.normalBlack12)
         ],
       ),
     );

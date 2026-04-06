@@ -12,6 +12,12 @@ class AppMetaLabels {
   String totalProjects = SessionController().getLanguage() == 1
       ? 'Total Projects'
       : 'عقودك الايجارية';
+  String projects = SessionController().getLanguage() == 1
+      ? 'Projects'
+      : 'عقودك الايجارية';
+  String selectyear = SessionController().getLanguage() == 1
+      ? 'Select Year'
+      : 'عقودك الايجارية';
   /////////
 
   String biometric =

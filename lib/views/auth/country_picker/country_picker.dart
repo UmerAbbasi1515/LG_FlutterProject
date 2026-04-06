@@ -59,7 +59,7 @@ class _CountryPickerState extends State<CountryPicker> {
                               children: [
                                 Text(
                                   AppMetaLabels().change,
-                                  style: AppTextStyle.normalWhite11.copyWith(fontFamily: 'TestFont'),
+                                  style: AppTextStyle.normalWhite11,
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(top: 1.0.h),

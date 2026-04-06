@@ -43,8 +43,7 @@ class _OTPScreenState extends State<OTPScreen> {
       if (user != null) {
         // Navigate the user away from the login screens
         // autoVerifyOtpBtn();
-      } else {
-      }
+      } else {}
     });
     setState(() {
       authController.isCodeSent.value = false;
@@ -53,11 +52,11 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 
   autoVerifyOtpBtn() async {
-     var otpCodeFrombackend = SessionController().otpCodeFrombackend ;
-          if (kDebugMode) {
-            print(otpCodeFrombackend);
-          }
-    await controller.verifyOtpBtn('159159', otpCodeFrombackend??"", "1");
+    var otpCodeFrombackend = SessionController().otpCodeFrombackend;
+    if (kDebugMode) {
+      print(otpCodeFrombackend);
+    }
+    await controller.verifyOtpBtn('159159', otpCodeFrombackend ?? "", "1");
   }
 
   @override
@@ -104,7 +103,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                   )
                                 : Text(
                                     AppMetaLabels().enterTheCode,
-                                    style: AppTextStyle.normalWhite11,
+                                    style: AppTextStyle.normalWhite12,
                                   ),
                           ),
                           Padding(
@@ -140,8 +139,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                           ),
                                           Text(
                                             AppMetaLabels().verifyingOtp,
-                                            style:
-                                                AppTextStyle.semiBoldWhite10,
+                                            style: AppTextStyle.semiBoldWhite10,
                                           ),
                                         ],
                                       ),
@@ -229,11 +227,13 @@ class _OTPScreenState extends State<OTPScreen> {
                                 : Container(
                                     width: 85.0.w,
                                     decoration: BoxDecoration(
-                                      color: const Color.fromRGBO(255, 59, 48, 0.6),
+                                      color: const Color.fromRGBO(
+                                          255, 59, 48, 0.6),
                                       borderRadius:
                                           BorderRadius.circular(1.0.h),
                                       border: Border.all(
-                                        color: const Color.fromRGBO(255, 59, 48, 1),
+                                        color: const Color.fromRGBO(
+                                            255, 59, 48, 1),
                                       ),
                                     ),
                                     child: Padding(
@@ -299,9 +299,10 @@ class _OTPScreenState extends State<OTPScreen> {
                               },
                               child: Text(
                                 AppMetaLabels().cancel,
-                                style: AppTextStyle.semiBoldWhite12,
+                                style: AppTextStyle.semiBoldWhite13,
                               ),
-                            )
+                            ),
+                         
                         ],
                       ),
                     ),

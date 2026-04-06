@@ -57,6 +57,7 @@ Future<void> main() async {
 
   await dotenv.load(fileName: ".env");
 
+
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle.light.copyWith(
       statusBarColor: Colors.transparent,

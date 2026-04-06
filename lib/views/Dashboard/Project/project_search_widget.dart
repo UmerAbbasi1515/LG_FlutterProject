@@ -19,6 +19,7 @@ class ProjectSearchWidget extends StatefulWidget {
 class _ProjectSearchWidgetState extends State<ProjectSearchWidget> {
   int _selectedType = 1;
   final TextEditingController _searchController = TextEditingController();
+  String? _selectedYear;
 
   final Map<int, String> searchTypes = {
     1: 'Halka',
@@ -27,15 +28,16 @@ class _ProjectSearchWidgetState extends State<ProjectSearchWidget> {
     4: 'PMO',
     5: 'Project Leader',
     6: 'Project Name',
+    7: 'ADP Year',
   };
+
   final ProjectController getContractsController = Get.find();
+
   void _onSearch(String searchType, String search) {
     if (kDebugMode) {
       print('Type: $searchType | Query: $search');
     }
     getContractsController.getProjectsWithFilter(searchType, search);
-    // call your API here
-    // e.g. getContractsController.searchProjects(searchType, query);
   }
 
   @override
@@ -54,18 +56,22 @@ class _ProjectSearchWidgetState extends State<ProjectSearchWidget> {
           overflow: TextOverflow.ellipsis,
           style: AppTextStyle.semiBoldBlack14,
         ),
-        SizedBox(
-          height: 1.h,
-        ),
+        SizedBox(height: 1.h),
+
         Wrap(
           spacing: 3,
           runSpacing: 3,
           children: searchTypes.entries.map((entry) {
             final selected = _selectedType == entry.key;
             return GestureDetector(
-              onTap: () => setState(() => _selectedType = entry.key),
+              onTap: () => setState(() {
+                _selectedType = entry.key;
+                _searchController.clear();
+                _selectedYear = null;
+              }),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
                 decoration: BoxDecoration(
                   color: selected ? Colors.blue.shade50 : Colors.transparent,
                   border: Border.all(
@@ -81,11 +87,15 @@ class _ProjectSearchWidgetState extends State<ProjectSearchWidget> {
                       value: entry.key,
                       groupValue: _selectedType,
                       activeColor: AppColors.blueColor,
-                      onChanged: (val) => setState(() => _selectedType = val!),
+                      onChanged: (val) => setState(() {
+                        _selectedType = val!;
+                        _searchController.clear();
+                        _selectedYear = null;
+                      }),
                       visualDensity: VisualDensity.compact,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                     Text(
                       entry.value,
                       style: AppTextStyle.semiBoldBlack12,
@@ -96,35 +106,114 @@ class _ProjectSearchWidgetState extends State<ProjectSearchWidget> {
             );
           }).toList(),
         ),
-        SizedBox(height: 12),
-        TextField(
-          controller: _searchController,
-          onChanged: (value) {
-            setState(() {});
-            if (value.trim().isEmpty) {
-              getContractsController.getProjects();
-            }
-          },
-          decoration: textFieldDecoration.copyWith(
-            hintText: AppMetaLabels().search,
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.0),
-              borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5.0),
-              borderSide: BorderSide(color: AppColors.blueColor, width: 2.0),
-            ),
-          ),
-          style: AppTextStyle.normalGrey10,
-        ),
-        SizedBox(height: 12),
+
+        const SizedBox(height: 12),
+
+        /// 🔥 Dynamic Field (Dropdown OR TextField)
+        _selectedType == 7
+            ? SizedBox(
+                height: 5.5.h,
+                child: SizedBox(
+                  height: 5.5.h,
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedYear,
+                    dropdownColor: Colors.white, // ✅ FIX: background color
+
+                    items: List.generate(
+                      2026 - 1995 + 1,
+                      (index) {
+                        final year = (1995 + index).toString();
+                        return DropdownMenuItem(
+                          value: year,
+                          child: Text(
+                            year,
+                            style:
+                                AppTextStyle.normalGrey10, // optional styling
+                          ),
+                        );
+                      },
+                    ),
+
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedYear = value;
+                      });
+                    },
+
+                    decoration: textFieldDecoration.copyWith(
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        borderSide: BorderSide(
+                          color: Colors.grey.shade400,
+                          width: 1.5,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        borderSide: BorderSide(
+                          color: AppColors.blueColor,
+                          width: 2.0,
+                        ),
+                      ),
+                      contentPadding: EdgeInsets.only(
+                        bottom: 0.1.h,
+                        left: 3.w,
+                      ),
+                    ),
+
+                    /// ✅ IMPORTANT: use this instead of hintText
+                    hint: Text(AppMetaLabels().selectyear,
+                        style: AppTextStyle.normalGrey14),
+                  ),
+                ))
+            : TextField(
+                controller: _searchController,
+                onChanged: (value) {
+                  setState(() {});
+                  if (value.trim().isEmpty) {
+                    getContractsController.getProjects();
+                  }
+                },
+                decoration: textFieldDecoration.copyWith(
+                  hintText: AppMetaLabels().search,
+                  suffixIcon: _searchController.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() {});
+                            getContractsController.getProjects();
+                          },
+                        )
+                      : null,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                    borderSide:
+                        BorderSide(color: Colors.grey.shade400, width: 1.5),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                    borderSide:
+                        BorderSide(color: AppColors.blueColor, width: 2.0),
+                  ),
+                ),
+                style: AppTextStyle.normalGrey13,
+              ),
+
+        const SizedBox(height: 12),
+
         ButtonWidgetBlue(
           buttonText: AppMetaLabels().search,
-          onPress: _searchController.text.trim().isEmpty
+          onPress: (_selectedType == 7
+                  ? (_selectedYear == null || _selectedYear!.isEmpty)
+                  : _searchController.text.trim().isEmpty)
               ? null
               : () => _onSearch(
-                  _selectedType.toString(), _searchController.text.trim()),
+                    _selectedType.toString(),
+                    _selectedType == 7
+                        ? _selectedYear!
+                        : _searchController.text.trim(),
+                  ),
         ),
       ],
     );

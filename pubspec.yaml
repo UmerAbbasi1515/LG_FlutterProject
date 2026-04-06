@@ -63,6 +63,15 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/lgp/dataJson/data_json11.json
+    - assets/images/lgp/img_0.png
+    - assets/images/lgp/img_1.png
+    - assets/images/lgp/img_2.png
+    - assets/images/lgp/img_3.png
+    - assets/images/lgp/splash.jpeg
+    - assets/images/lgp/LGP-main.svg
+    - assets/images/lgp/LGP-main1x.png
+    - assets/images/lgp/LGP-main4x.png
     - assets/images/common_images/
     - assets/images/tenant_images/
     - assets/images/landlord_images/
