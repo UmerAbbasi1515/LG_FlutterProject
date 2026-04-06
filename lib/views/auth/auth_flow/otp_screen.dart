@@ -297,12 +297,20 @@ class _OTPScreenState extends State<OTPScreen> {
                                 // //     '+92';
                                 Get.back();
                               },
-                              child: Text(
-                                AppMetaLabels().cancel,
-                                style: AppTextStyle.semiBoldWhite13,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    AppMetaLabels().cancel,
+                                    style: AppTextStyle.normalWhite13,
+                                  ),
+                                  Container(
+                                    color: AppColors.whiteColor,
+                                    height: 0.1.h,
+                                    width: 8.0.w,
+                                  ),
+                                ],
                               ),
                             ),
-                         
                         ],
                       ),
                     ),
