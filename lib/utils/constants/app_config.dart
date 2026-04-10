@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/foundation.dart';
 
 class AppConfig {
@@ -18,6 +16,8 @@ class AppConfig {
   String? getProjects;
   String? getProjectsFilter;
   String? addProjectsFeedback;
+  String? setPassword;
+  String? loginWithPassword;
 
   factory AppConfig() {
     return _instance;
@@ -30,20 +30,21 @@ class AppConfig {
   void setUrls() {
     if (kReleaseMode) isProcutionEnvironment = true;
 
-    if(isProcutionEnvironment){
+    if (isProcutionEnvironment) {
       baseUrl = 'https://auth.api.ubspropt.com/api/'; // production url
-    }else{
+    } else {
       baseUrl = 'http://localhost:5107/api/'; // development url
     }
-
 
     getLanguage = "${baseUrl!}Auth/GetLanguages";
     updateLanguage = "${baseUrl!}Auth/updateLanguage";
     getcountries = "${baseUrl!}Auth/getcountries";
     validateUser = "${baseUrl!}Auth/ValidateUser";
     verifyUserOTP = "${baseUrl!}Auth/VerifyUserOTP";
+    setPassword = "${baseUrl!}Auth/SetPassword";
+    loginWithPassword = "${baseUrl!}Auth/LoginWithPassword";
     getUserProfile = "${baseUrl!}Profile/GetUserProfile";
-    updateUserProfile = "${baseUrl!}Profile/updateUserProfile";
+    updateUserProfile = "${baseUrl!}Profile/UpdateUserProfile";
     getProjects = "${baseUrl!}Project/GetProjects";
     getProjectsFilter = "${baseUrl!}Project/GetProjectsFilter";
     addProjectsFeedback = "${baseUrl!}Project/AddProjectsFeedback";

@@ -2,9 +2,9 @@ import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/utils/constants/global_preferences.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/validate_user.dart';
 import 'package:localgovernment_project/views/auth/blocked_device/block_device_screen.dart';
 import 'package:localgovernment_project/views/auth/choose_language/language_screen.dart';
-import 'package:localgovernment_project/views/auth/auth_flow/validate_user.dart';
 
 class SplashScreenController extends GetxController {
   bool isLoginBool = false;
@@ -13,7 +13,6 @@ class SplashScreenController extends GetxController {
   RxString phone = "".obs;
   bool setLanguage = false;
   bool? isEnglish;
-
 
   @override
   void onInit() async {
@@ -69,7 +68,7 @@ class SplashScreenController extends GetxController {
         // } else {
         //   Get.to(() => ValidateUserScreen());
         // }
-       await Future.delayed(Duration(seconds: 2));
+        await Future.delayed(Duration(seconds: 2));
         Get.to(() => ValidateUserScreen());
       }
     });

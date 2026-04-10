@@ -7,8 +7,8 @@ import 'package:localgovernment_project/utils/styles/text_styles.dart';
 import 'package:localgovernment_project/views/auth/auth_flow/validate_user_controller.dart';
 import 'package:sizer/sizer.dart';
 
-class PhoneNoFieldFB extends StatelessWidget {
-  PhoneNoFieldFB({super.key});
+class PhoneNoFieldWidget extends StatelessWidget {
+  PhoneNoFieldWidget({super.key});
   static final TextEditingController phoneController = TextEditingController();
   final tooltipKey = GlobalKey<State<Tooltip>>();
   final vUController = Get.put(ValidateFirebaseUserController());
@@ -35,7 +35,7 @@ class PhoneNoFieldFB extends StatelessWidget {
       },
       onEditingComplete: () async {
         await vUController.validateMobileUser();
-       if (!context.mounted) return;
+        if (!context.mounted) return;
         FocusScope.of(context).unfocus();
         vUController.textFieldTap.value = false;
       },
@@ -78,3 +78,4 @@ class PhoneNoFieldFB extends StatelessWidget {
     tooltip?.ensureTooltipVisible();
   }
 }
+

@@ -16,7 +16,6 @@ import 'package:localgovernment_project/views/auth/blocked_device/block_device_s
 import 'package:localgovernment_project/views/auth/auth_flow/otp_screen.dart';
 import 'package:localgovernment_project/views/auth/auth_flow/otp_controller.dart';
 import 'package:localgovernment_project/views/common/no_internet_screen.dart';
-import 'package:localgovernment_project/views/widgets/New/phone_no_field.dart';
 import 'package:localgovernment_project/views/widgets/snackbar_widget.dart';
 
 class ValidateFirebaseUserController extends GetxController {
@@ -287,7 +286,7 @@ class ValidateFirebaseUserController extends GetxController {
 
     isCodeSent.value = true;
     resendProgressBarLoading.value = false;
-    PhoneNoFieldFB.phoneController.clear();
+    // PhoneNoFieldWidget.phoneController.clear();
 
     Get.to(() => OTPScreen(
           otpCodeForVerifyOTP: model.value.data?.otpCode ?? "",
@@ -349,7 +348,6 @@ class ValidateFirebaseUserController extends GetxController {
   RxString errorValidateUser = "".obs;
 
   Future<void> validateMobileUser() async {
-    isUpdating.value = true;
     bool isInternetConnected = await BaseClientClass.isInternetConnected();
     if (!isInternetConnected) {
       Get.to(() => const NoInternetScreen());
@@ -375,18 +373,28 @@ class ValidateFirebaseUserController extends GetxController {
           }
           await verifyPhone(SessionController().getPhone() ?? "");
         } else {
+          isUpdating.value == false;
+          verifying.value == false;
+          loadingData.value = false;
           SnakBarWidget.getSnackBarErrorBlue(
               AppMetaLabels().error, model.value.message ?? "");
         }
         loadingData.value = false;
+        isUpdating.value == false;
+        verifying.value == false;
       } else {
         errorValidateUser.value = result;
         loadingData.value = false;
+        isUpdating.value == false;
+        verifying.value == false;
       }
     } catch (e) {
       loadingData.value = false;
+      isUpdating.value == false;
+      verifying.value == false;
     }
-    isUpdating.value = false;
+    loadingData.value = false;
+    isUpdating.value == false;
+    verifying.value == false;
   }
-
 }

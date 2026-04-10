@@ -160,7 +160,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                       ),
                                     ),
                                     Expanded(
-                                      child: PhoneNoFieldFB(),
+                                      child: PhoneNoFieldWidget(),
                                     ),
                                   ],
                                 ),
@@ -241,11 +241,12 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                     FocusScope.of(context).unfocus();
                                     authController.textFieldTap.value = false;
                                     // checking weather user entered mobile no or not
-                                    if (PhoneNoFieldFB.phoneController.text ==
+                                    if (PhoneNoFieldWidget
+                                                .phoneController.text ==
                                             '' ||
-                                        PhoneNoFieldFB
+                                        PhoneNoFieldWidget
                                             .phoneController.text.isEmpty ||
-                                        PhoneNoFieldFB.phoneController.text
+                                        PhoneNoFieldWidget.phoneController.text
                                             .contains(' ')) {
                                       SnakBarWidget.getSnackBarErrorBlue(
                                         AppMetaLabels().error,
@@ -254,7 +255,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                       return;
                                     }
                                     // checking weather user started enter mobile no with 0 or not
-                                    if (PhoneNoFieldFB.phoneController.text
+                                    if (PhoneNoFieldWidget.phoneController.text
                                             .toString()[0] ==
                                         '0') {
                                       Get.snackbar(
@@ -266,27 +267,33 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                     } else {
                                       var dailingCode =
                                           SessionController().getDialingCode();
-                                      var number =
-                                          PhoneNoFieldFB.phoneController.text;
+                                      var number = PhoneNoFieldWidget
+                                          .phoneController.text;
                                       final String phone =
                                           '$dailingCode$number';
                                       SessionController().setPhone(phone);
                                       var phoneNbrValidation =
                                           authController.validateMobile(phone);
                                       if (kDebugMode) {
-                                        print(
-                                            'Phone  ::: $phone');
+                                        print('Phone  ::: $phone');
                                         print(
                                             'Phone Validation ::: $phoneNbrValidation');
                                       }
-                                        if (phoneNbrValidation ==
+                                      if (phoneNbrValidation ==
                                           "Invalid Mobile Number") {
-                                            SnakBarWidget.getSnackBarError(AppMetaLabels().error, AppMetaLabels().invalidPhoneNumber);
-                                          }else{
-                                            await authController.validateMobileUser();
-                                          }
-
-                                      
+                                        SnakBarWidget.getSnackBarError(
+                                            AppMetaLabels().error,
+                                            AppMetaLabels().invalidPhoneNumber);
+                                      } else {
+                                        await authController
+                                            .validateMobileUser();
+                                        setState(() {
+                                          authController.isUpdating.value ==
+                                              false;
+                                          authController.verifying.value ==
+                                              false;
+                                        });
+                                      }
                                     }
                                   },
                                 ),

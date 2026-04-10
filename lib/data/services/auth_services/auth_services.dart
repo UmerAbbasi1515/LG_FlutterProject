@@ -14,27 +14,27 @@ class AuthServices {
       "mobile": SessionController().getPhone(),
     };
     var url = AppConfig().validateUser;
-    var response = await BaseClientClass.postwithheader(url??"", data,
+    var response = await BaseClientClass.postwithheader(url ?? "", data,
         token: SessionController().getLoginToken());
-      if (response is http.Response) {
-        final jsonData = jsonDecode(response.body);
+    if (response is http.Response) {
+      final jsonData = jsonDecode(response.body);
 
-        // ✅ Safe null check
-        if (jsonData['data'] != null) {
-          return ApiResponse<LoginData>.fromJson(
-            jsonData,
-            (data) => LoginData.fromJson(data),
-          );
-        } else {
-          // ✅ Return empty response instead of throwing
-          return ApiResponse<LoginData>(
-            data: null,
-            message: jsonData['message'],
-            statusCode: jsonData['statusCode'],
-          );
+      // ✅ Safe null check
+      if (jsonData['data'] != null) {
+        return ApiResponse<LoginData>.fromJson(
+          jsonData,
+          (data) => LoginData.fromJson(data),
+        );
+      } else {
+        // ✅ Return empty response instead of throwing
+        return ApiResponse<LoginData>(
+          data: null,
+          message: jsonData['message'],
+          statusCode: jsonData['statusCode'],
+        );
+      }
     }
-  }
-      throw Exception(AppMetaLabels().invalidResponse);
+    throw Exception(AppMetaLabels().invalidResponse);
   }
 
   static Future<dynamic> verfiyUserOTP(
@@ -46,16 +46,55 @@ class AuthServices {
       "otpVerifyStatus": status
     };
     var url = AppConfig().verifyUserOTP;
-    var response = await BaseClientClass.postwithheader(url??"", data,
+    var response = await BaseClientClass.postwithheader(url ?? "", data,
         token: SessionController().getLoginToken());
-     if (response is http.Response) {
+    if (response is http.Response) {
       final jsonData = jsonDecode(response.body);
       final apiResponse = ApiResponse<OtpData>.fromJson(
-          jsonData,
-          (data) => OtpData.fromJson(data),
-        );
+        jsonData,
+        (data) => OtpData.fromJson(data),
+      );
       return apiResponse;
     }
-      throw Exception(AppMetaLabels().invalidResponse);
+    throw Exception(AppMetaLabels().invalidResponse);
+  }
+
+  static Future<dynamic> setPassword(String? mobile, String? password) async {
+    var data = {
+      "mobile": SessionController().getPhone(),
+      "password": password,
+    };
+    var url = AppConfig().setPassword;
+    var response = await BaseClientClass.postwithheader(url ?? "", data,
+        token: SessionController().getLoginToken());
+    if (response is http.Response) {
+      final jsonData = jsonDecode(response.body);
+      final apiResponse = ApiResponse<PasswordSetData>.fromJson(
+        jsonData,
+        (data) => PasswordSetData.fromJson(data),
+      );
+      return apiResponse;
+    }
+    throw Exception(AppMetaLabels().invalidResponse);
+  }
+
+  static Future<dynamic> loginWithPassword(
+      String? mobile, String? password) async {
+    var data = {
+      "mobile": mobile,
+      "password": password,
+    };
+    var url = AppConfig().loginWithPassword;
+    var response = await BaseClientClass.postwithheader(url ?? "", data,
+        token: SessionController().getLoginToken());
+    if (response is http.Response) {
+      final jsonData = jsonDecode(response.body);
+      final apiResponse = ApiResponse<OtpData>.fromJson(
+        jsonData,
+        (data) => OtpData.fromJson(data),
+      );
+      return apiResponse;
+    }
+    throw Exception(AppMetaLabels().invalidResponse);
   }
 }

@@ -28,10 +28,13 @@ class TenantProfileServices {
   static Future<dynamic> updateProfile(
       String name, String mobileNo, String email, String address) async {
     var data = {
-      "name": name,
-      "mobileNo": mobileNo,
-      "email": email,
-      "address": address
+      "UserId": name,
+      "NameEn": name,
+      "NameUr": name,
+      "Phone": mobileNo,
+      "Email": email,
+      "Address": address,
+      "AddressUr": address
     };
     var url = AppConfig().updateLanguage;
     var response = await BaseClientClass.postwithheader(url ?? "", data,

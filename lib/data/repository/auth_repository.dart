@@ -9,5 +9,11 @@ class CommonRepository {
       UserLanguageServices.updateLanguage(langId);
   static Future<dynamic> validateUser() => AuthServices.validateUser();
   static Future<dynamic> verifyOtp(
-          String? otpCode, String? otpCodeForVerifyOTP,String? status) => AuthServices.verfiyUserOTP(otpCode, otpCodeForVerifyOTP,status);
+          String? otpCode, String? otpCodeForVerifyOTP, String? status) =>
+      AuthServices.verfiyUserOTP(otpCode, otpCodeForVerifyOTP, status);
+
+  static Future<dynamic> setPassword(String? mobile, String? password) =>
+      AuthServices.setPassword(mobile, password);
+  static Future<dynamic> loginWithPassword(String? mobile, String? password) =>
+      AuthServices.loginWithPassword(mobile, password);
 }

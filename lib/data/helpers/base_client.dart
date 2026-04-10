@@ -35,8 +35,6 @@ class BaseClientClass {
             headers: {
               "Content-Type": "application/json",
               'Authorization': 'Bearer $token',
-              'ApiKey': 'UZ5QdWg2dLm1sop09082AccIa03DxupsIWDt9rqfeM',
-              "raw": "datawithoutfile"
             },
             encoding: Encoding.getByName('utf-8'),
           )
@@ -89,8 +87,6 @@ class BaseClientClass {
             headers: {
               "Content-Type": "application/json",
               'Authorization': 'Bearer $token',
-              'ApiKey': 'UZ5QdWg2dLm1sop09082AccIa03DxupsIWDt9rqfeM',
-              "raw": "datawithoutfile"
             },
             encoding: Encoding.getByName('utf-8'),
           )
@@ -150,9 +146,7 @@ class BaseClientClass {
             body: json.encode(data),
             headers: {
               "Content-Type": "application/json",
-              'Authorization': 'Bearer ',
-              'ApiKey': 'UZ5QdWg2dLm1sop09082AccIa03DxupsIWDt9rqfeM',
-              "raw": "datawithoutfile"
+              'Authorization': 'Bearer '
             },
             encoding: Encoding.getByName('utf-8'),
           )

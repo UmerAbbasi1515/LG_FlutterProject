@@ -1,4 +1,6 @@
+import 'package:get/get.dart';
 import 'package:localgovernment_project/data/models/auth_models/validate_user_model.dart';
+import 'package:localgovernment_project/views/widgets/New/phone_no_field.dart';
 
 class SessionController {
   static final SessionController _instance = SessionController._internel();
@@ -21,7 +23,7 @@ class SessionController {
   String? _goToDashboard;
   String? _notificationId;
   String? _url = "";
-  bool enableSSL = true;
+  RxBool isFirstTimeLogin = false.obs;
   String? otpCodeFrombackend = "";
   bool fingerprint = false;
   String? storeAppVerison;
@@ -172,5 +174,7 @@ class SessionController {
 
   void resetSession() {
     _token = '';
+    SessionController().setLoginToken("");
+    PhoneNoFieldWidget.phoneController.clear();
   }
 }

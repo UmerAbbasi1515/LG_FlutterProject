@@ -285,10 +285,13 @@ class _OTPScreenState extends State<OTPScreen> {
                               onPressed: () {
                                 setState(() {
                                   authController.error.value = '';
+
                                   authController
                                       .resendProgressBarLoading.value = false;
                                   authController.errorValidateUser.value = '';
                                   authController.resendProgressBar.value = true;
+                                  authController.verifying.value = false;
+                                  authController.isUpdating.value = false;
                                 });
                                 // final CountryPickerController
                                 //     countryController =

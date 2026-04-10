@@ -12,12 +12,37 @@ class AppMetaLabels {
   String totalProjects = SessionController().getLanguage() == 1
       ? 'Total Projects'
       : 'عقودك الايجارية';
-  String projects = SessionController().getLanguage() == 1
-      ? 'Projects'
-      : 'عقودك الايجارية';
+  String projects =
+      SessionController().getLanguage() == 1 ? 'Projects' : 'عقودك الايجارية';
   String selectyear = SessionController().getLanguage() == 1
       ? 'Select Year'
       : 'عقودك الايجارية';
+  String confirmPassword =
+      SessionController().getLanguage() == 1 ? 'Confirm Password' : 'تاكيد';
+  String pleaseenterPassword = SessionController().getLanguage() == 1
+      ? "Please enter Password"
+      : "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل . ";
+  String passwordMustbe8Char = SessionController().getLanguage() == 1
+      ? "Password must be at least 8 characters."
+      : "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل . ";
+  String passwordMContainOneNumericVal = SessionController().getLanguage() == 1
+      ? "Password must contain at least one numeric value."
+      : "يجب أن تحتوي كلمة المرور على قيمة رقمية واحدة على الأقل . ";
+  String passwordMContainOneAlphaNumericVal =
+      SessionController().getLanguage() == 1
+          ? "Password must contain at least one non-alphanumeric character."
+          : "يجب أن تحتوي كلمة المرور على حرف واحد غير أبجدي رقمي على الأقل . ";
+  String passwordMContainOneCapSmaAlpha = SessionController().getLanguage() == 1
+      ? "Password must contain at least one small & one capital character"
+      : "يجب أن تحتوي كلمة المرور على حرف صغير وحرف كبير واحد على الأقل . ";
+
+  String password =
+      SessionController().getLanguage() == 1 ? 'Password' : 'جواز سفر';
+
+  String savePassword = SessionController().getLanguage() == 1
+      ? "Save Password"
+      : "حفظ رقم التعريف الشخصي ";
+  String set = SessionController().getLanguage() == 1 ? ' Set' : 'جواز سفر';
   /////////
 
   String biometric =
@@ -2322,9 +2347,6 @@ class AppMetaLabels {
 
   String documentsCapital =
       SessionController().getLanguage() == 1 ? 'DOCUMENTS' : 'مستندات';
-
-  String passport =
-      SessionController().getLanguage() == 1 ? 'Passport' : 'جواز سفر';
 
   String sector = SessionController().getLanguage() == 1 ? 'Sector' : 'قطاع';
   String ownerName =
