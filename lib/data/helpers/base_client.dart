@@ -60,7 +60,7 @@ class BaseClientClass {
       );
       return AppMetaLabels().connectionTimedOut;
     } catch (e) {
-       if (kDebugMode) {
+      if (kDebugMode) {
         print(e);
       }
       return AppMetaLabels().anyError;
@@ -72,12 +72,12 @@ class BaseClientClass {
       {String? token}) async {
     token ??= SessionController().getToken();
     var forTestingdata = data;
-    // data = {"requestBody": encriptdata(data)};
-    // if (kDebugMode) {
-    //   print('Encripted Data PostWithHeader :::: => $data');
-    //   print('Encripted Data Testing ::::::::::: :::: => ${json.encode(data)}');
-    // }
-    // print('Token PostWithHeader :::: => $token');
+    data = {"requestBody": encriptdata(data)};
+    if (kDebugMode) {
+      print('Encripted Data PostWithHeader :::: => $data');
+      print('Encripted Data Testing ::::::::::: :::: => ${json.encode(data)}');
+      print('Token PostWithHeader :::: => $token');
+    }
     http.Response response;
     try {
       response = await http
@@ -117,10 +117,9 @@ class BaseClientClass {
       );
       return AppMetaLabels().connectionTimedOut;
     } catch (e) {
-      
       if (kDebugMode) {
         print('Response ::Catch e.toString():: ${e.toString()}');
-      print('Response ::Catch:: $e');
+        print('Response ::Catch:: $e');
       }
       return AppMetaLabels().anyError;
     }
@@ -152,15 +151,16 @@ class BaseClientClass {
           )
           .timeout(const Duration(seconds: timeOutDuration));
 
-       if (kDebugMode) print('Request: ${response.request}');
-        // print('Headers: ${response.request.headers}');
-       if (kDebugMode) print('End: $url');
+      if (kDebugMode) print('Request: ${response.request}');
+      // print('Headers: ${response.request.headers}');
+      if (kDebugMode) print('End: $url');
 
-
-     if (kDebugMode) print('response:: ${response.statusCode}');
+      if (kDebugMode) print('response:: ${response.statusCode}');
       return _getResponse(response, url, forTestingdata);
     } on SocketException {
-     if (kDebugMode) print('Response :: BCC SocketException:: No internet connection');
+      if (kDebugMode) {
+        print('Response :: BCC SocketException:: No internet connection');
+      }
       await Get.to(() => const NoInternetScreen());
       Get.offAll(() => const SplashScreen());
 
@@ -194,7 +194,7 @@ class BaseClientClass {
           http.MultipartRequest("POST", Uri.parse(url));
       // if (filePath != null) {
       if (filePath != '') {
-          if (kDebugMode) {
+        if (kDebugMode) {
           print('Inside ::::: ');
         }
         http.MultipartFile multipartFile =
@@ -206,11 +206,11 @@ class BaseClientClass {
         "Content-Type": "application/json",
         'Authorization': 'Bearer $bearerToken',
       });
-        if (kDebugMode) {
+      if (kDebugMode) {
         print('Request :::::::: $request');
       }
       http.StreamedResponse response = await request.send();
-      
+
       // response.statusCode == 401 putting this condition because
       // in multipart we are not calling _getResponse for handle the response
       if (response.statusCode == 401) {
@@ -228,12 +228,12 @@ class BaseClientClass {
       // print('Respone :11::22:: ${res.body}');
       return response;
     } catch (e) {
-      if (kDebugMode){
+      if (kDebugMode) {
         print('Catch ========> From BaseClient $e');
-      print(e);
-      print(e.toString());
+        print(e);
+        print(e.toString());
       }
-      
+
       return 0;
     }
   }
@@ -252,10 +252,11 @@ class BaseClientClass {
 
   static dynamic _getResponse(
       http.Response response, String url, dynamic data) async {
-       if (kDebugMode) { print(
-        'Response Body :::: inside getResponse:: $url ::: $data Test:=> ${response.body}');}
+    if (kDebugMode) {
+      print(
+          'Response Body :::: inside getResponse:: $url ::: $data Test:=> ${response.body}');
+    }
 
-     
     if (response.body.contains('BadRequestExecution Timeout Expired')) {
       if (kDebugMode) {
         print('Response inhelper :: ${response.body}');

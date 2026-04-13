@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/data/helpers/base_client.dart';
+import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/data/models/auth_models/validate_user_model.dart';
 import 'package:localgovernment_project/data/models/common_response_model.dart';
 import 'package:localgovernment_project/data/repository/profile_repository.dart';
@@ -47,6 +48,8 @@ class ProfileController extends GetxController {
         error.value = '';
         if (result.message == "user data found") {
           model.value = result;
+          SessionController().nameEn = result.data?.nameEn;
+          SessionController().nameUr = result.data?.nameUr;
         }
         update();
       } else {
