@@ -4,7 +4,9 @@ import 'package:localgovernment_project/data/helpers/base_client.dart';
 import 'package:localgovernment_project/data/models/auth_models/validate_user_model.dart';
 import 'package:localgovernment_project/data/models/common_response_model.dart';
 import 'package:localgovernment_project/data/repository/profile_repository.dart';
+import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/views/common/no_internet_screen.dart';
+import 'package:localgovernment_project/views/widgets/snackbar_widget.dart';
 
 class ProfileController extends GetxController {
   Rx<ApiResponse<UserModel>> model = ApiResponse<UserModel>().obs;
@@ -69,19 +71,23 @@ class ProfileController extends GetxController {
       loadingData.value = true;
       var result =
           await ProfileRepository.updateProfile(name, phone, email, address);
-      if (result is ApiResponse<UserModel>) {
+      if (result is ApiResponse<CommonMessageModel>) {
         error.value = '';
-        if (result.message == "user data found") {
-          model.value = result;
+        if (result.message == "Success" &&
+            result.data?.message == "Profile updated sucessfully") {
+          SnakBarWidget.getSnackBarErrorBlue(
+              AppMetaLabels().error, result.data?.message ?? "");
         }
         update();
       } else {
-        error.value = result;
+        SnakBarWidget.getSnackBarErrorBlue(
+            AppMetaLabels().error, result.data?.message ?? "");
       }
     } catch (e) {
       if (kDebugMode) {
         print('inside Catch $e}');
       }
+      SnakBarWidget.getSnackBarErrorBlue(AppMetaLabels().error, e.toString());
       error.value = e.toString();
     } finally {
       loadingData.value = false;

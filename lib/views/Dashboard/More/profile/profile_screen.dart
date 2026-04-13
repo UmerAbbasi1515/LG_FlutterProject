@@ -49,14 +49,15 @@ class _TenantProfileState extends State<TenantProfile> {
         isEn ? data?.address ?? "" : data?.addressUr ?? "";
   }
 
-  void _onUpdatePressed() {
+  Future<void> _onUpdatePressed() async {
     if (_isEditing) {
-      profileController.updateProfile(
+      await profileController.updateProfile(
         _nameController.text,
         _phoneController.text,
         _emailController.text,
         _addressController.text,
       );
+      profileController.getProfile();
     } else {
       _populateFields();
     }
@@ -127,7 +128,7 @@ class _TenantProfileState extends State<TenantProfile> {
                         // Avatar
                         Container(
                           height: 15.h,
-                          padding: EdgeInsets.all(1.0.h),
+                          padding: EdgeInsets.all(0.0.h),
                           margin: EdgeInsets.only(top: 1.h),
                           child: Container(
                             decoration: const BoxDecoration(
@@ -140,13 +141,11 @@ class _TenantProfileState extends State<TenantProfile> {
                                 child: Text(
                                   profileController.getInitials(
                                     isEn
-                                        ? SessionController()
-                                                .getUser()
-                                                .nameEn ??
+                                        ? profileController
+                                                .model.value.data?.nameEn ??
                                             ""
-                                        : SessionController()
-                                                .getUser()
-                                                .nameUr ??
+                                        : profileController
+                                                .model.value.data?.nameUr ??
                                             "",
                                   ),
                                   style: AppTextStyle.semiBoldWhite16
@@ -185,19 +184,17 @@ class _TenantProfileState extends State<TenantProfile> {
                                       AppMetaLabels().personalInfo,
                                       style: AppTextStyle.semiBoldBlack14,
                                     ),
-                                    SizedBox(height: 2.h),
+                                    SizedBox(height: 0.h),
                                     _profileField(
                                       label: AppMetaLabels().name,
                                       controller: _nameController,
                                       isEditing: _isEditing,
                                       staticValue: isEn
-                                          ? SessionController()
-                                                  .getUser()
-                                                  .nameEn ??
+                                          ? profileController
+                                                  .model.value.data?.nameEn ??
                                               ""
-                                          : SessionController()
-                                                  .getUser()
-                                                  .nameUr ??
+                                          : profileController
+                                                  .model.value.data?.nameUr ??
                                               "",
                                     ),
                                     _profileField(
@@ -250,12 +247,23 @@ class _TenantProfileState extends State<TenantProfile> {
 
                         // Cancel button shown only in edit mode
                         if (_isEditing)
-                          TextButton(
-                            onPressed: () => setState(() => _isEditing = false),
-                            child: Text(
-                              AppMetaLabels().cancel,
-                              style: AppTextStyle.normalBlack12
-                                  .copyWith(color: AppColors.grey1),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              onTap: () => setState(() => _isEditing = false),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    AppMetaLabels().cancel,
+                                    style: AppTextStyle.semiBoldBlue15,
+                                  ),
+                                  Container(
+                                    color: AppColors.blueColor,
+                                    height: 0.1.h,
+                                    width: 10.w,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                       ],

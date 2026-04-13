@@ -25,6 +25,18 @@ class PasswordSetData {
   }
 }
 
+class CommonMessageModel {
+  final String message;
+
+  CommonMessageModel({required this.message});
+
+  factory CommonMessageModel.fromJson(Map<String, dynamic> json) {
+    return CommonMessageModel(
+      message: json['message'] ?? '',
+    );
+  }
+}
+
 // User OTP
 class OtpData {
   final UserModel user;

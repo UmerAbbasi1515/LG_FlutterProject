@@ -10,7 +10,7 @@ import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 
 class TenantProfileServices {
   static Future<dynamic> getProfile() async {
-    var data = { };
+    var data = {};
     var url = AppConfig().getUserProfile;
     var response = await BaseClientClass.postwithheader(url ?? "", data,
         token: SessionController().getLoginToken());
@@ -28,22 +28,22 @@ class TenantProfileServices {
   static Future<dynamic> updateProfile(
       String name, String mobileNo, String email, String address) async {
     var data = {
-      "UserId": name,
-      "NameEn": name,
-      "NameUr": name,
-      "Phone": mobileNo,
-      "Email": email,
-      "Address": address,
-      "AddressUr": address
+      "userId": SessionController().getUser().id.toString(),
+      "nameEn": name,
+      "nameUr": name,
+      "phone": mobileNo,
+      "email": email,
+      "address": address,
+      "addressUr": address
     };
-    var url = AppConfig().updateLanguage;
+    var url = AppConfig().updateUserProfile;
     var response = await BaseClientClass.postwithheader(url ?? "", data,
         token: SessionController().getLoginToken());
     if (response is http.Response) {
       final jsonData = jsonDecode(response.body);
-      final apiResponse = ApiResponse<UserModel>.fromJson(
+      final apiResponse = ApiResponse<CommonMessageModel>.fromJson(
         jsonData,
-        (data) => UserModel.fromJson(data),
+        (data) => CommonMessageModel.fromJson(data),
       );
       return apiResponse;
     }
