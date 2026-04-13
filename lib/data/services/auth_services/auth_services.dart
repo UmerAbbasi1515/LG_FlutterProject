@@ -19,17 +19,15 @@ class AuthServices {
     if (response is http.Response) {
       final jsonData = jsonDecode(response.body);
 
-      // ✅ Safe null check
-      if (jsonData['data'] != null) {
-        return ApiResponse<LoginData>.fromJson(
+      if (jsonData is Map<String, dynamic> && jsonData['data'] != null) {
+        return ApiResponse<ValidateUserModel>.fromJson(
           jsonData,
-          (data) => LoginData.fromJson(data),
+          (data) => ValidateUserModel.fromJson(data),
         );
       } else {
-        // ✅ Return empty response instead of throwing
-        return ApiResponse<LoginData>(
+        return ApiResponse<ValidateUserModel>(
           data: null,
-          message: jsonData['message'],
+          message: jsonData['message']?.toString() ?? "Invalid response",
           statusCode: jsonData['statusCode'],
         );
       }
@@ -50,11 +48,19 @@ class AuthServices {
         token: SessionController().getLoginToken());
     if (response is http.Response) {
       final jsonData = jsonDecode(response.body);
-      final apiResponse = ApiResponse<OtpData>.fromJson(
-        jsonData,
-        (data) => OtpData.fromJson(data),
-      );
-      return apiResponse;
+
+      if (jsonData is Map<String, dynamic> && jsonData['data'] != null) {
+        return ApiResponse<OtpData>.fromJson(
+          jsonData,
+          (data) => OtpData.fromJson(data),
+        );
+      } else {
+        return ApiResponse<OtpData>(
+          data: null,
+          message: jsonData['message']?.toString() ?? "Invalid response",
+          statusCode: jsonData['statusCode'],
+        );
+      }
     }
     throw Exception(AppMetaLabels().invalidResponse);
   }
@@ -69,11 +75,19 @@ class AuthServices {
         token: SessionController().getLoginToken());
     if (response is http.Response) {
       final jsonData = jsonDecode(response.body);
-      final apiResponse = ApiResponse<PasswordSetData>.fromJson(
-        jsonData,
-        (data) => PasswordSetData.fromJson(data),
-      );
-      return apiResponse;
+
+      if (jsonData is Map<String, dynamic> && jsonData['data'] != null) {
+        return ApiResponse<PasswordSetData>.fromJson(
+          jsonData,
+          (data) => PasswordSetData.fromJson(data),
+        );
+      } else {
+        return ApiResponse<PasswordSetData>(
+          data: null,
+          message: jsonData['message']?.toString() ?? "Invalid response",
+          statusCode: jsonData['statusCode'],
+        );
+      }
     }
     throw Exception(AppMetaLabels().invalidResponse);
   }
@@ -89,11 +103,18 @@ class AuthServices {
         token: SessionController().getLoginToken());
     if (response is http.Response) {
       final jsonData = jsonDecode(response.body);
-      final apiResponse = ApiResponse<OtpData>.fromJson(
-        jsonData,
-        (data) => OtpData.fromJson(data),
-      );
-      return apiResponse;
+      if (jsonData is Map<String, dynamic> && jsonData['data'] != null) {
+        return ApiResponse<OtpData>.fromJson(
+          jsonData,
+          (data) => OtpData.fromJson(data),
+        );
+      } else {
+        return ApiResponse<OtpData>(
+          data: null,
+          message: jsonData['message']?.toString() ?? "Invalid response",
+          statusCode: jsonData['statusCode'],
+        );
+      }
     }
     throw Exception(AppMetaLabels().invalidResponse);
   }

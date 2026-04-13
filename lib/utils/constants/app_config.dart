@@ -41,8 +41,8 @@ class AppConfig {
     getcountries = "${baseUrl!}Auth/getcountries";
     validateUser = "${baseUrl!}Auth/ValidateUser";
     verifyUserOTP = "${baseUrl!}Auth/VerifyUserOTP";
-    setPassword = "${baseUrl!}Auth/SetPassword";
-    loginWithPassword = "${baseUrl!}Auth/LoginWithPassword";
+    setPassword = "${baseUrl!}Auth/SetUserPassword";
+    loginWithPassword = "${baseUrl!}Auth/VerifyUserPassword";
     getUserProfile = "${baseUrl!}Profile/GetUserProfile";
     updateUserProfile = "${baseUrl!}Profile/UpdateUserProfile";
     getProjects = "${baseUrl!}Project/GetProjects";

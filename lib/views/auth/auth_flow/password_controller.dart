@@ -5,6 +5,7 @@ import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/data/models/auth_models/validate_user_model.dart';
 import 'package:localgovernment_project/data/models/common_response_model.dart';
 import 'package:localgovernment_project/data/repository/auth_repository.dart';
+import 'package:localgovernment_project/utils/constants/global_preferences.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/views/Dashboard/dashboard_tabs/dashboard_tabs_screen.dart';
 import 'package:localgovernment_project/views/auth/auth_flow/validate_user.dart';
@@ -44,6 +45,17 @@ class PasswordController extends GetxController {
     }
   }
 
+  String maskPhoneNumber(String phone) {
+    if (phone.isEmpty || phone.length < 7) {
+      return phone;
+    }
+
+    String start = phone.substring(0, 4); // +923
+    String end = phone.substring(phone.length - 3); // 083
+
+    return "$start****$end";
+  }
+
   var passwordSetModel = ApiResponse<PasswordSetData>().obs;
   Future<void> setPassword() async {
     bool isInternetConnected = await BaseClientClass.isInternetConnected();
@@ -59,9 +71,9 @@ class PasswordController extends GetxController {
       if (result is ApiResponse<PasswordSetData>) {
         passwordSetModel.value = result;
 
-        if (passwordSetModel.value.message != "Password Success" &&
-            passwordSetModel.value.data?.password !=
-                "Password set successfully") {
+        if (passwordSetModel.value.message == "Password update successfull" &&
+            passwordSetModel.value.data?.message ==
+                "Password update successfully") {
           Get.offAll(() => ValidateUserScreen());
         } else {
           SnakBarWidget.getSnackBarErrorBlue(
@@ -91,20 +103,79 @@ class PasswordController extends GetxController {
           mobile, passwordController.text);
       if (result is ApiResponse<OtpData>) {
         loginWithPassModel.value = result;
-        if (loginWithPassModel.value.message != "user not found" &&
-            loginWithPassModel.value.data != null) {
-          Get.offAll(() => TenantDashboardTabs());
+        if (loginWithPassModel.value.data != null &&
+            loginWithPassModel.value.message !=
+                "Token generation failed,Please try again later / contact with support team") {
+          ////////////////////////////
+          /// SessionController ///
+          ////////////////////////////
+          SessionController().setUser(loginWithPassModel.value.data?.user);
+          SessionController()
+              .setLoginToken(loginWithPassModel.value.data?.token);
+          SessionController().setToken(loginWithPassModel.value.data?.token);
+          var phone = SessionController().getPhone();
+
+          /////////////////////////////////////
+          /// GlobalPreferencesEncrypted ///
+          ////////////////////////////////////
+          saveDataLocally();
+          SessionController().setPhone(phone);
+          if (loginWithPassModel.value.message != "user not found" &&
+              loginWithPassModel.value.data != null) {
+            Get.offAll(() => TenantDashboardTabs());
+          } else {
+            SnakBarWidget.getSnackBarErrorBlue(
+                AppMetaLabels().error, loginWithPassModel.value.message ?? "");
+          }
+          isLoading.value = false;
         } else {
+          isLoading.value = false;
           SnakBarWidget.getSnackBarErrorBlue(
               AppMetaLabels().error, loginWithPassModel.value.message ?? "");
         }
-        isLoading.value = false;
       } else {
         errorWhileApiCall.value = result;
         isLoading.value = false;
+        SnakBarWidget.getSnackBarErrorBlue(
+            AppMetaLabels().error, loginWithPassModel.value.message ?? "");
       }
     } catch (e) {
       isLoading.value = false;
+      SnakBarWidget.getSnackBarErrorBlue(
+          AppMetaLabels().error, loginWithPassModel.value.message ?? "");
     }
+  }
+
+  void saveDataLocally() async {
+    var phone = SessionController().getPhone();
+    GlobalPreferencesEncrypted.setString(
+      GlobalPreferencesLabels.phoneNumber,
+      phone ?? "",
+    );
+
+    GlobalPreferencesEncrypted.setString(
+      GlobalPreferencesLabels.loginToken,
+      loginWithPassModel.value.data?.token ?? "",
+    );
+
+    GlobalPreferencesEncrypted.setString(
+      GlobalPreferencesLabels.userName,
+      loginWithPassModel.value.data?.user.nameEn ?? "",
+    );
+
+    GlobalPreferencesEncrypted.setString(
+      GlobalPreferencesLabels.userNameAr,
+      loginWithPassModel.value.data?.user.nameUr ?? "",
+    );
+
+    GlobalPreferencesEncrypted.setString(
+      GlobalPreferencesLabels.userID,
+      loginWithPassModel.value.data?.user.id.toString() ?? "",
+    );
+
+    GlobalPreferences.setbool(
+      GlobalPreferencesLabels.isLoginBool,
+      true,
+    );
   }
 }

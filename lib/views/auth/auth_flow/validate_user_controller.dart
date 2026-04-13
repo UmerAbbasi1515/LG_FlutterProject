@@ -12,6 +12,7 @@ import 'package:localgovernment_project/data/repository/auth_repository.dart';
 import 'package:localgovernment_project/utils/constants/app_const.dart';
 import 'package:localgovernment_project/utils/constants/global_preferences.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/password_screen.dart';
 import 'package:localgovernment_project/views/auth/blocked_device/block_device_screen.dart';
 import 'package:localgovernment_project/views/auth/auth_flow/otp_screen.dart';
 import 'package:localgovernment_project/views/auth/auth_flow/otp_controller.dart';
@@ -20,6 +21,7 @@ import 'package:localgovernment_project/views/widgets/snackbar_widget.dart';
 
 class ValidateFirebaseUserController extends GetxController {
   static String? verificationId;
+  RxBool isLoadingN = false.obs;
   RxBool isCodeSent = false.obs;
   RxBool verifying = false.obs;
   RxBool validOTP = true.obs;
@@ -340,7 +342,8 @@ class ValidateFirebaseUserController extends GetxController {
     }
   }
 
-  Rx<ApiResponse<LoginData>> model = ApiResponse<LoginData>().obs;
+  Rx<ApiResponse<ValidateUserModel>> model =
+      ApiResponse<ValidateUserModel>().obs;
   RxBool isUpdating = false.obs;
   RxBool loadingData = false.obs;
   RxBool textFieldTap = false.obs;
@@ -353,10 +356,12 @@ class ValidateFirebaseUserController extends GetxController {
       Get.to(() => const NoInternetScreen());
     }
     errorValidateUser.value = '';
+    dynamic result;
     try {
-      loadingData.value = true;
-      var result = await CommonRepository.validateUser();
-      if (result is ApiResponse<LoginData>) {
+      isLoadingN.value = true;
+      result = await CommonRepository.validateUser();
+      isLoadingN.value == false;
+      if (result is ApiResponse<ValidateUserModel>) {
         model.value = result;
 
         if (model.value.message != "user not found" &&
@@ -367,34 +372,35 @@ class ValidateFirebaseUserController extends GetxController {
             );
           }
           SessionController().otpCodeFrombackend = model.value.data?.otpCode;
+          SessionController().isPasswordSet =
+              model.value.data?.isPasswordSet ?? "0";
           var otpCodeFrombackend = SessionController().otpCodeFrombackend;
+          var isPasswordSetValue = SessionController().isPasswordSet;
           if (kDebugMode) {
             print(otpCodeFrombackend);
+            print(isPasswordSetValue);
           }
-          await verifyPhone(SessionController().getPhone() ?? "");
-        } else {
-          isUpdating.value == false;
-          verifying.value == false;
+
           loadingData.value = false;
+          if (isPasswordSetValue == "") {
+            await verifyPhone(SessionController().getPhone() ?? "");
+          } else {
+            Get.offAll(
+                () => PasswordScreen(isPasswordSet: isPasswordSetValue.obs));
+          }
+        } else {
           SnakBarWidget.getSnackBarErrorBlue(
               AppMetaLabels().error, model.value.message ?? "");
         }
-        loadingData.value = false;
-        isUpdating.value == false;
-        verifying.value == false;
       } else {
-        errorValidateUser.value = result;
-        loadingData.value = false;
-        isUpdating.value == false;
-        verifying.value == false;
+        SnakBarWidget.getSnackBarErrorBlue(
+            AppMetaLabels().error, result.message ?? "");
       }
     } catch (e) {
-      loadingData.value = false;
-      isUpdating.value == false;
-      verifying.value == false;
+      SnakBarWidget.getSnackBarErrorBlue(
+          AppMetaLabels().error, result.message.toString());
+    } finally {
+      isLoadingN.value = false;
     }
-    loadingData.value = false;
-    isUpdating.value == false;
-    verifying.value == false;
   }
 }

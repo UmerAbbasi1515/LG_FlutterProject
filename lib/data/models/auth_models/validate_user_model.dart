@@ -1,26 +1,26 @@
 // user validate
-import 'package:get/get.dart';
-
-class LoginData {
+class ValidateUserModel {
   final String otpCode;
+  final String isPasswordSet;
 
-  LoginData({required this.otpCode});
+  ValidateUserModel({required this.otpCode, required this.isPasswordSet});
 
-  factory LoginData.fromJson(Map<String, dynamic> json) {
-    return LoginData(
+  factory ValidateUserModel.fromJson(Map<String, dynamic> json) {
+    return ValidateUserModel(
       otpCode: json['otpCode'] ?? '',
+      isPasswordSet: json['isPasswordSet'] ?? '',
     );
   }
 }
 
 class PasswordSetData {
-  final String password;
+  final String message;
 
-  PasswordSetData({required this.password});
+  PasswordSetData({required this.message});
 
   factory PasswordSetData.fromJson(Map<String, dynamic> json) {
     return PasswordSetData(
-      password: json['password'] ?? '',
+      message: json['message'] ?? '',
     );
   }
 }
@@ -51,7 +51,6 @@ class UserModel {
   String? email;
   String? address;
   String? addressUr;
-  RxBool? isFirstTimeLogin;
 
   UserModel({
     this.id,
@@ -61,7 +60,6 @@ class UserModel {
     this.email,
     this.address,
     this.addressUr,
-    this.isFirstTimeLogin,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -73,7 +71,6 @@ class UserModel {
       email: json['email'] ?? '',
       address: json['address'] ?? '',
       addressUr: json['addressUr'] ?? '',
-      isFirstTimeLogin: json['isFirstTimeLogin'] ?? true.obs,
     );
   }
 }

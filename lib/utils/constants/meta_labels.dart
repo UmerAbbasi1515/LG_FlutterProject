@@ -22,6 +22,9 @@ class AppMetaLabels {
   String pleaseenterPassword = SessionController().getLanguage() == 1
       ? "Please enter Password"
       : "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل . ";
+  String pleaseenterPasswordwithMobile = SessionController().getLanguage() == 1
+      ? "Please enter your password for this phone number "
+      : "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل . ";
   String passwordMustbe8Char = SessionController().getLanguage() == 1
       ? "Password must be at least 8 characters."
       : "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل . ";

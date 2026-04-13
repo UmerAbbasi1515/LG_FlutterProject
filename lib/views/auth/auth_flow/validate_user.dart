@@ -221,8 +221,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                 ? 2.0.h
                                 : 15.0.h,
                           ),
-                          authController.isUpdating.value == true ||
-                                  authController.verifying.value == true
+                          authController.isLoadingN.value
                               ? Column(
                                   children: [
                                     const LoadingIndicatorWhite(),

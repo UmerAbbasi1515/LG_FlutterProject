@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 import 'package:localgovernment_project/data/models/auth_models/validate_user_model.dart';
 import 'package:localgovernment_project/views/widgets/New/phone_no_field.dart';
 
@@ -23,7 +22,7 @@ class SessionController {
   String? _goToDashboard;
   String? _notificationId;
   String? _url = "";
-  RxBool isFirstTimeLogin = false.obs;
+  String isPasswordSet = "0";
   String? otpCodeFrombackend = "";
   bool fingerprint = false;
   String? storeAppVerison;
@@ -177,4 +176,5 @@ class SessionController {
     SessionController().setLoginToken("");
     PhoneNoFieldWidget.phoneController.clear();
   }
+  
 }

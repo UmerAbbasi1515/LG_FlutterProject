@@ -7,7 +7,7 @@ import 'package:localgovernment_project/utils/styles/text_styles.dart';
 import 'package:localgovernment_project/views/Dashboard/More/profile/profile_screen.dart';
 import 'package:localgovernment_project/views/Dashboard/More/notifications/read_notifications.dart';
 import 'package:localgovernment_project/views/Dashboard/More/settings/settings_screen.dart';
-import 'package:localgovernment_project/views/auth/auth_flow/validate_user.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/password_screen.dart';
 import 'package:localgovernment_project/views/common/about_app.dart/about_app.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/divider_widget.dart';
 import 'package:sizer/sizer.dart';
@@ -105,13 +105,18 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                         ),
                         onPressed: () {
                           SessionController().resetSession();
-                          Get.offAll(() => const ValidateUserScreen());
+                          Get.offAll(() => PasswordScreen(
+                              isPasswordSet:
+                                  SessionController().isPasswordSet.obs));
                         },
                       ),
                       InkWell(
                         onTap: () {
                           SessionController().resetSession();
-                          Get.offAll(() => const ValidateUserScreen());
+                          SessionController().resetSession();
+                          Get.offAll(() => PasswordScreen(
+                              isPasswordSet:
+                                  SessionController().isPasswordSet.obs));
                         },
                         child: Text(
                           '${AppMetaLabels().logout}  ',
