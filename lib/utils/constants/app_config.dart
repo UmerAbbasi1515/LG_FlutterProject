@@ -16,6 +16,7 @@ class AppConfig {
   String? getProjects;
   String? getProjectsFilter;
   String? addProjectsFeedback;
+  String? getProjectsFeedback;
   String? setPassword;
   String? loginWithPassword;
 
@@ -48,5 +49,6 @@ class AppConfig {
     getProjects = "${baseUrl!}Project/GetProjects";
     getProjectsFilter = "${baseUrl!}Project/GetProjectsFilter";
     addProjectsFeedback = "${baseUrl!}Project/AddProjectsFeedback";
+    getProjectsFeedback = "${baseUrl!}Project/GetProjectFeedback";
   }
 }

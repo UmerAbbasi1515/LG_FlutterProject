@@ -68,9 +68,10 @@ class ProjectServices {
     throw Exception(AppMetaLabels().invalidResponse);
   }
 
-  static Future<dynamic> submitProjectFeedback(FeedBackRequestModel param) async {
+  static Future<dynamic> submitProjectFeedback(
+      FeedBackRequestModel param) async {
     var data = {
-      "name": param.name??"", 
+      "name": param.name ?? "",
       "email": param.email,
       "phone": param.phone,
       "complaintFeedbackText": param.complaintFeedbackText,
@@ -92,6 +93,39 @@ class ProjectServices {
         jsonData,
         (data) {
           if (data == null) return [];
+        },
+      );
+      return apiResponse;
+    }
+    throw Exception(AppMetaLabels().invalidResponse);
+  }
+
+  static Future<dynamic> getFeedbackDetail(String projectID) async {
+    var data = {
+      "projectId": projectID,
+    };
+    var url = AppConfig().getProjectsFeedback;
+    if (kDebugMode) {
+      print(url);
+    }
+
+    var response = await BaseClientClass.postwithheader(url ?? "", data);
+
+    if (response is http.Response) {
+      final jsonData = jsonDecode(response.body);
+
+      final apiResponse = ApiResponse<List<GetFeedbackDetailResponse>>.fromJson(
+        jsonData,
+        (data) {
+          if (data == null) return [];
+
+          final list = data is List ? data : data['data'];
+
+          if (list == null) return [];
+
+          return (list as List)
+              .map((e) => GetFeedbackDetailResponse.fromJson(e))
+              .toList();
         },
       );
       return apiResponse;

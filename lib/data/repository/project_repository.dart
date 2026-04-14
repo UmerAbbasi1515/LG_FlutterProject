@@ -12,4 +12,7 @@ class ProjectRepository {
     FeedBackRequestModel param,
   ) =>
       ProjectServices.submitProjectFeedback(param);
+
+  static Future<dynamic> getFeedbackDetail(String projectID) =>
+      ProjectServices.getFeedbackDetail(projectID);
 }

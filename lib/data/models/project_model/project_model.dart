@@ -19,6 +19,7 @@ class ProjectVM {
     required this.projectLeader,
     required this.committeeMembersNameEn,
     required this.committeeMembersNameUr,
+    required this.isFeedbackAdded,
   });
 
   final int? id;
@@ -38,6 +39,7 @@ class ProjectVM {
   final ProjectLeader? projectLeader;
   final String? committeeMembersNameEn;
   final String? committeeMembersNameUr;
+  bool? isFeedbackAdded;
 
   factory ProjectVM.fromJson(Map<String, dynamic> json) {
     return ProjectVM(
@@ -60,6 +62,7 @@ class ProjectVM {
           : ProjectLeader.fromJson(json["projectLeader"]),
       committeeMembersNameEn: json["committee_members_name_en"],
       committeeMembersNameUr: json["committee_members_name_ur"],
+      isFeedbackAdded: json["isFeedbackAdded"],
     );
   }
 }
@@ -184,4 +187,87 @@ class FeedBackRequestModel {
   final File? videoFile;
   final File? imageFile;
   final File? audioFile;
+}
+
+class GetFeedbackDetailResponse {
+  final int id;
+  final String nameEn;
+  final String nameUr;
+  final String email;
+  final String phone;
+  final String whatsAppPhone;
+  final String textMessage;
+  final int projectId;
+  final List<FeedbackMedia> media;
+
+  GetFeedbackDetailResponse({
+    required this.id,
+    required this.nameEn,
+    required this.nameUr,
+    required this.email,
+    required this.phone,
+    required this.whatsAppPhone,
+    required this.textMessage,
+    required this.projectId,
+    required this.media,
+  });
+
+  factory GetFeedbackDetailResponse.fromJson(Map<String, dynamic> json) {
+    return GetFeedbackDetailResponse(
+      id: json['id'],
+      nameEn: json['nameEn'] ?? '',
+      nameUr: json['nameUr'] ?? '',
+      email: json['email'] ?? '',
+      phone: json['phone'] ?? '',
+      whatsAppPhone: json['whatsAppPhone'] ?? '',
+      textMessage: json['textMessage'] ?? '',
+      projectId: json['projectId'],
+      media: (json['media'] as List<dynamic>?)
+              ?.map((e) => FeedbackMedia.fromJson(e))
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nameEn': nameEn,
+      'nameUr': nameUr,
+      'email': email,
+      'phone': phone,
+      'whatsAppPhone': whatsAppPhone,
+      'textMessage': textMessage,
+      'projectId': projectId,
+      'media': media.map((e) => e.toJson()).toList(),
+    };
+  }
+}
+
+class FeedbackMedia {
+  final String filePath;
+  final String mediaType;
+  final String? previewUrl;
+
+  FeedbackMedia({
+    required this.filePath,
+    required this.mediaType,
+    required this.previewUrl,
+  });
+
+  factory FeedbackMedia.fromJson(Map<String, dynamic> json) {
+    return FeedbackMedia(
+      filePath: json['filePath'] ?? '',
+      mediaType: json['mediaType'] ?? '',
+      previewUrl: json['previewUrl'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'filePath': filePath,
+      'mediaType': mediaType,
+      'previewUrl': previewUrl,
+    };
+  }
 }

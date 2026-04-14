@@ -80,7 +80,7 @@ class ButtonWidgetPermBlue extends StatelessWidget {
           ),
           backgroundColor: AppColors.blueColor,
           disabledBackgroundColor: AppColors.blueColor.withOpacity(0.5),
-          padding: EdgeInsets.symmetric(horizontal: 6.0.h, vertical: 1.5.h),
+          padding: EdgeInsets.symmetric(horizontal: 2.0.h, vertical: 1.5.h),
         ),
         onPressed: onPress,
         child: Text(

@@ -12,6 +12,8 @@ class ProjectController extends GetxController {
 
   Rx<ApiResponse<List<ProjectVM>>> model =
       ApiResponse<List<ProjectVM>>(data: []).obs;
+  Rx<ApiResponse<List<GetFeedbackDetailResponse>>> feedbackDetailModel =
+      ApiResponse<List<GetFeedbackDetailResponse>>(data: []).obs;
   String getInitials(String fullName) {
     if (fullName.trim().isEmpty) return '';
 
@@ -39,6 +41,7 @@ class ProjectController extends GetxController {
       if (result is ApiResponse<List<ProjectVM>>) {
         error.value = '';
         model.value = result;
+        model.value.data?.first.isFeedbackAdded = true;
         update();
       } else {
         error.value = result;
@@ -90,6 +93,30 @@ class ProjectController extends GetxController {
       if (result is ApiResponse<dynamic>) {
         error.value = '';
         resultAddFeddback = result;
+        update();
+      } else {
+        error.value = result;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('inside Catch $e}');
+      }
+    } finally {
+      loadingProjectsData.value = false;
+    }
+  }
+
+  Future<void> getProjectsFeedback(String projectID) async {
+    try {
+      bool isInternetConnected = await BaseClientClass.isInternetConnected();
+      if (!isInternetConnected) {
+        await Get.to(() => const NoInternetScreen());
+      }
+      loadingProjectsData.value = true;
+      var result = await ProjectRepository.getFeedbackDetail(projectID);
+      if (result is ApiResponse<List<GetFeedbackDetailResponse>>) {
+        error.value = '';
+        feedbackDetailModel.value = result;
         update();
       } else {
         error.value = result;

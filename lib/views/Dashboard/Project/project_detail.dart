@@ -4,6 +4,8 @@ import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
 import 'package:localgovernment_project/views/Dashboard/Project/feedback_complaint_screen.dart';
+import 'package:localgovernment_project/views/Dashboard/Project/feedback_detail.dart';
+import 'package:localgovernment_project/views/Dashboard/Project/project_controller.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/button_widget.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/divider_widget.dart';
 import 'package:localgovernment_project/views/widgets/custom_app_bar2.dart';
@@ -18,6 +20,7 @@ class ProjectDetailScreen extends StatefulWidget {
 }
 
 class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
+  ProjectController controller = Get.put(ProjectController());
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -207,13 +210,40 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 2.h),
-                      child: ButtonWidgetPermBlue(
-                        buttonText: "Feedback/Complaint",
-                        onPress: () {
-                          Get.to(() => FeedbackComplaintScreen(
-                                selectproject: widget.selectedProject,
-                              ));
-                        },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.all(0.1.h),
+                            child: SizedBox(
+                              width: 47.w,
+                              child: ButtonWidgetPermBlue(
+                                buttonText: "View Feedback/Complaint",
+                                onPress: () {
+                                  Get.to(() => FeedbackComplaintDetailScreen(
+                                        projectId: widget.selectedProject.id
+                                            .toString(),
+                                      ));
+                                },
+                              ),
+                            ),
+                          ),
+                          // ADD BUTTON (always show OR you can conditionally control)
+                          Padding(
+                            padding: EdgeInsets.all(0.1.h),
+                            child: SizedBox(
+                              width: 47.w,
+                              child: ButtonWidgetPermBlue(
+                                buttonText: "Add Feedback/Complaint",
+                                onPress: () {
+                                  Get.to(() => FeedbackComplaintScreen(
+                                        selectproject: widget.selectedProject,
+                                      ));
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

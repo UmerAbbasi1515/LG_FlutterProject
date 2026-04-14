@@ -64,8 +64,9 @@ class SplashScreenController extends GetxController {
         }
         // Changed here must update *********>
         // if (isLoginBool) {
-        //   Get.snackbar("Success", "Login successfully go to dashboard");
+        //   Get.offAll(() => TenantDashboardTabs());
         // } else {
+        //   await Future.delayed(Duration(seconds: 2));
         //   Get.to(() => ValidateUserScreen());
         // }
         await Future.delayed(Duration(seconds: 2));
