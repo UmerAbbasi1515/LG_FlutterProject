@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:localgovernment_project/data/helpers/base_client.dart';
+import 'package:localgovernment_project/data/helpers/encription.dart';
 import 'package:localgovernment_project/data/models/common_response_model.dart';
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
 import 'package:localgovernment_project/utils/constants/app_config.dart';
@@ -70,21 +70,14 @@ class ProjectServices {
 
   static Future<dynamic> submitProjectFeedback(
       FeedBackRequestModel param) async {
-    var data = {
-      "name": param.name ?? "",
-      "email": param.email,
-      "phone": param.phone,
-      "complaintFeedbackText": param.complaintFeedbackText,
-      "audio": param.audioFile,
-      "video": param.videoFile,
-      "image": param.imageFile,
-    };
-    var url = AppConfig().addProjectsFeedback;
+ 
+
+    String url = AppConfig().addProjectsFeedback ?? "";
     if (kDebugMode) {
       print(url);
     }
 
-    var response = await BaseClientClass.postwithheader(url ?? "", data);
+    var response = await BaseClientClass.submitProjectFeedback(param);
 
     if (response is http.Response) {
       final jsonData = jsonDecode(response.body);

@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/views/widgets/custom_app_bar2.dart';
 import 'package:sizer/sizer.dart';
@@ -54,6 +52,7 @@ class _FeedbackComplaintDetailScreenState
     videoController!.play();
 
     showDialog(
+      // ignore: use_build_context_synchronously
       context: context,
       builder: (_) => Dialog(
         backgroundColor: Colors.black,
@@ -111,30 +110,16 @@ class _FeedbackComplaintDetailScreenState
                   child: Column(
                     children: [
                       // ================= TEXT =================
-                      buildText(
-                          "Name",
-                          dataList.isNotEmpty
-                              ? dataList.first.nameEn ?? ""
-                              : ""),
-                      buildText(
-                          "Email",
-                          dataList.isNotEmpty
-                              ? dataList.first.email ?? ""
-                              : ""),
-                      buildText(
-                          "Phone / WhatsApp",
-                          dataList.isNotEmpty
-                              ? dataList.first.phone ?? ""
-                              : ""),
+                      buildText("Name",
+                          dataList.isNotEmpty ? dataList.first.nameEn : ""),
+                      buildText("Email",
+                          dataList.isNotEmpty ? dataList.first.email : ""),
+                      buildText("Phone / WhatsApp",
+                          dataList.isNotEmpty ? dataList.first.phone : ""),
                       buildTextComplaint(
                         "Feedback / complaint...",
-                        dataList.isNotEmpty
-                            ? dataList.first.textMessage ?? ""
-                            : "",
+                        dataList.isNotEmpty ? dataList.first.textMessage : "",
                       ),
-
-                      SizedBox(height: 2.h),
-
                       // ================= FULL LIST =================
                       ListView.builder(
                         shrinkWrap: true,
@@ -142,7 +127,7 @@ class _FeedbackComplaintDetailScreenState
                         itemCount: dataList.length,
                         itemBuilder: (context, index) {
                           final item = dataList[index];
-                          final media = item.media ?? [];
+                          final media = item.media;
 
                           final images = media
                               .where((e) => e.mediaType == "image")

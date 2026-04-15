@@ -169,9 +169,9 @@ class Ward {
 
 class FeedBackRequestModel {
   FeedBackRequestModel({
-    this.videoFile,
-    this.imageFile,
-    this.audioFile,
+    required this.videoFile,
+    required this.imageFile,
+    required this.audioFile,
     this.name,
     this.email,
     this.phone,

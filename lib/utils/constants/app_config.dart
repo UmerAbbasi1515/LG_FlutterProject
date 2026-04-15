@@ -48,7 +48,7 @@ class AppConfig {
     updateUserProfile = "${baseUrl!}Profile/UpdateUserProfile";
     getProjects = "${baseUrl!}Project/GetProjects";
     getProjectsFilter = "${baseUrl!}Project/GetProjectsFilter";
-    addProjectsFeedback = "${baseUrl!}Project/AddProjectsFeedback";
+    addProjectsFeedback = "${baseUrl!}Project/AddProjectFeedback";
     getProjectsFeedback = "${baseUrl!}Project/GetProjectFeedback";
   }
 }

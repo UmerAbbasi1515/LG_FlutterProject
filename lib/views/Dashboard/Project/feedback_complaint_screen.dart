@@ -203,7 +203,7 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
     _playTimer = null;
     _recordTimer = null;
     setState(() {
-      audioFile = null;
+      audioFile = File('');
       isDone = false;
       isRecording = false;
       isPlaying = false;
@@ -235,6 +235,9 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
         : SessionController().getUser().nameUr ?? "";
     emailController.text = SessionController().getUser().email ?? "";
     phoneController.text = SessionController().getUser().phone ?? "";
+    imageFile = null;
+    videoFile = null;
+    audioFile = null;
   }
 
   @override
@@ -333,7 +336,7 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
                                 InkWell(
                                   onTap: () {
                                     setState(() {
-                                      imageFile = null;
+                                      imageFile = File('');
                                     });
                                   },
                                   child: Container(
@@ -401,7 +404,7 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
                                   child: InkWell(
                                     onTap: () {
                                       setState(() {
-                                        videoFile = null;
+                                        videoFile = File('');
                                       });
                                     },
                                     child: Container(
@@ -468,14 +471,15 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
 
                           FeedBackRequestModel feedbackRequestModel =
                               FeedBackRequestModel(
-                                  name: nameController.text,
-                                  email: emailController.text,
-                                  phone: phoneController.text,
-                                  projectId: widget.selectproject.id.toString(),
-                                  complaintFeedbackText: nameController.text,
-                                  videoFile: videoFile,
-                                  audioFile: audioFile,
-                                  imageFile: imageFile);
+                            name: nameController.text,
+                            email: emailController.text,
+                            phone: phoneController.text,
+                            projectId: widget.selectproject.id.toString(),
+                            complaintFeedbackText: complaintController.text,
+                            videoFile: videoFile,
+                            audioFile: audioFile,
+                            imageFile: imageFile,
+                          );
                           controller.submitFeedBack(feedbackRequestModel);
                         },
                       ),
@@ -771,8 +775,7 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
     );
   }
 
-  Widget buildTextField(String hint, 
-      TextEditingController controller,
+  Widget buildTextField(String hint, TextEditingController controller,
       {int maxLines = 1}) {
     return Padding(
       padding: EdgeInsets.only(bottom: 2.h),

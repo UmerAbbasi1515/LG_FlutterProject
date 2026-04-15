@@ -9,6 +9,9 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:localgovernment_project/data/helpers/encription.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
+import 'package:localgovernment_project/data/models/common_response_model.dart';
+import 'package:localgovernment_project/data/models/project_model/project_model.dart';
+import 'package:localgovernment_project/utils/constants/app_config.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/views/auth/splash_screen/splash_screen.dart';
@@ -235,6 +238,91 @@ class BaseClientClass {
       }
 
       return 0;
+    }
+  }
+
+  static Future<dynamic> submitProjectFeedback(
+      FeedBackRequestModel param) async {
+   
+    var data = {
+      'NameEn': param.name??"",
+      'NameUr': param.name??"", // adjust if needed
+      'Email': param.email??"",
+      'Phone': param.phone??"",
+      'ProjectId': param.projectId??"",
+      'TextMessage': param.complaintFeedbackText??"",
+    };
+    // var data = {
+    //   'NameEn': encriptdatasingle(param.name).toString(),
+    //   'NameUr': encriptdatasingle(param.name).toString(), // adjust if needed
+    //   'Email': encriptdatasingle(param.email).toString(),
+    //   'Phone': encriptdatasingle(param.phone).toString(),
+    //   'ProjectId': encriptdatasingle(param.projectId.toString()).toString(),
+    //   'TextMessage': encriptdatasingle(param.complaintFeedbackText).toString(),
+    // };
+
+    String url = AppConfig().addProjectsFeedback ?? "";
+
+    try {
+      var request = http.MultipartRequest("POST", Uri.parse(url));
+
+      // ================= TEXT FIELDS =================
+      request.fields.addAll(data);
+
+      // ================= FILES =================
+
+      // IMAGE
+      if (param.imageFile != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            "ImageFile",
+            param.imageFile!.path,
+          ),
+        );
+      }
+
+      // VIDEO
+      if (param.videoFile != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            "VideoFile",
+            param.videoFile!.path,
+          ),
+        );
+      }
+
+      // AUDIO
+      if (param.audioFile != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            "AudioFile",
+            param.audioFile!.path,
+          ),
+        );
+      }
+
+      // ================= HEADERS =================
+      String token = SessionController().getToken() ?? "";
+
+      request.headers.addAll({
+        'Authorization': 'Bearer $token',
+      });
+
+      var response = await request.send();
+      var res = await http.Response.fromStream(response);
+
+      if (kDebugMode) {
+        print(res.body);
+      }
+
+      final jsonData = jsonDecode(res.body);
+
+      return ApiResponse<dynamic>.fromJson(jsonData, (data) {});
+    } catch (e) {
+      if (kDebugMode) {
+        print("Upload Error: $e");
+      }
+      return null;
     }
   }
 
