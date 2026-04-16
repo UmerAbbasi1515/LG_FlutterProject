@@ -177,5 +177,9 @@ class PasswordController extends GetxController {
       GlobalPreferencesLabels.isLoginBool,
       true,
     );
+    GlobalPreferences.setbool(
+      GlobalPreferencesLabels.isPasswordSet,
+      true,
+    );
   }
 }

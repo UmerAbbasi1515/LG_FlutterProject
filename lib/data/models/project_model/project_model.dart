@@ -271,3 +271,23 @@ class FeedbackMedia {
     };
   }
 }
+
+class IsFeedbackAddedResponseModel {
+  final bool isfeedbackAdded;
+
+  IsFeedbackAddedResponseModel({
+    required this.isfeedbackAdded,
+  });
+
+  factory IsFeedbackAddedResponseModel.fromJson(Map<String, dynamic> json) {
+    return IsFeedbackAddedResponseModel(
+      isfeedbackAdded: json['isfeedbackAdded'] ?? false,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'isfeedbackAdded': isfeedbackAdded,
+    };
+  }
+}

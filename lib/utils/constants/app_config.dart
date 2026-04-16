@@ -15,6 +15,7 @@ class AppConfig {
   String? updateUserProfile;
   String? getProjects;
   String? getProjectsFilter;
+  String? isAddProjectsFeedback;
   String? addProjectsFeedback;
   String? getProjectsFeedback;
   String? setPassword;
@@ -48,6 +49,7 @@ class AppConfig {
     updateUserProfile = "${baseUrl!}Profile/UpdateUserProfile";
     getProjects = "${baseUrl!}Project/GetProjects";
     getProjectsFilter = "${baseUrl!}Project/GetProjectsFilter";
+    isAddProjectsFeedback = "${baseUrl!}Project/IsFeedbackAdded";
     addProjectsFeedback = "${baseUrl!}Project/AddProjectFeedback";
     getProjectsFeedback = "${baseUrl!}Project/GetProjectFeedback";
   }

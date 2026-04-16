@@ -2,12 +2,14 @@ import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/utils/constants/global_preferences.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/password_screen.dart';
 import 'package:localgovernment_project/views/auth/auth_flow/validate_user.dart';
 import 'package:localgovernment_project/views/auth/blocked_device/block_device_screen.dart';
 import 'package:localgovernment_project/views/auth/choose_language/language_screen.dart';
 
 class SplashScreenController extends GetxController {
   bool isLoginBool = false;
+  bool isPasswordSet = false;
   bool isBlocked = false;
   RxString secText = "".obs;
   RxString phone = "".obs;
@@ -43,6 +45,9 @@ class SplashScreenController extends GetxController {
     isLoginBool =
         await GlobalPreferences.getBool(GlobalPreferencesLabels.isLoginBool) ??
             false;
+    isPasswordSet = await GlobalPreferences.getBool(
+            GlobalPreferencesLabels.isPasswordSet) ??
+        false;
     isEnglish =
         await GlobalPreferences.getBool(GlobalPreferencesLabels.isEnglish) ??
             true;
@@ -63,14 +68,16 @@ class SplashScreenController extends GetxController {
               ));
         }
         // Changed here must update *********>
-        // if (isLoginBool) {
-        //   Get.offAll(() => TenantDashboardTabs());
-        // } else {
-        //   await Future.delayed(Duration(seconds: 2));
-        //   Get.to(() => ValidateUserScreen());
-        // }
-        await Future.delayed(Duration(seconds: 2));
-        Get.to(() => ValidateUserScreen());
+        if (isLoginBool) {
+          Get.offAll(() => PasswordScreen(
+                isPasswordSet: isPasswordSet.toString().obs,
+              ));
+        } else {
+          await Future.delayed(Duration(seconds: 2));
+          Get.to(() => ValidateUserScreen());
+        }
+        // await Future.delayed(Duration(seconds: 2));
+        // Get.to(() => ValidateUserScreen());
       }
     });
   }

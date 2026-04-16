@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
+import 'package:localgovernment_project/views/widgets/common_widgets/loading_indicator_blue.dart';
 import 'package:localgovernment_project/views/widgets/snackbar_widget.dart';
 import 'package:record/record.dart';
 import 'package:just_audio/just_audio.dart';
@@ -19,16 +20,16 @@ import 'dart:math';
 
 import 'project_controller.dart';
 
-class FeedbackComplaintScreen extends StatefulWidget {
+class AddFeedbackComplaintScreen extends StatefulWidget {
   final ProjectVM selectproject;
-  const FeedbackComplaintScreen({super.key, required this.selectproject});
+  const AddFeedbackComplaintScreen({super.key, required this.selectproject});
 
   @override
-  State<FeedbackComplaintScreen> createState() =>
-      _FeedbackComplaintScreenState();
+  State<AddFeedbackComplaintScreen> createState() =>
+      _AddFeedbackComplaintScreenState();
 }
 
-class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
+class _AddFeedbackComplaintScreenState extends State<AddFeedbackComplaintScreen>
     with TickerProviderStateMixin {
   final controller = Get.put(ProjectController());
   final nameController = TextEditingController();
@@ -436,53 +437,67 @@ class _FeedbackComplaintScreenState extends State<FeedbackComplaintScreen>
                       SizedBox(height: 2.h),
 
                       /// SUBMIT
-                      ButtonWidgetPermBlue(
-                        buttonText: "Submit",
-                        onPress: () {
-                          // Mandatory fields validation
-                          if (nameController.text.trim().isEmpty) {
-                            SnakBarWidget.getSnackBarError(
-                                "Error", "Name is required");
-                            return;
-                          }
-                          if (emailController.text.trim().isEmpty) {
-                            SnakBarWidget.getSnackBarError(
-                                "Error", "Email is required");
-                            return;
-                          }
-                          if (phoneController.text.trim().isEmpty) {
-                            SnakBarWidget.getSnackBarError(
-                                "Error", "Phone is required");
-                            return;
-                          }
+                      Obx(() {
+                        return controller.loadingProjectsData.value
+                            ? LoadingIndicatorBlue()
+                            : ButtonWidgetPermBlue(
+                                buttonText: "Submit",
+                                onPress: () {
+                                  // Mandatory fields validation
+                                  if (nameController.text.trim().isEmpty) {
+                                    SnakBarWidget.getSnackBarError(
+                                        "Error", "Name is required");
+                                    return;
+                                  }
+                                  if (emailController.text.trim().isEmpty) {
+                                    SnakBarWidget.getSnackBarError(
+                                        "Error", "Email is required");
+                                    return;
+                                  }
+                                  if (phoneController.text.trim().isEmpty) {
+                                    SnakBarWidget.getSnackBarError(
+                                        "Error", "Phone is required");
+                                    return;
+                                  }
 
-                          // At least one of these must be provided
-                          final bool hasText =
-                              complaintController.text.trim().isNotEmpty;
-                          final bool hasImage = imageFile != null;
-                          final bool hasVideo = videoFile != null;
-                          final bool hasAudio = audioFile != null;
+                                  // At least one of these must be provided
+                                  final bool hasText = complaintController.text
+                                      .trim()
+                                      .isNotEmpty;
+                                  final bool hasImage = imageFile != null;
+                                  final bool hasVideo = videoFile != null;
+                                  final bool hasAudio = audioFile != null;
 
-                          if (!hasText && !hasImage && !hasVideo && !hasAudio) {
-                            SnakBarWidget.getSnackBarError("Error",
-                                "Please provide at least one of: text, image, video, or audio");
-                            return;
-                          }
+                                  if (!hasText &&
+                                      !hasImage &&
+                                      !hasVideo &&
+                                      !hasAudio) {
+                                    SnakBarWidget.getSnackBarError("Error",
+                                        "Please provide at least one of: text, image, video, or audio");
+                                    return;
+                                  }
 
-                          FeedBackRequestModel feedbackRequestModel =
-                              FeedBackRequestModel(
-                            name: nameController.text,
-                            email: emailController.text,
-                            phone: phoneController.text,
-                            projectId: widget.selectproject.id.toString(),
-                            complaintFeedbackText: complaintController.text,
-                            videoFile: videoFile,
-                            audioFile: audioFile,
-                            imageFile: imageFile,
-                          );
-                          controller.submitFeedBack(feedbackRequestModel);
-                        },
-                      ),
+                                  FeedBackRequestModel feedbackRequestModel =
+                                      FeedBackRequestModel(
+                                    name: nameController.text,
+                                    email: emailController.text,
+                                    phone: phoneController.text,
+                                    projectId:
+                                        widget.selectproject.id.toString(),
+                                    complaintFeedbackText:
+                                        complaintController.text,
+                                    videoFile: videoFile,
+                                    audioFile: audioFile,
+                                    imageFile: imageFile,
+                                  );
+                                  controller
+                                      .submitFeedBack(feedbackRequestModel);
+                                },
+                              );
+                      }),
+                      SizedBox(
+                        height: 2.h,
+                      )
                     ],
                   ),
                 ),

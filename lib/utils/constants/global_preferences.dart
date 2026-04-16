@@ -7,6 +7,7 @@ class GlobalPreferencesLabels {
   static String userName = "5J8mC";
   static String userNameAr = "r5d6y";
   static String isLoginBool = "05zpm";
+  static String isPasswordSet = "05zpmP";
   static String fingerPrint = "LpkDI";
   static String deviceToken = "Apk3I";
   static String blockTime = "Pme4Q";

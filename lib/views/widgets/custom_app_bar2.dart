@@ -75,6 +75,78 @@ class CustomAppBar2 extends StatelessWidget {
   }
 }
 
+class CustomAppBarDoubleBack extends StatelessWidget {
+  final String? title;
+  final Function? onBackPressed;
+  const CustomAppBarDoubleBack({
+    super.key,
+    @required this.title,
+    this.onBackPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 12.h,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 0.5.h,
+            spreadRadius: 0.8.h,
+            offset: Offset(0.1.h, 0.1.h),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          Image.asset(
+            AppImagesPath.appbarimg,
+            width: double.infinity,
+            height: 12.h,
+            fit: BoxFit.cover,
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 5.0.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                    size: 3.h,
+                  ),
+                  onPressed: () {
+                    if (onBackPressed != null) {
+                      onBackPressed!();
+                    } else {
+                      Get.back();
+                      Get.back();
+                    }
+                  },
+                ),
+                Expanded(
+                  child: Text(
+                    title!,
+                    style: AppTextStyle.semiBoldWhite15,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+                SizedBox(
+                  width: 5.h,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class CustomAppBar2ForVendorTechniance extends StatelessWidget {
   final String? title;
   final Function? onBackPressed;

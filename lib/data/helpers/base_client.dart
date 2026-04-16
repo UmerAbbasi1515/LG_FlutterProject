@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:localgovernment_project/data/helpers/encription.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
-import 'package:localgovernment_project/data/models/common_response_model.dart';
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
 import 'package:localgovernment_project/utils/constants/app_config.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
@@ -243,14 +242,13 @@ class BaseClientClass {
 
   static Future<dynamic> submitProjectFeedback(
       FeedBackRequestModel param) async {
-   
     var data = {
-      'NameEn': param.name??"",
-      'NameUr': param.name??"", // adjust if needed
-      'Email': param.email??"",
-      'Phone': param.phone??"",
-      'ProjectId': param.projectId??"",
-      'TextMessage': param.complaintFeedbackText??"",
+      'NameEn': param.name ?? "",
+      'NameUr': param.name ?? "", // adjust if needed
+      'Email': param.email ?? "",
+      'Phone': param.phone ?? "",
+      'ProjectId': param.projectId ?? "",
+      'TextMessage': param.complaintFeedbackText ?? "",
     };
     // var data = {
     //   'NameEn': encriptdatasingle(param.name).toString(),
@@ -316,8 +314,11 @@ class BaseClientClass {
       }
 
       final jsonData = jsonDecode(res.body);
+      if (kDebugMode) {
+        print(jsonData);
+      }
 
-      return ApiResponse<dynamic>.fromJson(jsonData, (data) {});
+      return res;
     } catch (e) {
       if (kDebugMode) {
         print("Upload Error: $e");

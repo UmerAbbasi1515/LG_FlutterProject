@@ -8,6 +8,8 @@ class ProjectRepository {
     String search,
   ) =>
       ProjectServices.getProjectsWithFilter(searchType, search);
+  static Future<dynamic> isFeedbackAdded(String projectId) =>
+      ProjectServices.isFeedbackAdded(projectId);
   static Future<dynamic> submitProjectFeedback(
     FeedBackRequestModel param,
   ) =>

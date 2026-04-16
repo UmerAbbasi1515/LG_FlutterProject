@@ -60,7 +60,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 3.w),
                   child: Obx(() {
-                    final isSet = widget.isPasswordSet?.value == "True";
+                    final isSet =
+                        widget.isPasswordSet?.value.toLowerCase() == "true";
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
