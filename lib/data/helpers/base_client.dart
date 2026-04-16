@@ -11,14 +11,17 @@ import 'package:localgovernment_project/data/helpers/encription.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
 import 'package:localgovernment_project/utils/constants/app_config.dart';
+import 'package:localgovernment_project/utils/constants/global_preferences.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
-import 'package:localgovernment_project/views/auth/splash_screen/splash_screen.dart';
+import 'package:localgovernment_project/views/auth/auth_flow/password_screen.dart';
 import 'package:localgovernment_project/views/common/no_internet_screen.dart';
+import 'package:localgovernment_project/views/widgets/snackbar_widget.dart';
 
 class BaseClientClass {
   static const int timeOutDuration = 60;
   static String dumnyUrl = '';
+
   static Future<dynamic> post(String url, data, {String? token}) async {
     token ??= SessionController().getToken();
     var forTestingdata = data;
@@ -50,7 +53,13 @@ class BaseClientClass {
         print('Response :: BCC SocketException:: No internet connection');
       }
       await Get.to(() => const NoInternetScreen());
-      Get.offAll(() => const SplashScreen());
+      bool isPasswordSet = await GlobalPreferences.getBool(
+              GlobalPreferencesLabels.isPasswordSet) ??
+          false;
+
+      Get.offAll(() => PasswordScreen(
+            isPasswordSet: isPasswordSet.toString().obs,
+          ));
       return SessionController().getLanguage() == 1
           ? 'No internet connection'
           : 'لا يوجد اتصال بالإنترنت';
@@ -73,6 +82,12 @@ class BaseClientClass {
   static Future<dynamic> postwithheader(String url, data,
       {String? token}) async {
     token ??= SessionController().getToken();
+
+    token = "$token Test";
+
+    if (kDebugMode) {
+      print(token);
+    }
     var forTestingdata = data;
     data = {"requestBody": encriptdata(data)};
     if (kDebugMode) {
@@ -100,13 +115,32 @@ class BaseClientClass {
       if (kDebugMode) {
         print('response:: ${response.statusCode}');
       }
+
+      final jsonData = jsonDecode(response.body);
+      if (kDebugMode) {
+        print(jsonData['message']);
+      }
+
+      if (jsonData['message'] == 'unauthorized') {
+        SnakBarWidget.getSnackBarErrorBlue(
+            AppMetaLabels().error, "Unauthorized , Please login agian");
+        SessionController().resetSession();
+        bool isPasswordSet = await GlobalPreferences.getBool(
+                GlobalPreferencesLabels.isPasswordSet) ??
+            false;
+
+        Get.offAll(() => PasswordScreen(
+              isPasswordSet: isPasswordSet.toString().obs,
+            ));
+      }
+
       return _getResponse(response, url, forTestingdata);
     } on SocketException {
       if (kDebugMode) {
         print('Response :: BCC SocketException:: No internet connection');
       }
       await Get.to(() => const NoInternetScreen());
-      // Get.offAll(() => const SplashScreen());
+      // Get.offAll(() => const PasswordScreen());
       return 'No internet connection';
     } on TimeoutException {
       if (kDebugMode) {
@@ -156,15 +190,38 @@ class BaseClientClass {
       if (kDebugMode) print('Request: ${response.request}');
       // print('Headers: ${response.request.headers}');
       if (kDebugMode) print('End: $url');
-
       if (kDebugMode) print('response:: ${response.statusCode}');
+
+      final jsonData = jsonDecode(response.body);
+      if (kDebugMode) {
+        print(jsonData['message']);
+      }
+      if (jsonData['message'] == 'unauthorized') {
+        SnakBarWidget.getSnackBarErrorBlue(
+            AppMetaLabels().error, "Unauthorized , Please login agian");
+        SessionController().resetSession();
+        bool isPasswordSet = await GlobalPreferences.getBool(
+                GlobalPreferencesLabels.isPasswordSet) ??
+            false;
+
+        Get.offAll(() => PasswordScreen(
+              isPasswordSet: isPasswordSet.toString().obs,
+            ));
+      }
+
       return _getResponse(response, url, forTestingdata);
     } on SocketException {
       if (kDebugMode) {
         print('Response :: BCC SocketException:: No internet connection');
       }
       await Get.to(() => const NoInternetScreen());
-      Get.offAll(() => const SplashScreen());
+      bool isPasswordSet = await GlobalPreferences.getBool(
+              GlobalPreferencesLabels.isPasswordSet) ??
+          false;
+
+      Get.offAll(() => PasswordScreen(
+            isPasswordSet: isPasswordSet.toString().obs,
+          ));
 
       return 'No internet connection';
     } on TimeoutException {
@@ -187,7 +244,13 @@ class BaseClientClass {
     bool isInternetConnected = await BaseClientClass.isInternetConnected();
     if (!isInternetConnected) {
       await Get.offAll(const NoInternetScreen());
-      Get.offAll(() => const SplashScreen());
+      bool isPasswordSet = await GlobalPreferences.getBool(
+              GlobalPreferencesLabels.isPasswordSet) ??
+          false;
+
+      Get.offAll(() => PasswordScreen(
+            isPasswordSet: isPasswordSet.toString().obs,
+          ));
       return;
     }
     String bearerToken = token ?? SessionController().getToken() ?? '';
@@ -216,18 +279,39 @@ class BaseClientClass {
       // response.statusCode == 401 putting this condition because
       // in multipart we are not calling _getResponse for handle the response
       if (response.statusCode == 401) {
-        Get.offAll(() => const SplashScreen());
-        getx.Get.snackbar(
-          AppMetaLabels().error,
-          AppMetaLabels().unauthorized,
-          backgroundColor: AppColors.white54,
-        );
+        bool isPasswordSet = await GlobalPreferences.getBool(
+                GlobalPreferencesLabels.isPasswordSet) ??
+            false;
+
+        SnakBarWidget.getSnackBarErrorBlue(
+            AppMetaLabels().error, "Unauthorized , Please login agian");
+        Get.offAll(() => PasswordScreen(
+              isPasswordSet: isPasswordSet.toString().obs,
+            ));
         return AppMetaLabels().unauthorized;
       }
       // Response of UploadFile
       // The below lines for print the response of uploadFile
-      // var res = await http.Response.fromStream(response);
+      var res = await http.Response.fromStream(response);
       // print('Respone :11::22:: ${res.body}');
+
+      final jsonData = jsonDecode(res.body);
+      if (kDebugMode) {
+        print(jsonData['message']);
+      }
+      if (jsonData['message'] == 'unauthorized') {
+        SnakBarWidget.getSnackBarErrorBlue(
+            AppMetaLabels().error, "Unauthorized , Please login agian");
+        SessionController().resetSession();
+        bool isPasswordSet = await GlobalPreferences.getBool(
+                GlobalPreferencesLabels.isPasswordSet) ??
+            false;
+
+        Get.offAll(() => PasswordScreen(
+              isPasswordSet: isPasswordSet.toString().obs,
+            ));
+      }
+
       return response;
     } catch (e) {
       if (kDebugMode) {
@@ -317,6 +401,21 @@ class BaseClientClass {
       if (kDebugMode) {
         print(jsonData);
       }
+      if (kDebugMode) {
+        print(jsonData['message']);
+      }
+      if (jsonData['message'] == 'unauthorized') {
+        SnakBarWidget.getSnackBarErrorBlue(
+            AppMetaLabels().error, "Unauthorized , Please login agian");
+        SessionController().resetSession();
+        bool isPasswordSet = await GlobalPreferences.getBool(
+                GlobalPreferencesLabels.isPasswordSet) ??
+            false;
+
+        Get.offAll(() => PasswordScreen(
+              isPasswordSet: isPasswordSet.toString().obs,
+            ));
+      }
 
       return res;
     } catch (e) {
@@ -358,20 +457,26 @@ class BaseClientClass {
       case 400:
         return AppMetaLabels().badRequest;
       case 401:
-        Get.offAll(() => const SplashScreen());
-        getx.Get.snackbar(
-          AppMetaLabels().error,
-          AppMetaLabels().unauthorized,
-          backgroundColor: AppColors.white54,
-        );
+        SnakBarWidget.getSnackBarErrorBlue(
+            AppMetaLabels().error, "Unauthorized , Please login agian");
+        bool isPasswordSet = await GlobalPreferences.getBool(
+                GlobalPreferencesLabels.isPasswordSet) ??
+            false;
+
+        Get.offAll(() => PasswordScreen(
+              isPasswordSet: isPasswordSet.toString().obs,
+            ));
         return AppMetaLabels().unauthorized;
       case 403:
-        Get.offAll(() => const SplashScreen());
-        getx.Get.snackbar(
-          AppMetaLabels().error,
-          AppMetaLabels().unauthorized,
-          backgroundColor: AppColors.white54,
-        );
+        SnakBarWidget.getSnackBarErrorBlue(
+            AppMetaLabels().error, "Unauthorized , Please login agian");
+        bool isPasswordSet = await GlobalPreferences.getBool(
+                GlobalPreferencesLabels.isPasswordSet) ??
+            false;
+
+        Get.offAll(() => PasswordScreen(
+              isPasswordSet: isPasswordSet.toString().obs,
+            ));
         return AppMetaLabels().unauthorized;
       case 404:
         return AppMetaLabels().noDatafound;
