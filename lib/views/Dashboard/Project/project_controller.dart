@@ -6,7 +6,7 @@ import 'package:localgovernment_project/data/models/common_response_model.dart';
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
 import 'package:localgovernment_project/data/repository/project_repository.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
-import 'package:localgovernment_project/views/Dashboard/Project/get_feedback_screen.dart';
+import 'package:localgovernment_project/views/Dashboard/Project/get_multiplefeedback_screen.dart';
 import 'package:localgovernment_project/views/common/no_internet_screen.dart';
 import 'package:localgovernment_project/views/widgets/snackbar_widget.dart';
 
@@ -21,6 +21,8 @@ class ProjectController extends GetxController {
       ApiResponse<IsFeedbackAddedResponseModel>().obs;
   Rx<ApiResponse<GetFeedbackDetailResponse?>> feedbackDetailModel =
       ApiResponse<GetFeedbackDetailResponse?>().obs;
+  Rx<ApiResponse<List<GetFeedbackDetailResponse?>>> feedbackListDetailModel =
+      ApiResponse<List<GetFeedbackDetailResponse>>().obs;
   Rx<ApiResponse<CommonMessageModel>> addFeedbackModel =
       ApiResponse<CommonMessageModel>().obs;
 
@@ -115,7 +117,8 @@ class ProjectController extends GetxController {
   }
 
   var resultAddFeddback = ApiResponse<dynamic>();
-  Future<void> submitFeedBack(FeedBackRequestModel feebackrquestModel) async {
+  Future<void> submitFeedBack(FeedBackRequestModel feebackrquestModel,
+      ProjectVM selectedProject) async {
     try {
       bool isInternetConnected = await BaseClientClass.isInternetConnected();
       if (!isInternetConnected) {
@@ -131,8 +134,9 @@ class ProjectController extends GetxController {
             "Feedback added successfully") {
           SnakBarWidget.getSnackBarErrorBlue(AppMetaLabels().success,
               addFeedbackModel.value.data?.message ?? "");
-          Get.off(() => GetFeedbackComplaintScreen(
+          Get.off(() => GetMultipleFeedbackComplaintScreen(
                 projectId: feebackrquestModel.projectId.toString(),
+                selectproject: selectedProject,
               ));
         }
         update();
@@ -160,6 +164,37 @@ class ProjectController extends GetxController {
       if (result is ApiResponse<GetFeedbackDetailResponse>) {
         error.value = '';
         feedbackDetailModel.value = result;
+        if (kDebugMode) {
+          print(feedbackDetailModel.value.data?.nameEn);
+          print(feedbackDetailModel.value.data?.email);
+          print(feedbackDetailModel.value.data?.phone);
+        }
+        update();
+      } else {
+        error.value = result;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('inside Catch $e}');
+      }
+    } finally {
+      loadingProjectsData.value = false;
+    }
+  }
+
+  Future<void> getProjectsMultipleFeedback(String projectID) async {
+    try {
+      bool isInternetConnected = await BaseClientClass.isInternetConnected();
+      if (!isInternetConnected) {
+        await Get.to(() => const NoInternetScreen());
+      }
+      loadingProjectsData.value = true;
+      feedbackListDetailModel.value =
+          ApiResponse<List<GetFeedbackDetailResponse>>();
+      var result = await ProjectRepository.getFeedbackListDetail(projectID);
+      if (result is ApiResponse<List<GetFeedbackDetailResponse>>) {
+        error.value = '';
+        feedbackListDetailModel.value = result;
         if (kDebugMode) {
           print(feedbackDetailModel.value.data?.nameEn);
           print(feedbackDetailModel.value.data?.email);

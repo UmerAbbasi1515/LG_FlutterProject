@@ -4,7 +4,7 @@ import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
 import 'package:localgovernment_project/views/Dashboard/Project/add_feedback_screen.dart';
-import 'package:localgovernment_project/views/Dashboard/Project/get_feedback_screen.dart';
+import 'package:localgovernment_project/views/Dashboard/Project/get_multiplefeedback_screen.dart';
 import 'package:localgovernment_project/views/Dashboard/Project/project_controller.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/button_widget.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/divider_widget.dart';
@@ -280,11 +280,18 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                                   "View Feedback/Complaint",
                                               onPress: () {
                                                 Get.to(() =>
-                                                    GetFeedbackComplaintScreen(
-                                                      projectId: widget
-                                                          .selectedProject.id
-                                                          .toString(),
-                                                    ));
+                                                    GetMultipleFeedbackComplaintScreen(
+                                                        projectId: widget
+                                                            .selectedProject.id
+                                                            .toString(),
+                                                        selectproject: widget
+                                                            .selectedProject));
+                                                // Get.to(() =>
+                                                //     GetFeedbackComplaintScreen(
+                                                //       projectId: widget
+                                                //           .selectedProject.id
+                                                //           .toString(),
+                                                //     ));
                                               },
                                             ),
                                           ),

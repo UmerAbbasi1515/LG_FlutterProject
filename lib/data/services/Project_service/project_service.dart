@@ -133,4 +133,44 @@ class ProjectServices {
 
     throw Exception(AppMetaLabels().invalidResponse);
   }
+
+  static Future<ApiResponse<List<GetFeedbackDetailResponse>>>
+      getFeedbackListDetail(String projectID) async {
+    var data = {
+      "projectId": projectID,
+    };
+
+    var url = AppConfig().getProjectsFeedbackList;
+
+    var response = await BaseClientClass.postwithheader(url ?? "", data);
+
+    if (response is http.Response) {
+      final jsonData = jsonDecode(response.body);
+
+      final apiResponse = ApiResponse<List<GetFeedbackDetailResponse>>.fromJson(
+        jsonData,
+        (data) {
+          if (data == null) return [];
+
+          // ✅ CASE 1: LIST
+          if (data is List) {
+            return data
+                .map((e) => GetFeedbackDetailResponse.fromJson(e))
+                .toList();
+          }
+
+          // ✅ CASE 2: SINGLE OBJECT
+          if (data is Map<String, dynamic>) {
+            return [GetFeedbackDetailResponse.fromJson(data)];
+          }
+
+          return [];
+        },
+      );
+
+      return apiResponse;
+    }
+
+    throw Exception(AppMetaLabels().invalidResponse);
+  }
 }

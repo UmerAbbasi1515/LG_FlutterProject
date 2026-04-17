@@ -1,3 +1,4 @@
+
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
 import 'package:localgovernment_project/data/services/Project_service/project_service.dart';
 
@@ -17,4 +18,7 @@ class ProjectRepository {
 
   static Future<dynamic> getFeedbackDetail(String projectID) =>
       ProjectServices.getFeedbackDetail(projectID);
+  static Future<dynamic>
+      getFeedbackListDetail(String projectID) =>
+          ProjectServices.getFeedbackListDetail(projectID);
 }

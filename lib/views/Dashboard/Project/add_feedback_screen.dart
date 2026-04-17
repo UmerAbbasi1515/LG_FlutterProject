@@ -490,8 +490,9 @@ class _AddFeedbackComplaintScreenState extends State<AddFeedbackComplaintScreen>
                                     audioFile: audioFile,
                                     imageFile: imageFile,
                                   );
-                                  controller
-                                      .submitFeedBack(feedbackRequestModel);
+                                  controller.submitFeedBack(
+                                      feedbackRequestModel,
+                                      widget.selectproject);
                                 },
                               );
                       }),

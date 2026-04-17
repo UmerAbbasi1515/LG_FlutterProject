@@ -83,8 +83,6 @@ class BaseClientClass {
       {String? token}) async {
     token ??= SessionController().getToken();
 
-    token = "$token Test";
-
     if (kDebugMode) {
       print(token);
     }

@@ -31,6 +31,12 @@ class _GetFeedbackComplaintScreenState
   final player = AudioPlayer();
   VideoPlayerController? videoController;
 
+  // ✅ Rx observables instead of plain setState variables
+  final RxBool isPlaying = false.obs;
+  final Rx<String?> playingAudioUrl = Rx<String?>(null);
+
+  StreamSubscription? _playerSubscription;
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +44,7 @@ class _GetFeedbackComplaintScreenState
   }
 
   getFeedbackData() async {
-    await controller.getProjectsFeedback(widget.projectId);
+    await controller.getProjectsMultipleFeedback(widget.projectId);
   }
 
   @override
@@ -92,37 +98,27 @@ class _GetFeedbackComplaintScreenState
   }
 
   // ---------------- AUDIO ----------------
-  String? playingAudioUrl;
-  bool isPlaying = false;
-  StreamSubscription? _playerSubscription;
   Future<void> playAudioFromUrl(String url) async {
     try {
-      if (playingAudioUrl == url && isPlaying) {
+      if (playingAudioUrl.value == url && isPlaying.value) {
         await player.pause();
-        setState(() => isPlaying = false);
+        isPlaying.value = false; // ✅ reactive update
         return;
       }
 
       await player.stop();
-
-      // 👇 Cancel old listener before creating new one
       await _playerSubscription?.cancel();
 
-      setState(() {
-        playingAudioUrl = url;
-        isPlaying = true;
-      });
+      playingAudioUrl.value = url;  // ✅ reactive update
+      isPlaying.value = true;        // ✅ reactive update
 
       await player.setUrl(url);
       await player.play();
 
-      // 👇 Store the subscription
       _playerSubscription = player.playerStateStream.listen((state) {
         if (state.processingState == ProcessingState.completed) {
-          setState(() {
-            isPlaying = false;
-            playingAudioUrl = null;
-          });
+          isPlaying.value = false;       // ✅ reactive update
+          playingAudioUrl.value = null;  // ✅ reactive update
         }
       });
     } catch (e) {
@@ -134,8 +130,6 @@ class _GetFeedbackComplaintScreenState
 
   @override
   Widget build(BuildContext context) {
-    final data = controller.feedbackDetailModel.value.data;
-
     return Directionality(
       textDirection: SessionController().getLanguage() == 1
           ? TextDirection.ltr
@@ -143,284 +137,278 @@ class _GetFeedbackComplaintScreenState
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Obx(() {
+          // ✅ data is now INSIDE Obx so GetX can track it
+          final data = controller.feedbackDetailModel.value.data;
+
+          if (controller.temp.value) return const SizedBox();
+
           if (data == null) {
             return const Center(child: Text("No Data Found"));
           }
 
           final media = data.media;
 
-          return controller.temp.value
-              ? SizedBox()
-              : Column(
-                  children: [
-                    CustomAppBarDoubleBack(title: "Feedback / Complaint"),
-                    controller.loadingProjectsData.value
-                        ? Center(
-                            child: Padding(
-                            padding: EdgeInsets.only(top: 30.h),
-                            child: Center(child: LoadingIndicatorBlue()),
-                          ))
-                        : Expanded(
-                            child: SingleChildScrollView(
-                              child: Padding(
-                                padding: EdgeInsets.all(3.w),
-                                child: Column(
-                                  children: [
-                                    // ================= CARD 1 (USER INFO) =================
-                                    Container(
-                                      width: double.infinity,
-                                      padding: EdgeInsets.all(3.w),
-                                      margin: EdgeInsets.only(bottom: 2.h),
-                                      decoration: BoxDecoration(
-                                        border:
-                                            Border.all(color: AppColors.grey1),
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: Colors.grey.shade50,
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          buildText("Name", data.nameEn),
-                                          buildText("Email", data.email),
-                                          buildText("Phone", data.phone),
-                                        ],
-                                      ),
-                                    ),
-
-                                    // ================= CARD 2 (COMPLAINT + MEDIA) =================
-                                    Container(
-                                      width: double.infinity,
-                                      padding: EdgeInsets.all(3.w),
-                                      decoration: BoxDecoration(
-                                        border:
-                                            Border.all(color: AppColors.grey1),
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: Colors.grey.shade50,
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Description",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          SizedBox(height: 1.h),
-                                          buildTextComplaint(
-                                              "Complaint", data.textMessage),
-
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              // ================= IMAGES =================
-                                              if (media.any((e) =>
-                                                  e.mediaType == 'image'))
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      const Text(
-                                                        "Images",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      SizedBox(height: 1.h),
-                                                      SizedBox(
-                                                        height: 12.h,
-                                                        child: ListView(
-                                                          scrollDirection:
-                                                              Axis.horizontal,
-                                                          children: media
-                                                              .where((e) =>
-                                                                  e.mediaType ==
-                                                                  'image')
-                                                              .map(
-                                                                  (e) =>
-                                                                      Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .only(
-                                                                            right:
-                                                                                10),
-                                                                        child:
-                                                                            GestureDetector(
-                                                                          onTap:
-                                                                              () {
-                                                                            showDialog(
-                                                                              context: context,
-                                                                              builder: (_) => Dialog(
-                                                                                backgroundColor: Colors.black,
-                                                                                insetPadding: EdgeInsets.zero,
-                                                                                child: Stack(
-                                                                                  children: [
-                                                                                    Center(
-                                                                                      child: InteractiveViewer(
-                                                                                        minScale: 0.5,
-                                                                                        maxScale: 4,
-                                                                                        child: Image.network(
-                                                                                          e.previewUrl ?? "",
-                                                                                          fit: BoxFit.contain,
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-
-                                                                                    // ❌ Close button
-                                                                                    Positioned(
-                                                                                      top: 40,
-                                                                                      right: 20,
-                                                                                      child: IconButton(
-                                                                                        icon: const Icon(Icons.close, color: Colors.white, size: 30),
-                                                                                        onPressed: () => Navigator.pop(context),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ),
-                                                                            );
-                                                                          },
-                                                                          child:
-                                                                              ClipRRect(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(8),
-                                                                            child:
-                                                                                Image.network(
-                                                                              e.previewUrl ?? "",
-                                                                              width: 40.w,
-                                                                              fit: BoxFit.cover,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ))
-                                                              .toList(),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-
-                                              SizedBox(width: 2.w),
-
-                                              // ================= VIDEOS =================
-                                              if (media.any((e) =>
-                                                  e.mediaType == 'video'))
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      const Text(
-                                                        "Videos",
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      SizedBox(height: 1.h),
-                                                      SizedBox(
-                                                        height: 12.h,
-                                                        child: ListView(
-                                                          scrollDirection:
-                                                              Axis.horizontal,
-                                                          children: media
-                                                              .where((e) =>
-                                                                  e.mediaType ==
-                                                                  'video')
-                                                              .map((e) =>
-                                                                  GestureDetector(
-                                                                    onTap: () =>
-                                                                        _showVideoFromUrl(e.previewUrl ??
-                                                                            ""),
-                                                                    child:
-                                                                        Container(
-                                                                      width:
-                                                                          40.w,
-                                                                      margin: const EdgeInsets
-                                                                          .only(
-                                                                          right:
-                                                                              10),
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color: Colors
-                                                                            .black12,
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(8),
-                                                                      ),
-                                                                      child: const Icon(
-                                                                          Icons
-                                                                              .play_circle,
-                                                                          size:
-                                                                              40),
-                                                                    ),
-                                                                  ))
-                                                              .toList(),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 2.h),
-                                          // -------- AUDIO --------
-                                          if (media.any((e) =>
-                                              e.mediaType == 'audio')) ...[
-                                            const Text("Audio",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            Column(
-                                              children: media
-                                                  .where((e) =>
-                                                      e.mediaType == 'audio')
-                                                  .map((e) {
-                                                final url = e.previewUrl
-                                                        ?.replaceAll('audios',
-                                                            'audio') ??
-                                                    "";
-
-                                                final isCurrent =
-                                                    playingAudioUrl == url;
-
-                                                return Card(
-                                                  child: ListTile(
-                                                    leading: Icon(
-                                                      isCurrent && isPlaying
-                                                          ? Icons
-                                                              .pause_circle_filled
-                                                          : Icons
-                                                              .play_circle_fill,
-                                                      color: AppColors.bgBlue1,
-                                                      size: 35,
-                                                    ),
-                                                    title: Text(
-                                                      isCurrent && isPlaying
-                                                          ? "Playing..."
-                                                          : "Play Audio",
-                                                    ),
-                                                    onTap: () {
-                                                      playAudioFromUrl(url);
-                                                      setState(() {});
-                                                    },
-                                                  ),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ],
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+          return Column(
+            children: [
+              CustomAppBarDoubleBack(title: "Feedback / Complaint"),
+              if (controller.loadingProjectsData.value)
+                Padding(
+                  padding: EdgeInsets.only(top: 30.h),
+                  child: const Center(child: LoadingIndicatorBlue()),
+                )
+              else
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: EdgeInsets.all(3.w),
+                      child: Column(
+                        children: [
+                          // ================= CARD 1 (USER INFO) =================
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(3.w),
+                            margin: EdgeInsets.only(bottom: 2.h),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.grey1),
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.grey.shade50,
+                            ),
+                            child: Column(
+                              children: [
+                                buildText("Name", data.nameEn),
+                                buildText("Email", data.email),
+                                buildText("Phone", data.phone),
+                              ],
                             ),
                           ),
-                  ],
-                );
+
+                          // ================= CARD 2 (COMPLAINT + MEDIA) =================
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(3.w),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.grey1),
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.grey.shade50,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Description",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(height: 1.h),
+                                buildTextComplaint("Complaint", data.textMessage),
+
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // ================= IMAGES =================
+                                    if (media.any((e) => e.mediaType == 'image'))
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "Images",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(height: 1.h),
+                                            SizedBox(
+                                              height: 12.h,
+                                              child: ListView(
+                                                scrollDirection: Axis.horizontal,
+                                                children: media
+                                                    .where((e) =>
+                                                        e.mediaType == 'image')
+                                                    .map(
+                                                      (e) => Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                                right: 10),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder: (_) =>
+                                                                  Dialog(
+                                                                backgroundColor:
+                                                                    Colors.black,
+                                                                insetPadding:
+                                                                    EdgeInsets
+                                                                        .zero,
+                                                                child: Stack(
+                                                                  children: [
+                                                                    Center(
+                                                                      child:
+                                                                          InteractiveViewer(
+                                                                        minScale:
+                                                                            0.5,
+                                                                        maxScale:
+                                                                            4,
+                                                                        child: Image
+                                                                            .network(
+                                                                          e.previewUrl ??
+                                                                              "",
+                                                                          fit: BoxFit
+                                                                              .contain,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Positioned(
+                                                                      top: 40,
+                                                                      right: 20,
+                                                                      child:
+                                                                          IconButton(
+                                                                        icon: const Icon(
+                                                                            Icons
+                                                                                .close,
+                                                                            color:
+                                                                                Colors.white,
+                                                                            size:
+                                                                                30),
+                                                                        onPressed:
+                                                                            () =>
+                                                                                Navigator.pop(context),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(8),
+                                                            child: Image.network(
+                                                              e.previewUrl ?? "",
+                                                              width: 40.w,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                    .toList(),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                    SizedBox(width: 2.w),
+
+                                    // ================= VIDEOS =================
+                                    if (media.any((e) => e.mediaType == 'video'))
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              "Videos",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(height: 1.h),
+                                            SizedBox(
+                                              height: 12.h,
+                                              child: ListView(
+                                                scrollDirection: Axis.horizontal,
+                                                children: media
+                                                    .where((e) =>
+                                                        e.mediaType == 'video')
+                                                    .map(
+                                                      (e) => GestureDetector(
+                                                        onTap: () =>
+                                                            _showVideoFromUrl(
+                                                                e.previewUrl ??
+                                                                    ""),
+                                                        child: Container(
+                                                          width: 40.w,
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  right: 10),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                Colors.black12,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(8),
+                                                          ),
+                                                          child: const Icon(
+                                                              Icons.play_circle,
+                                                              size: 40),
+                                                        ),
+                                                      ),
+                                                    )
+                                                    .toList(),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                  ],
+                                ),
+
+                                SizedBox(height: 2.h),
+
+                                // ================= AUDIO =================
+                                if (media.any((e) => e.mediaType == 'audio')) ...[
+                                  const Text(
+                                    "Audio",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  // ✅ Separate nested Obx ONLY for audio play state
+                                  Obx(
+                                    () => Column(
+                                      children: media
+                                          .where((e) => e.mediaType == 'audio')
+                                          .map((e) {
+                                        final url = e.previewUrl
+                                                ?.replaceAll('audios', 'audio') ??
+                                            "";
+                                        final isCurrent =
+                                            playingAudioUrl.value == url;
+
+                                        return Card(
+                                          child: ListTile(
+                                            leading: Icon(
+                                              isCurrent && isPlaying.value
+                                                  ? Icons.pause_circle_filled
+                                                  : Icons.play_circle_fill,
+                                              color: AppColors.bgBlue1,
+                                              size: 35,
+                                            ),
+                                            title: Text(
+                                              isCurrent && isPlaying.value
+                                                  ? "Playing..."
+                                                  : "Play Audio",
+                                            ),
+                                            onTap: () => playAudioFromUrl(url),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          );
         }),
       ),
     );
