@@ -125,24 +125,24 @@ class PasswordController extends GetxController {
             Get.offAll(() => TenantDashboardTabs());
           } else {
             SnakBarWidget.getSnackBarErrorBlue(
-                AppMetaLabels().error, loginWithPassModel.value.message ?? "");
+                AppMetaLabels().error, AppMetaLabels().tokenGenerationFailedN);
           }
           isLoading.value = false;
         } else {
           isLoading.value = false;
           SnakBarWidget.getSnackBarErrorBlue(
-              AppMetaLabels().error, loginWithPassModel.value.message ?? "");
+              AppMetaLabels().error, AppMetaLabels().tokenGenerationFailedN);
         }
       } else {
         errorWhileApiCall.value = result;
         isLoading.value = false;
         SnakBarWidget.getSnackBarErrorBlue(
-            AppMetaLabels().error, loginWithPassModel.value.message ?? "");
+            AppMetaLabels().error, AppMetaLabels().tokenGenerationFailedN);
       }
     } catch (e) {
       isLoading.value = false;
       SnakBarWidget.getSnackBarErrorBlue(
-          AppMetaLabels().error, loginWithPassModel.value.message ?? "");
+          AppMetaLabels().error, AppMetaLabels().tokenGenerationFailedN);
     }
   }
 

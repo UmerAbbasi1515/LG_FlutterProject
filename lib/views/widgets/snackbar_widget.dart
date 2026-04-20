@@ -1,8 +1,6 @@
 
 import 'package:get/route_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:localgovernment_project/utils/constants/meta_labels.dart';
-import 'package:localgovernment_project/utils/styles/text_styles.dart';
 import 'package:sizer/sizer.dart';
 
 class SnakBarWidget {
@@ -53,121 +51,10 @@ class SnakBarWidget {
         ));
   }
 
-  static getSnackBarErrorBlueRichTExt(String title, String message) {
-    return Get.snackbar(title, message,
-        messageText: RichText(
-          text: TextSpan(
-            text: '',
-            children: <TextSpan>[
-              TextSpan(
-                  text: AppMetaLabels().pleaseScan,
-                  style: AppTextStyle.normalWhite11),
-              TextSpan(
-                  text: message,
-                  style: AppTextStyle.semiBoldWhite12
-                      .copyWith(fontWeight: FontWeight.bold)),
-              TextSpan(
-                  text: AppMetaLabels().validEID,
-                  style: AppTextStyle.normalWhite11),
-            ],
-          ),
-        ),
-        snackPosition: SnackPosition.TOP,
-        duration: const Duration(seconds: 5),
-        backgroundColor: Colors.blue,
-        margin: EdgeInsets.only(bottom: 2.h, right: 1.h, left: 1.h),
-        colorText: Colors.white,
-        icon: const Icon(
-          Icons.error,
-          color: Colors.white,
-        ));
-  }
-
-  static getSnackBarTAKEBlueRichTExt() {
-    return Get.snackbar('', '',
-        messageText: RichText(
-          text: TextSpan(
-            text: '',
-            children: <TextSpan>[
-              TextSpan(
-                  text: AppMetaLabels().pleasetakeOtherSide,
-                  style: AppTextStyle.normalWhite11),
-              TextSpan(text: '', style: AppTextStyle.normalWhite11),
-            ],
-          ),
-        ),
-        snackPosition: SnackPosition.TOP,
-        duration: const Duration(seconds: 5),
-        backgroundColor: Colors.blue,
-        margin: EdgeInsets.only(bottom: 2.h, right: 1.h, left: 1.h),
-        colorText: Colors.white,
-        icon: const Icon(
-          Icons.error,
-          color: Colors.white,
-        ));
-  }
-
-  static getSnackBarErrorBlueRichTExtForPrepareData(
-      String title, String message) {
-    return Get.snackbar(title, message,
-        messageText: RichText(
-          text: TextSpan(
-            text: '',
-            children: <TextSpan>[
-              TextSpan(
-                  text: AppMetaLabels().pleaseWait,
-                  style: AppTextStyle.normalWhite11),
-              TextSpan(
-                  text: message,
-                  style: AppTextStyle.semiBoldWhite12
-                      .copyWith(fontWeight: FontWeight.bold)),
-              TextSpan(
-                  text: AppMetaLabels().dataISPreparing,
-                  style: AppTextStyle.normalWhite11),
-            ],
-          ),
-        ),
-        snackPosition: SnackPosition.TOP,
-        duration: const Duration(seconds: 5),
-        backgroundColor: Colors.blue,
-        margin: EdgeInsets.only(bottom: 2.h, right: 1.h, left: 1.h),
-        colorText: Colors.white,
-        icon: const Icon(
-          Icons.error,
-          color: Colors.white,
-        ));
-  }
-
-  static getSnackBarErrorBlueRichTExtForPrepareDataAr() {
-    return Get.snackbar('', '',
-        messageText: RichText(
-          text: TextSpan(
-            text: '',
-            children: <TextSpan>[
-              TextSpan(
-                  text: '',
-                  style: AppTextStyle.normalWhite11),
-              TextSpan(
-                  text: AppMetaLabels().dataISPreparingAR,
-                  style: AppTextStyle.semiBoldWhite12
-                      .copyWith(fontWeight: FontWeight.bold)),
-              TextSpan(
-                  text: '',
-                  style: AppTextStyle.normalWhite11),
-            ],
-          ),
-        ),
-        snackPosition: SnackPosition.TOP,
-        duration: const Duration(seconds: 5),
-        backgroundColor: Colors.blue,
-        margin: EdgeInsets.only(bottom: 2.h, right: 1.h, left: 1.h),
-        colorText: Colors.white,
-        icon: const Icon(
-          Icons.error,
-          color: Colors.white,
-        ));
-  }
-
+  
+ 
+ 
+  
   static getSnackBarErrorBlueWith20Sec(
     String title,
     String message,

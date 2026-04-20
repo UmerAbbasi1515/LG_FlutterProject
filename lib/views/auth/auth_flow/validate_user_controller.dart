@@ -382,7 +382,7 @@ class ValidateFirebaseUserController extends GetxController {
           }
 
           loadingData.value = false;
-          if (isPasswordSetValue == "") {
+          if (isPasswordSetValue != "") {
             await verifyPhone(SessionController().getPhone() ?? "");
           } else {
             Get.offAll(
@@ -390,15 +390,15 @@ class ValidateFirebaseUserController extends GetxController {
           }
         } else {
           SnakBarWidget.getSnackBarErrorBlue(
-              AppMetaLabels().error, model.value.message ?? "");
+              AppMetaLabels().error, AppMetaLabels().userDataNotFound);
         }
       } else {
         SnakBarWidget.getSnackBarErrorBlue(
-            AppMetaLabels().error, result.message ?? "");
+            AppMetaLabels().error, AppMetaLabels().userDataNotFound);
       }
     } catch (e) {
       SnakBarWidget.getSnackBarErrorBlue(
-          AppMetaLabels().error, result.message.toString());
+          AppMetaLabels().error, AppMetaLabels().userDataNotFound);
     } finally {
       isLoadingN.value = false;
     }

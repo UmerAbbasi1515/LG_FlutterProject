@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
@@ -61,13 +60,13 @@ class _LanguageScreenState extends State<LanguageScreen> {
                             children: [
                               Text(
                                 AppMetaLabels().choose,
-                              style: AppTextStyle.normalWhite11,
+                                style: AppTextStyle.semiBoldWhite16,
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 1.0.h),
                                 child: Text(
                                   AppMetaLabels().language,
-                                  style: AppTextStyle.semiBoldWhite13,
+                                  style: AppTextStyle.semiBoldWhite15,
                                 ),
                               ),
                             ],
@@ -103,8 +102,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                   child: ListView.builder(
                                     // shrinkWrap: true,
                                     padding: EdgeInsets.zero,
-                                    itemCount: gLController
-                                        .model.value.data?.length,
+                                    itemCount:
+                                        gLController.model.value.data?.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return Column(
@@ -115,9 +114,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                             child: InkWell(
                                               onTap: () {
                                                 gLController.changeLanguage(
-                                                    gLController
-                                                            .  model.value.data?[index]
-                                                            .id ??
+                                                    gLController.model.value
+                                                            .data?[index].id ??
                                                         -1,
                                                     widget.loggedIn ?? false,
                                                     widget.cont ?? false);
@@ -129,18 +127,20 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                                   children: [
                                                     Text(
                                                       (gLController
-                                                                  .  model.value.data?[
-                                                                      index]
+                                                                  .model
+                                                                  .value
+                                                                  .data?[index]
                                                                   .nameEn ==
-                                                              "Arabic")
-                                                          ? "العربية"
+                                                              "Urdu")
+                                                          ? "اردو"
                                                           : gLController
-                                                                  .  model.value.data?[
-                                                                      index]
+                                                                  .model
+                                                                  .value
+                                                                  .data?[index]
                                                                   .nameEn ??
                                                               "",
                                                       style: AppTextStyle
-                                                          .normalWhite15,
+                                                          .normalWhite16,
                                                     ),
                                                     const Spacer(),
                                                     Padding(
@@ -150,8 +150,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                                                   .selectedLang
                                                                   .value ==
                                                               gLController
-                                                                  .  model.value.data?[
-                                                                      index]
+                                                                  .model
+                                                                  .value
+                                                                  .data?[index]
                                                                   .id
                                                           // index
                                                           ? Icon(
@@ -168,7 +169,10 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                             ),
                                           ),
                                           index ==
-                                                  (gLController.model.value.data?.length ?? 0) - 1
+                                                  (gLController.model.value.data
+                                                              ?.length ??
+                                                          0) -
+                                                      1
                                               ? const SizedBox()
                                               : const AppDivider(),
                                         ],

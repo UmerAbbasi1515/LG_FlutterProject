@@ -149,7 +149,10 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                     Container(
                                       color: AppColors.blueColor,
                                       height: 0.1.h,
-                                      width: 10.w,
+                                      width:
+                                          SessionController().getLanguage() == 1
+                                              ? 10.w
+                                              : 20.w,
                                     ),
                                   ],
                                 ),

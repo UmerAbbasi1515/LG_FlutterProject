@@ -91,7 +91,7 @@ class _OTPScreenState extends State<OTPScreen> {
                             padding: EdgeInsets.only(top: 3.0.h),
                             child: Text(
                               AppMetaLabels().otpVerification,
-                              style: AppTextStyle.semiBoldWhite13,
+                              style: AppTextStyle.semiBoldWhite15,
                             ),
                           ),
 
@@ -103,7 +103,7 @@ class _OTPScreenState extends State<OTPScreen> {
                                   )
                                 : Text(
                                     AppMetaLabels().enterTheCode,
-                                    style: AppTextStyle.normalWhite12,
+                                    style: AppTextStyle.normalWhite14,
                                   ),
                           ),
                           Padding(
@@ -309,7 +309,10 @@ class _OTPScreenState extends State<OTPScreen> {
                                   Container(
                                     color: AppColors.whiteColor,
                                     height: 0.1.h,
-                                    width: 8.0.w,
+                                    width:
+                                        SessionController().getLanguage() == 1
+                                            ? 8.0.w
+                                            : 14.w,
                                   ),
                                 ],
                               ),

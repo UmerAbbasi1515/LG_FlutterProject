@@ -98,7 +98,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                             AppMetaLabels().oneTimePassword,
                             textAlign: TextAlign.center,
                             // style: AppTextStyle.semiBoldWhite10,
-                            style: AppTextStyle.normalWhite12,
+                            style: AppTextStyle.normalWhite14,
                           ),
                           Padding(
                             padding: EdgeInsets.only(
@@ -110,7 +110,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                               child: Text(
                                 AppMetaLabels().mobileNumber,
                                 textAlign: TextAlign.center,
-                                style: AppTextStyle.normalWhite12,
+                                style: AppTextStyle.normalWhite14,
                               ),
                             ),
                           ),
@@ -143,7 +143,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                                 countryController
                                                     .selectedDialingCode.value,
                                                 style:
-                                                    AppTextStyle.normalWhite13,
+                                                    AppTextStyle.normalWhite14,
                                               );
                                             }),
                                           ),
@@ -198,14 +198,14 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                                   EdgeInsets.only(left: 1.0.h),
                                               child: Text(
                                                 authController.errorValidateUser
-                                                            .value ==
+                                                            .value !=
                                                         ''
                                                     ? authController.error.value
                                                     : authController
                                                         .errorValidateUser
                                                         .value,
                                                 style: AppTextStyle
-                                                    .semiBoldWhite11,
+                                                    .semiBoldWhite13,
                                                 maxLines: 3,
                                               ),
                                             ),
@@ -230,7 +230,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                     ),
                                     Text(
                                       AppMetaLabels().validatingUser,
-                                      style: AppTextStyle.semiBoldWhite10,
+                                      style: AppTextStyle.semiBoldWhite14,
                                     ),
                                   ],
                                 )
@@ -316,7 +316,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                           ),
                                           Text(
                                             AppMetaLabels().sureToExit,
-                                            style: AppTextStyle.semiBoldBlack12,
+                                            style: AppTextStyle.semiBoldBlack13,
                                           ),
                                           Row(
                                             mainAxisAlignment:
@@ -333,7 +333,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                                 child: Text(
                                                   AppMetaLabels().no,
                                                   style: AppTextStyle
-                                                      .semiBoldBlack12,
+                                                      .semiBoldBlack13,
                                                 ),
                                               ),
                                               Padding(
@@ -354,7 +354,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                                   child: Text(
                                                     AppMetaLabels().yes,
                                                     style: AppTextStyle
-                                                        .semiBoldWhite12,
+                                                        .semiBoldWhite13,
                                                   ),
                                                 ),
                                               ),
@@ -370,7 +370,7 @@ class _ValidateUserScreenState extends State<ValidateUserScreen> {
                                 children: [
                                   Text(
                                     AppMetaLabels().cancel,
-                                    style: AppTextStyle.normalWhite13,
+                                    style: AppTextStyle.normalWhite14,
                                   ),
                                   Container(
                                     color: AppColors.whiteColor,
