@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/data/helpers/base_client.dart';
+import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/data/models/auth_models/validate_user_model.dart';
 import 'package:localgovernment_project/data/models/common_response_model.dart';
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
@@ -47,7 +48,6 @@ class ProjectController extends GetxController {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final complaintController = TextEditingController();
-
 
   Future<void> getProjects() async {
     try {
@@ -139,8 +139,11 @@ class ProjectController extends GetxController {
         addFeedbackModel.value = result;
         if (addFeedbackModel.value.data?.message ==
             "Feedback added successfully") {
-          SnakBarWidget.getSnackBarErrorBlue(AppMetaLabels().success,
-              addFeedbackModel.value.data?.message ?? "");
+          SnakBarWidget.getSnackBarErrorBlue(
+              AppMetaLabels().success,
+              SessionController().getLanguage() == 1
+                  ? addFeedbackModel.value.data?.message ?? ""
+                  : addFeedbackModel.value.data?.messageUr ?? "");
           Get.off(() => GetMultipleFeedbackComplaintScreen(
                 projectId: feebackrquestModel.projectId.toString(),
                 selectproject: selectedProject,

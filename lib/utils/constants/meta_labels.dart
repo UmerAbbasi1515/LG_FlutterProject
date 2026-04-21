@@ -30,6 +30,9 @@ class AppMetaLabels {
   String yes = SessionController().getLanguage() == 1 ? 'Yes' : 'جی ہاں';
   String no = SessionController().getLanguage() == 1 ? 'No' : 'نہیں';
   String error = SessionController().getLanguage() == 1 ? 'Error' : 'خرابی';
+  String unAuthPlzRelogin = SessionController().getLanguage() == 1
+      ? 'Unauthorized , Please login agian'
+      : "غیر مجاز، براہ کرم دوبارہ لاگ ان کریں";
   String invalidPhoneNumber = SessionController().getLanguage() == 1
       ? 'Invalid Mobile Number'
       : 'غلط موبائل نمبر';

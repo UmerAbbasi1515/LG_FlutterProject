@@ -27,12 +27,14 @@ class PasswordSetData {
 
 class CommonMessageModel {
   final String message;
+  final String messageUr;
 
-  CommonMessageModel({required this.message});
+  CommonMessageModel({required this.message, required this.messageUr});
 
   factory CommonMessageModel.fromJson(Map<String, dynamic> json) {
     return CommonMessageModel(
       message: json['message'] ?? '',
+      messageUr: json['messageUr'] ?? '',
     );
   }
 }

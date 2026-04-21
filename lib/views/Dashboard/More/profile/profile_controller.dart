@@ -79,12 +79,18 @@ class ProfileController extends GetxController {
         if (result.message == "Success" &&
             result.data?.message == "Profile updated sucessfully") {
           SnakBarWidget.getSnackBarErrorBlue(
-              AppMetaLabels().error, result.data?.message ?? "");
+              AppMetaLabels().error,
+              SessionController().getLanguage() == 1
+                  ? result.data?.message ?? ""
+                  : result.data?.messageUr ?? "");
         }
         update();
       } else {
         SnakBarWidget.getSnackBarErrorBlue(
-            AppMetaLabels().error, result.data?.message ?? "");
+            AppMetaLabels().error,
+            SessionController().getLanguage() == 1
+                ? result.data?.message ?? ""
+                : result.data?.messageUr ?? "");
       }
     } catch (e) {
       if (kDebugMode) {

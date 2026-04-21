@@ -121,7 +121,7 @@ class BaseClientClass {
 
       if (jsonData['message'] == 'unauthorized') {
         SnakBarWidget.getSnackBarErrorBlue(
-            AppMetaLabels().error, "Unauthorized , Please login agian");
+            AppMetaLabels().error, AppMetaLabels().unAuthPlzRelogin);
         SessionController().resetSession();
         bool isPasswordSet = await GlobalPreferences.getBool(
                 GlobalPreferencesLabels.isPasswordSet) ??
@@ -196,7 +196,7 @@ class BaseClientClass {
       }
       if (jsonData['message'] == 'unauthorized') {
         SnakBarWidget.getSnackBarErrorBlue(
-            AppMetaLabels().error, "Unauthorized , Please login agian");
+            AppMetaLabels().error, AppMetaLabels().unAuthPlzRelogin);
         SessionController().resetSession();
         bool isPasswordSet = await GlobalPreferences.getBool(
                 GlobalPreferencesLabels.isPasswordSet) ??
@@ -282,7 +282,7 @@ class BaseClientClass {
             false;
 
         SnakBarWidget.getSnackBarErrorBlue(
-            AppMetaLabels().error, "Unauthorized , Please login agian");
+            AppMetaLabels().error, AppMetaLabels().unAuthPlzRelogin);
         Get.offAll(() => PasswordScreen(
               isPasswordSet: isPasswordSet.toString().obs,
             ));
@@ -299,7 +299,7 @@ class BaseClientClass {
       }
       if (jsonData['message'] == 'unauthorized') {
         SnakBarWidget.getSnackBarErrorBlue(
-            AppMetaLabels().error, "Unauthorized , Please login agian");
+            AppMetaLabels().error, AppMetaLabels().unAuthPlzRelogin);
         SessionController().resetSession();
         bool isPasswordSet = await GlobalPreferences.getBool(
                 GlobalPreferencesLabels.isPasswordSet) ??
@@ -404,7 +404,7 @@ class BaseClientClass {
       }
       if (jsonData['message'] == 'unauthorized') {
         SnakBarWidget.getSnackBarErrorBlue(
-            AppMetaLabels().error, "Unauthorized , Please login agian");
+            AppMetaLabels().error, AppMetaLabels().unAuthPlzRelogin);
         SessionController().resetSession();
         bool isPasswordSet = await GlobalPreferences.getBool(
                 GlobalPreferencesLabels.isPasswordSet) ??
@@ -456,7 +456,7 @@ class BaseClientClass {
         return AppMetaLabels().badRequest;
       case 401:
         SnakBarWidget.getSnackBarErrorBlue(
-            AppMetaLabels().error, "Unauthorized , Please login agian");
+            AppMetaLabels().error, AppMetaLabels().unAuthPlzRelogin);
         bool isPasswordSet = await GlobalPreferences.getBool(
                 GlobalPreferencesLabels.isPasswordSet) ??
             false;
@@ -467,7 +467,7 @@ class BaseClientClass {
         return AppMetaLabels().unauthorized;
       case 403:
         SnakBarWidget.getSnackBarErrorBlue(
-            AppMetaLabels().error, "Unauthorized , Please login agian");
+            AppMetaLabels().error, AppMetaLabels().unAuthPlzRelogin);
         bool isPasswordSet = await GlobalPreferences.getBool(
                 GlobalPreferencesLabels.isPasswordSet) ??
             false;
