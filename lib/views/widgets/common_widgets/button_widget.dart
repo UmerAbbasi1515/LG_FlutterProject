@@ -57,6 +57,7 @@ class ButtonWidgetBlue extends StatelessWidget {
         child: Text(
           buttonText ?? "",
           style: AppTextStyle.buttonTextStyle.copyWith(color: Colors.white),
+          textAlign: TextAlign.center,
         ),
       ),
     );

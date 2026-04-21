@@ -76,7 +76,10 @@ class _ProjectScreenState extends State<ProjectScreen> {
                             },
                             child: Text(
                               tDGDController.getInitials(
-                                  SessionController().nameEn ?? ""),
+                                  SessionController().getLanguage() == 1
+                                      ? SessionController().nameEn ?? ""
+                                      : SessionController().nameUr ?? ""
+                                      ),
                               style: AppTextStyle.semiBoldWhite14,
                             ),
                           ),
@@ -166,7 +169,6 @@ class _ProjectScreenState extends State<ProjectScreen> {
                             ),
                           ),
                         ),
-                  
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(

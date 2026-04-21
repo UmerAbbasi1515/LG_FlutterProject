@@ -83,7 +83,6 @@ class OTPController extends GetxController {
         Get.off(() => PasswordScreen(
               isPasswordSet: SessionController().isPasswordSet.obs,
             ));
-        // Get.offAll(()=>TenantDashboardTabs());
       } else {
         ValidateFirebaseUserController controller =
             Get.put(ValidateFirebaseUserController());

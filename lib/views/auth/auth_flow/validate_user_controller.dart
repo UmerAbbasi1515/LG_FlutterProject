@@ -177,7 +177,6 @@ class ValidateFirebaseUserController extends GetxController {
           GlobalPreferences.setbool(GlobalPreferencesLabels.isBlocked, true);
           return;
         }
-        // SnakBarWidget.getSnackBarError(e.message, e.message);
         if (kDebugMode) {
           print(e.message);
         }
@@ -323,10 +322,6 @@ class ValidateFirebaseUserController extends GetxController {
     resendProgressBarLoading.value = false;
     isUpdating.value = false;
     verifying.value = false;
-    // if (isCodeSent.value != true) {
-    //   SnakBarWidget.getSnackBarErrorBlue(
-    //       AppMetaLabels().alert, AppMetaLabels().codeAutoRetrievalTimeout);
-    // }
   }
 
 //Validate  email
@@ -382,7 +377,7 @@ class ValidateFirebaseUserController extends GetxController {
           }
 
           loadingData.value = false;
-          if (isPasswordSetValue != "") {
+          if (isPasswordSetValue == "") {
             await verifyPhone(SessionController().getPhone() ?? "");
           } else {
             Get.offAll(
@@ -390,15 +385,24 @@ class ValidateFirebaseUserController extends GetxController {
           }
         } else {
           SnakBarWidget.getSnackBarErrorBlue(
-              AppMetaLabels().error, AppMetaLabels().userDataNotFound);
+              AppMetaLabels().error,
+              SessionController().getLanguage() == 1
+                  ? model.value.message ?? ""
+                  : model.value.messageUr ?? "");
         }
       } else {
         SnakBarWidget.getSnackBarErrorBlue(
-            AppMetaLabels().error, AppMetaLabels().userDataNotFound);
+            AppMetaLabels().error,
+            SessionController().getLanguage() == 1
+                ? model.value.message ?? ""
+                : model.value.messageUr ?? "");
       }
     } catch (e) {
       SnakBarWidget.getSnackBarErrorBlue(
-          AppMetaLabels().error, AppMetaLabels().userDataNotFound);
+          AppMetaLabels().error,
+          SessionController().getLanguage() == 1
+              ? model.value.message ?? ""
+              : model.value.messageUr ?? "");
     } finally {
       isLoadingN.value = false;
     }

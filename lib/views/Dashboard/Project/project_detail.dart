@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
+import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
 import 'package:localgovernment_project/views/Dashboard/Project/add_feedback_screen.dart';
 import 'package:localgovernment_project/views/Dashboard/Project/get_multiplefeedback_screen.dart';
@@ -44,7 +45,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             return controller.loadingProjectsData.value == true
                 ? Column(
                     children: [
-                      CustomAppBar2(title: "Project Detail"),
+                      CustomAppBar2(title: AppMetaLabels().projectDetail),
                       Padding(
                         padding: EdgeInsets.only(top: 30.h),
                         child: Center(child: LoadingIndicatorBlue()),
@@ -54,7 +55,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                 : Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      CustomAppBar2(title: "Project Detail"),
+                      CustomAppBar2(title: AppMetaLabels().projectDetail),
                       Padding(
                         padding: EdgeInsets.all(2.0.h),
                         child: Row(
@@ -63,12 +64,12 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                               SessionController().getLanguage() == 1
                                   ? widget.selectedProject.nameEn ?? ""
                                   : widget.selectedProject.nameUr ?? "",
-                              style: AppTextStyle.semiBoldBlack13,
+                              style: AppTextStyle.semiBoldBlack15,
                             ),
                             const Spacer(),
                             Text(
                               widget.selectedProject.id.toString(),
-                              style: AppTextStyle.semiBoldBlack13,
+                              style: AppTextStyle.semiBoldBlack15,
                             ),
                           ],
                         ),
@@ -104,7 +105,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       rowList(
-                                        'Name',
+                                        AppMetaLabels().name,
                                         SessionController().getLanguage() == 1
                                             ? widget.selectedProject.nameEn ??
                                                 ""
@@ -112,7 +113,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                                 "",
                                       ),
                                       rowList(
-                                        'Description',
+                                        AppMetaLabels().description,
                                         SessionController().getLanguage() == 1
                                             ? widget.selectedProject
                                                     .descriptionEn ??
@@ -122,7 +123,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                                 "",
                                       ),
                                       rowList(
-                                        'Location',
+                                        AppMetaLabels().name,
                                         SessionController().getLanguage() == 1
                                             ? widget.selectedProject
                                                     .locationEn ??
@@ -132,12 +133,12 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                                 "",
                                       ),
                                       rowList(
-                                        'ADP Financial Year',
+                                        AppMetaLabels().adpFinancialYear,
                                         widget.selectedProject.adpYear
                                             .toString(),
                                       ),
                                       rowList(
-                                          'Project Leader',
+                                          AppMetaLabels().projectLeader,
                                           SessionController().getLanguage() == 1
                                               ? widget
                                                       .selectedProject
@@ -150,7 +151,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                                       ?.projectLeaderNameUr ??
                                                   ""),
                                       rowList(
-                                          'PMO',
+                                          AppMetaLabels().pmo,
                                           SessionController().getLanguage() == 1
                                               ? widget.selectedProject.pmo
                                                       ?.pmoNameEn ??
@@ -159,7 +160,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                                       ?.pmoNameUr ??
                                                   ""),
                                       rowList(
-                                        'Commattee Member',
+                                        AppMetaLabels().committeeMember,
                                         SessionController().getLanguage() == 1
                                             ? widget.selectedProject
                                                     .committeeMembersNameEn ??
@@ -180,7 +181,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                           Column(
                                             children: [
                                               Text(
-                                                "Halka",
+                                                AppMetaLabels().halka,
                                                 style:
                                                     AppTextStyle.normalGrey12,
                                               ),
@@ -209,7 +210,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                           Column(
                                             children: [
                                               Text(
-                                                "Union Councile",
+                                                AppMetaLabels().unionCouncil,
                                                 style:
                                                     AppTextStyle.normalGrey12,
                                               ),
@@ -234,7 +235,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                           Column(
                                             children: [
                                               Text(
-                                                "Ward",
+                                                AppMetaLabels().ward,
                                                 style:
                                                     AppTextStyle.normalGrey12,
                                               ),
@@ -276,8 +277,8 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                           child: SizedBox(
                                             width: 47.w,
                                             child: ButtonWidgetPermBlue(
-                                              buttonText:
-                                                  "View Feedback/Complaint",
+                                              buttonText: AppMetaLabels()
+                                                  .viewFeedbackComplaint,
                                               onPress: () {
                                                 Get.to(() =>
                                                     GetMultipleFeedbackComplaintScreen(
@@ -339,7 +340,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
           padding: EdgeInsets.only(top: 1.8.h),
           child: Text(
             text2,
-            style: AppTextStyle.semiBoldBlack13,
+            style: AppTextStyle.semiBoldBlack14,
           ),
         ),
       ],

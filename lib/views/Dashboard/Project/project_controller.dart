@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/data/helpers/base_client.dart';
 import 'package:localgovernment_project/data/models/auth_models/validate_user_model.dart';
@@ -33,14 +34,20 @@ class ProjectController extends GetxController {
 
     // If only one name → return first letter
     if (parts.length == 1) {
-      return parts[0][0].toUpperCase();
+      return parts[0].characters.first.toUpperCase();
     }
 
     // If multiple names → take first letter of each word
-    String initials = parts.map((e) => e[0].toUpperCase()).join();
+    String initials = parts.map((e) => e.characters.first.toUpperCase()).join();
 
     return initials;
   }
+
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
+  final complaintController = TextEditingController();
+
 
   Future<void> getProjects() async {
     try {

@@ -37,9 +37,9 @@ class PasswordController extends GetxController {
 
   void validateConfirmPassword() {
     if (confirmPassword.value.isEmpty) {
-      error.value = "Confirm password required";
+      error.value = AppMetaLabels().confirmPasswordRequired;
     } else if (confirmPassword.value != password.value) {
-      error.value = "Passwords do not match";
+      error.value = AppMetaLabels().passwordDoNotMatch;
     } else {
       error.value = "";
     }
@@ -77,7 +77,10 @@ class PasswordController extends GetxController {
           Get.offAll(() => ValidateUserScreen());
         } else {
           SnakBarWidget.getSnackBarErrorBlue(
-              AppMetaLabels().error, passwordSetModel.value.message ?? "");
+              AppMetaLabels().error,
+              SessionController().getLanguage() == 1
+                  ? passwordSetModel.value.message ?? ""
+                  : passwordSetModel.value.messageUr ?? "");
         }
         isLoading.value = false;
       } else {
@@ -125,24 +128,36 @@ class PasswordController extends GetxController {
             Get.offAll(() => TenantDashboardTabs());
           } else {
             SnakBarWidget.getSnackBarErrorBlue(
-                AppMetaLabels().error, AppMetaLabels().tokenGenerationFailedN);
+                AppMetaLabels().error,
+                SessionController().getLanguage() == 1
+                    ? passwordSetModel.value.message ?? ""
+                    : passwordSetModel.value.messageUr ?? "");
           }
           isLoading.value = false;
         } else {
           isLoading.value = false;
           SnakBarWidget.getSnackBarErrorBlue(
-              AppMetaLabels().error, AppMetaLabels().tokenGenerationFailedN);
+              AppMetaLabels().error,
+              SessionController().getLanguage() == 1
+                  ? passwordSetModel.value.message ?? ""
+                  : passwordSetModel.value.messageUr ?? "");
         }
       } else {
         errorWhileApiCall.value = result;
         isLoading.value = false;
         SnakBarWidget.getSnackBarErrorBlue(
-            AppMetaLabels().error, AppMetaLabels().tokenGenerationFailedN);
+            AppMetaLabels().error,
+            SessionController().getLanguage() == 1
+                ? passwordSetModel.value.message ?? ""
+                : passwordSetModel.value.messageUr ?? "");
       }
     } catch (e) {
       isLoading.value = false;
       SnakBarWidget.getSnackBarErrorBlue(
-          AppMetaLabels().error, AppMetaLabels().tokenGenerationFailedN);
+          AppMetaLabels().error,
+          SessionController().getLanguage() == 1
+              ? passwordSetModel.value.message ?? ""
+              : passwordSetModel.value.messageUr ?? "");
     }
   }
 

@@ -189,7 +189,7 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                                 ),
                                 title: Text(
                                   AppMetaLabels().myProfile,
-                                  style: AppTextStyle.normalBlack13,
+                                  style: AppTextStyle.normalBlack14,
                                 ),
                               ),
                               ListTile(
@@ -203,7 +203,7 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                                 ),
                                 title: Text(
                                   AppMetaLabels().notifications,
-                                  style: AppTextStyle.normalBlack13,
+                                  style: AppTextStyle.normalBlack14,
                                 ),
                               ),
                               ListTile(
@@ -217,7 +217,7 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                                 ),
                                 title: Text(
                                   AppMetaLabels().settings,
-                                  style: AppTextStyle.normalBlack13,
+                                  style: AppTextStyle.normalBlack14,
                                 ),
                               ),
                               ListTile(
@@ -249,7 +249,7 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                                                 Text(
                                                   AppMetaLabels().needHelp,
                                                   style: AppTextStyle
-                                                      .semiBoldBlack12,
+                                                      .normalBlack14,
                                                 ),
                                                 SizedBox(height: 3.0.h),
                                                 InkWell(
@@ -289,7 +289,7 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                                                                         AppMetaLabels()
                                                                             .contactCenter,
                                                                         style: AppTextStyle
-                                                                            .semiBoldGrey10,
+                                                                            .normalBlack14,
                                                                       ),
                                                                     ),
                                                                     const AppDivider(),
@@ -327,7 +327,7 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                                                                         AppMetaLabels()
                                                                             .cancel,
                                                                         style: AppTextStyle
-                                                                            .semiBoldBlue14,
+                                                                            .normalBlack14,
                                                                       ),
                                                                     ),
                                                                   ),
@@ -392,7 +392,7 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                                 ),
                                 title: Text(
                                   AppMetaLabels().help,
-                                  style: AppTextStyle.normalBlack13,
+                                  style: AppTextStyle.normalBlack14,
                                 ),
                               ),
                               ListTile(
@@ -406,7 +406,7 @@ class _TenantMoreScreenState extends State<TenantMoreScreen> {
                                 ),
                                 title: Text(
                                   AppMetaLabels().about,
-                                  style: AppTextStyle.normalBlack13,
+                                  style: AppTextStyle.normalBlack14,
                                 ),
                               ),
                             ],

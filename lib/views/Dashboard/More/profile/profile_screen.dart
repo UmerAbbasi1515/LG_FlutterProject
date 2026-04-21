@@ -294,27 +294,23 @@ class _TenantProfileState extends State<TenantProfile> {
           Text(label, style: AppTextStyle.normalGrey12),
           SizedBox(height: 0.5.h),
           isEditing
-              ? Directionality(
-                  textDirection:
-                      forceLeftToRight ? TextDirection.ltr : TextDirection.ltr,
-                  child: TextField(
-                    controller: controller,
-                    keyboardType: keyboardType,
-                    style: AppTextStyle.semiBoldBlack12,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: 1.5.h, vertical: 1.2.h),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        borderSide:
-                            BorderSide(color: Colors.grey.shade400, width: 1.5),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        borderSide:
-                            BorderSide(color: AppColors.blueColor, width: 2.0),
-                      ),
+              ? TextField(
+                  controller: controller,
+                  keyboardType: keyboardType,
+                  style: AppTextStyle.semiBoldBlack12,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.symmetric(
+                        horizontal: 1.5.h, vertical: 1.2.h),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      borderSide:
+                          BorderSide(color: Colors.grey.shade400, width: 1.5),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      borderSide:
+                          BorderSide(color: AppColors.blueColor, width: 2.0),
                     ),
                   ),
                 )

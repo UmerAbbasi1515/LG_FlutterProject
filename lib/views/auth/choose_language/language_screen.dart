@@ -26,6 +26,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
 
   @override
   void initState() {
+    gLController.getData();
     super.initState();
   }
 

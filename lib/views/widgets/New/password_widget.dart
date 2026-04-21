@@ -72,62 +72,52 @@ class PasswordFieldWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: SessionController().getLanguage() == 1
-          ? TextDirection.ltr
-          : TextDirection.rtl,
-      child: Obx(() => Directionality(
-            textDirection: SessionController().getLanguage() == 1
-                ? TextDirection.ltr
-                : TextDirection.ltr,
-            child: TextField(
-              controller: pController.passwordController,
-              onChanged: (val) {
-                pController.passwordController.text = val;
-                pController.password.value = val;
+    return Obx(() => TextField(
+          controller: pController.passwordController,
+          onChanged: (val) {
+            pController.passwordController.text = val;
+            pController.password.value = val;
+          },
+          style: AppTextStyle.semiBoldBlack14,
+          obscureText: pController.obscurePassword.value,
+          onEditingComplete: () {
+            if (pController.passwordController.text !=
+                pController.confirmPasswordController.text) {
+              pController.error.value = "Passwords do not match";
+            } else {
+              pController.error.value = "";
+            }
+          },
+          decoration: InputDecoration(
+            suffixIcon: IconButton(
+              icon: Icon(
+                pController.obscurePassword.value
+                    ? Icons.visibility_off
+                    : Icons.visibility,
+                color: AppColors.chartBlueColor,
+              ),
+              onPressed: () {
+                pController.obscurePassword.value =
+                    !pController.obscurePassword.value;
               },
-              style: AppTextStyle.semiBoldBlack14,
-              obscureText: pController.obscurePassword.value,
-              onEditingComplete: () {
-                if (pController.passwordController.text !=
-                    pController.confirmPasswordController.text) {
-                  pController.error.value = "Passwords do not match";
-                } else {
-                  pController.error.value = "";
-                }
-              },
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    pController.obscurePassword.value
-                        ? Icons.visibility_off
-                        : Icons.visibility,
-                    color: AppColors.chartBlueColor,
-                  ),
-                  onPressed: () {
-                    pController.obscurePassword.value =
-                        !pController.obscurePassword.value;
-                  },
-                ),
-                isDense: true,
-                contentPadding:
-                    EdgeInsets.symmetric(horizontal: 1.5.h, vertical: 1.2.h),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(1.w),
-                  borderSide: BorderSide(
-                    color: AppColors.chartBlueColor,
-                    width: 1,
-                  ),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(1.w),
-                  borderSide:
-                      BorderSide(color: AppColors.chartBlueColor, width: 2.0),
-                ),
+            ),
+            isDense: true,
+            contentPadding:
+                EdgeInsets.symmetric(horizontal: 1.5.h, vertical: 1.2.h),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(1.w),
+              borderSide: BorderSide(
+                color: AppColors.chartBlueColor,
+                width: 1,
               ),
             ),
-          )),
-    );
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(1.w),
+              borderSide:
+                  BorderSide(color: AppColors.chartBlueColor, width: 2.0),
+            ),
+          ),
+        ));
   }
 }
 

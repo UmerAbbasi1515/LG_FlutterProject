@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/utils/styles/text_field_style.dart';
@@ -22,14 +23,28 @@ class _ProjectSearchWidgetState extends State<ProjectSearchWidget> {
   String? _selectedYear;
 
   final Map<int, String> searchTypes = {
-    1: 'Halka',
-    2: 'UC',
-    3: 'Ward',
-    4: 'PMO',
-    5: 'Project Leader',
-    6: 'Project Name',
-    7: 'ADP Year',
+    1: AppMetaLabels().halka,
+    2: AppMetaLabels().uc,
+    3: AppMetaLabels().ward,
+    4: AppMetaLabels().pmo,
+    5: AppMetaLabels().projectLeader,
+    6: AppMetaLabels().projectName,
+    7: AppMetaLabels().adpyear,
   };
+
+  Map<int, String> getSearchTypes() {
+    bool isEnglish = SessionController().getLanguage() == 1;
+
+    return {
+      1: isEnglish ? 'Halka' : 'حلقہ',
+      2: isEnglish ? 'UC' : 'یوسی',
+      3: isEnglish ? 'Ward' : 'وارڈ',
+      4: isEnglish ? 'PMO' : 'پی ایم او',
+      5: isEnglish ? 'Project Leader' : 'پروجیکٹ لیڈر',
+      6: isEnglish ? 'Project Name' : 'پروجیکٹ کا نام',
+      7: isEnglish ? 'ADP Year' : 'اے ڈی پی سال',
+    };
+  }
 
   final ProjectController getContractsController = Get.find();
 
@@ -52,7 +67,7 @@ class _ProjectSearchWidgetState extends State<ProjectSearchWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Search project with",
+          AppMetaLabels().searchProjectWith,
           overflow: TextOverflow.ellipsis,
           style: AppTextStyle.semiBoldBlack14,
         ),
@@ -98,7 +113,7 @@ class _ProjectSearchWidgetState extends State<ProjectSearchWidget> {
                     const SizedBox(width: 4),
                     Text(
                       entry.value,
-                      style: AppTextStyle.semiBoldBlack12,
+                      style: AppTextStyle.semiBoldBlack13,
                     ),
                   ],
                 ),
@@ -125,10 +140,20 @@ class _ProjectSearchWidgetState extends State<ProjectSearchWidget> {
                         final year = (1995 + index).toString();
                         return DropdownMenuItem(
                           value: year,
-                          child: Text(
-                            year,
-                            style:
-                                AppTextStyle.normalGrey10, // optional styling
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                left: SessionController().getLanguage() == 1
+                                    ? 4.w
+                                    : 0.w,
+                                right: SessionController().getLanguage() == 1
+                                    ? 0.w
+                                    : 4.w),
+                            child: Text(
+                              year,
+                              style: AppTextStyle.normalGrey15,
+                              textAlign: TextAlign.center,
+                              // optional styling
+                            ),
                           ),
                         );
                       },

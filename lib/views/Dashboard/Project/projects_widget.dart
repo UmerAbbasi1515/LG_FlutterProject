@@ -76,7 +76,7 @@ class _ProjectsWidgetState extends State<ProjectsWidget> {
                       Obx(() {
                         return Text(
                           "${AppMetaLabels().totalProjects}  (${getContractsController.model.value.data?.length})",
-                          style: AppTextStyle.semiBoldBlack13,
+                          style: AppTextStyle.semiBoldBlack14,
                         );
                       }),
                     ],

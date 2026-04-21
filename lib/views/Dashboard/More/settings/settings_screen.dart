@@ -62,7 +62,7 @@ class TenantSettingsState extends State<TenantSettings> {
                         SizedBox(width: 2.0.h),
                         Text(
                           AppMetaLabels().biometric,
-                          style: AppTextStyle.semiBoldBlack13,
+                          style: AppTextStyle.semiBoldBlack14,
                         ),
                         const Spacer(),
                         Container(
@@ -88,8 +88,8 @@ class TenantSettingsState extends State<TenantSettings> {
                             labels: [AppMetaLabels().on, AppMetaLabels().off],
                             customTextStyles: [
                               fPOption == 0
-                                  ? AppTextStyle.semiBoldWhite10
-                                  : AppTextStyle.semiBoldBlack10,
+                                  ? AppTextStyle.semiBoldBlack14
+                                  : AppTextStyle.semiBoldBlack14,
                               AppTextStyle.semiBoldBlack10,
                             ],
                             radiusStyle: true,
@@ -118,7 +118,7 @@ class TenantSettingsState extends State<TenantSettings> {
                           SizedBox(width: 2.0.h),
                           Text(
                             AppMetaLabels().language,
-                            style: AppTextStyle.semiBoldBlack13,
+                            style: AppTextStyle.semiBoldBlack14,
                           ),
                           const Spacer(),
                           Icon(

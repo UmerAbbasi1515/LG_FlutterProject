@@ -204,7 +204,10 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                           controller
                                               .confirmPassword.value.isEmpty)
                                       ? null
-                                      : () => controller.setPassword(),
+                                      : (controller.password.value !=
+                                              controller.confirmPassword.value)
+                                          ? null
+                                          : () => controller.setPassword(),
                                 ),
                         ],
                       ],

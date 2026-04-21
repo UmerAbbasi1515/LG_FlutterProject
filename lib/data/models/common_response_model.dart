@@ -24,11 +24,13 @@
 class ApiResponse<T> {
   final int? statusCode;
   final String? message;
+  final String? messageUr;
   final T? data;
 
   ApiResponse({
     this.statusCode,
     this.message,
+    this.messageUr,
     this.data,
   });
 
@@ -41,6 +43,7 @@ class ApiResponse<T> {
     return ApiResponse<T>(
       statusCode: json['statusCode'],
       message: json['message'],
+      messageUr: json['messageUr'],
       data: rawData == null ? null : fromJsonT(rawData),
     );
   }

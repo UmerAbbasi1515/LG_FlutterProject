@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
+import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/views/Dashboard/Project/add_feedback_screen.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/button_widget.dart';
@@ -139,8 +140,7 @@ class _GetMultipleFeedbackComplaintScreenState
 
   @override
   Widget build(BuildContext context) {
-    final data = controller.feedbackListDetailModel.value.data;
-
+    setState(() {});
     return Directionality(
       textDirection: SessionController().getLanguage() == 1
           ? TextDirection.ltr
@@ -148,12 +148,13 @@ class _GetMultipleFeedbackComplaintScreenState
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Obx(() {
+          final data = controller.feedbackListDetailModel.value.data;
           return controller.temp.value
               ? SizedBox()
               : Column(
                   children: [
                     CustomAppBarDoubleBackAddFeedback(
-                      title: "Feedback / Complaint",
+                      title: AppMetaLabels().feedbackComplaint,
                       onAddPressed: () {
                         Get.to(() => AddFeedbackComplaintScreen(
                               selectproject: widget.selectproject,
@@ -185,8 +186,13 @@ class _GetMultipleFeedbackComplaintScreenState
                                       ),
                                       child: Column(
                                         children: [
-                                          buildText("Name",
-                                              data?.first?.nameEn ?? ""),
+                                          buildText(
+                                              "Name",
+                                              SessionController()
+                                                          .getLanguage() ==
+                                                      1
+                                                  ? data?.first?.nameEn ?? ""
+                                                  : data?.first?.nameUr ?? ""),
                                           buildText("Email",
                                               data?.first?.email ?? ""),
                                           buildText("Phone",
@@ -232,7 +238,7 @@ class _GetMultipleFeedbackComplaintScreenState
                                             children: [
                                               // ================= TEXT =================
                                               Text(
-                                                "Description",
+                                                AppMetaLabels().description,
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -256,7 +262,9 @@ class _GetMultipleFeedbackComplaintScreenState
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          const Text("Images",
+                                                          Text(
+                                                              AppMetaLabels()
+                                                                  .image,
                                                               style: TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -342,7 +350,9 @@ class _GetMultipleFeedbackComplaintScreenState
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          const Text("Videos",
+                                                          Text(
+                                                              AppMetaLabels()
+                                                                  .video,
                                                               style: TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -395,7 +405,7 @@ class _GetMultipleFeedbackComplaintScreenState
                                               // ================= AUDIO =================
                                               if (media.any((e) =>
                                                   e.mediaType == 'audio')) ...[
-                                                const Text("Audio",
+                                                Text(AppMetaLabels().audio,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold)),
@@ -428,8 +438,10 @@ class _GetMultipleFeedbackComplaintScreenState
                                                         ),
                                                         title: Text(
                                                           isCurrent && isPlaying
-                                                              ? "Playing..."
-                                                              : "Play Audio",
+                                                              ? AppMetaLabels()
+                                                                  .playing
+                                                              : AppMetaLabels()
+                                                                  .playAudio,
                                                         ),
                                                         onTap: () {
                                                           playAudioFromUrl(url);
@@ -450,8 +462,8 @@ class _GetMultipleFeedbackComplaintScreenState
                                       child: SizedBox(
                                         width: 60.w,
                                         child: ButtonWidgetPermBlue(
-                                          buttonText:
-                                              "Add More Feedback/Complaint",
+                                          buttonText: AppMetaLabels()
+                                              .addMoreFeedbackComplaint,
                                           onPress: () {
                                             Get.to(() =>
                                                 AddFeedbackComplaintScreen(

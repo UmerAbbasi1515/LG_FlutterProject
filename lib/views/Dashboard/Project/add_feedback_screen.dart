@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
+import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/loading_indicator_blue.dart';
@@ -32,10 +33,7 @@ class AddFeedbackComplaintScreen extends StatefulWidget {
 class _AddFeedbackComplaintScreenState extends State<AddFeedbackComplaintScreen>
     with TickerProviderStateMixin {
   final controller = Get.put(ProjectController());
-  final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final phoneController = TextEditingController();
-  final complaintController = TextEditingController();
+ 
   final ImagePicker picker = ImagePicker();
 
   // #region Pick Image
@@ -221,25 +219,32 @@ class _AddFeedbackComplaintScreenState extends State<AddFeedbackComplaintScreen>
 
   // #endregion
 
-  @override
-  void initState() {
-    super.initState();
-    _blinkController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1))
-          ..repeat();
-    _waveController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 800))
-          ..repeat();
+@override
+void initState() {
+  super.initState();
 
-    nameController.text = SessionController().getLanguage() == 1
-        ? SessionController().getUser().nameEn ?? ""
-        : SessionController().getUser().nameUr ?? "";
-    emailController.text = SessionController().getUser().email ?? "";
-    phoneController.text = SessionController().getUser().phone ?? "";
-    imageFile = null;
-    videoFile = null;
-    audioFile = null;
-  }
+  _blinkController =
+      AnimationController(vsync: this, duration: const Duration(seconds: 1))
+        ..repeat();
+
+  _waveController =
+      AnimationController(vsync: this, duration: const Duration(milliseconds: 800))
+        ..repeat();
+
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    final user = SessionController().getUser();
+
+    setState(() {
+     controller. nameController.text = SessionController().getLanguage() == 1
+          ? (user.nameEn ?? "")
+          : (user.nameUr ?? "");
+
+      controller.emailController.text = user.email ?? "";
+      controller.phoneController.text = user.phone ?? "";
+    });
+  });
+}
+
 
   @override
   void dispose() {
@@ -261,25 +266,26 @@ class _AddFeedbackComplaintScreenState extends State<AddFeedbackComplaintScreen>
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            CustomAppBar2(title: "Feedback / Complaint"),
+            CustomAppBar2(title: AppMetaLabels().feedbackComplaint),
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.all(3.w),
                   child: Column(
                     children: [
-                      buildTextField("Name", nameController),
-                      buildTextField("Email", emailController),
-                      buildTextField("Phone / WhatsApp", phoneController),
+                      buildTextField(AppMetaLabels().name, controller.nameController),
+                      buildTextField(AppMetaLabels().email, controller.emailController),
+                      buildTextField(
+                          AppMetaLabels().whatsappPhone, controller.phoneController),
                       buildTextFieldComplaint(
-                          "Write complaint...", complaintController,
+                          AppMetaLabels().writeComplaint, controller.complaintController,
                           maxLines: 5),
 
                       SizedBox(height: 2.h),
 
                       // #region Image
                       ButtonWidgetPermBlueIcon(
-                        buttonText: "Upload Image",
+                        buttonText: AppMetaLabels().uploadImage,
                         onPress: _showImageSourceDialog,
                         icon: Icons.image_outlined,
                       ),
@@ -363,7 +369,7 @@ class _AddFeedbackComplaintScreenState extends State<AddFeedbackComplaintScreen>
 
                       // #region Video
                       ButtonWidgetPermBlueIcon(
-                        buttonText: "Upload Video",
+                        buttonText: AppMetaLabels().uploadVideo,
                         onPress: _showVideoSourceDialog,
                         icon: Icons.videocam_outlined,
                       ),
@@ -441,27 +447,30 @@ class _AddFeedbackComplaintScreenState extends State<AddFeedbackComplaintScreen>
                         return controller.loadingProjectsData.value
                             ? LoadingIndicatorBlue()
                             : ButtonWidgetPermBlue(
-                                buttonText: "Submit",
+                                buttonText: AppMetaLabels().submit,
                                 onPress: () {
                                   // Mandatory fields validation
-                                  if (nameController.text.trim().isEmpty) {
+                                  if (controller.nameController.text.trim().isEmpty) {
                                     SnakBarWidget.getSnackBarError(
-                                        "Error", "Name is required");
+                                        AppMetaLabels().error,
+                                        AppMetaLabels().nameRequired);
                                     return;
                                   }
-                                  if (emailController.text.trim().isEmpty) {
+                                  if (controller.emailController.text.trim().isEmpty) {
                                     SnakBarWidget.getSnackBarError(
-                                        "Error", "Email is required");
+                                        AppMetaLabels().error,
+                                        AppMetaLabels().emailRequired);
                                     return;
                                   }
-                                  if (phoneController.text.trim().isEmpty) {
+                                  if (controller.phoneController.text.trim().isEmpty) {
                                     SnakBarWidget.getSnackBarError(
-                                        "Error", "Phone is required");
+                                        AppMetaLabels().error,
+                                        AppMetaLabels().phoneRequired);
                                     return;
                                   }
 
                                   // At least one of these must be provided
-                                  final bool hasText = complaintController.text
+                                  final bool hasText = controller.complaintController.text
                                       .trim()
                                       .isNotEmpty;
                                   final bool hasImage = imageFile != null;
@@ -472,20 +481,21 @@ class _AddFeedbackComplaintScreenState extends State<AddFeedbackComplaintScreen>
                                       !hasImage &&
                                       !hasVideo &&
                                       !hasAudio) {
-                                    SnakBarWidget.getSnackBarError("Error",
-                                        "Please provide at least one of: text, image, video, or audio");
+                                    SnakBarWidget.getSnackBarError(
+                                        AppMetaLabels().error,
+                                        AppMetaLabels().mediaRequiredMessage);
                                     return;
                                   }
 
                                   FeedBackRequestModel feedbackRequestModel =
                                       FeedBackRequestModel(
-                                    name: nameController.text,
-                                    email: emailController.text,
-                                    phone: phoneController.text,
+                                    name: controller.nameController.text,
+                                    email:controller. emailController.text,
+                                    phone: controller.phoneController.text,
                                     projectId:
                                         widget.selectproject.id.toString(),
                                     complaintFeedbackText:
-                                        complaintController.text,
+                                        controller.complaintController.text,
                                     videoFile: videoFile,
                                     audioFile: audioFile,
                                     imageFile: imageFile,
@@ -677,10 +687,10 @@ class _AddFeedbackComplaintScreenState extends State<AddFeedbackComplaintScreen>
             ),
             label: Text(
               isRecording
-                  ? "Stop recording"
+                  ? AppMetaLabels().stopRecording
                   : isDone
-                      ? "Record again"
-                      : "Start recording",
+                      ? AppMetaLabels().recordAgain
+                      : AppMetaLabels().startRecording,
               style: TextStyle(
                 color: isRecording ? Colors.red.shade800 : Colors.white,
               ),
@@ -798,7 +808,8 @@ class _AddFeedbackComplaintScreenState extends State<AddFeedbackComplaintScreen>
       child: TextField(
         controller: controller,
         maxLines: maxLines,
-        enabled: false,
+        enabled: true,
+        readOnly: true,
         decoration: InputDecoration(
           hintText: hint,
           border: OutlineInputBorder(

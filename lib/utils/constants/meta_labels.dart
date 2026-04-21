@@ -38,6 +38,12 @@ class AppMetaLabels {
       : 'براہ کرم اپنا فون نمبر درج کریں۔';
   String password =
       SessionController().getLanguage() == 1 ? 'Password' : 'پاس ورڈ';
+  String passwordDoNotMatch = SessionController().getLanguage() == 1
+      ? 'Passwords do not match'
+      : 'پاس ورڈز مماثل نہیں ہیں۔';
+  String confirmPasswordRequired = SessionController().getLanguage() == 1
+      ? '"Confirm password required"'
+      : "پاس ورڈ کی ضرورت کی تصدیق کریں";
   String invalidResponse =
       SessionController().getLanguage() == 1 ? 'Invalid Response' : 'غلط جواب';
   String appName = SessionController().getLanguage() == 1
@@ -263,4 +269,96 @@ class AppMetaLabels {
       : "ڈیوائس بلاک ہے براہ کرم انتظار کریں";
   String noService =
       SessionController().getLanguage() == 1 ? 'No Service' : "کوئی سروس نہیں";
+  String halka = SessionController().getLanguage() == 1 ? 'Halka' : 'حلقہ';
+  String uc = SessionController().getLanguage() == 1 ? 'UC' : 'یوسی';
+  String ward = SessionController().getLanguage() == 1 ? 'Ward' : 'وارڈ';
+  String pmo = SessionController().getLanguage() == 1 ? 'PMO' : 'پی ایم او';
+  String projectLeader = SessionController().getLanguage() == 1
+      ? 'Project Leader'
+      : 'پروجیکٹ لیڈر';
+  String projectName = SessionController().getLanguage() == 1
+      ? 'Project Name'
+      : 'پروجیکٹ کا نام';
+  String adpyear =
+      SessionController().getLanguage() == 1 ? 'ADP Year' : 'اے ڈی پی سال';
+  String searchProjectWith = SessionController().getLanguage() == 1
+      ? 'Search project with'
+      : 'پروجیکٹ تلاش کریں';
+  String projectDetail = SessionController().getLanguage() == 1
+      ? 'Project Detail'
+      : 'پروجیکٹ کی تفصیل';
+  String location =
+      SessionController().getLanguage() == 1 ? 'Location' : 'مقام';
+
+  String adpFinancialYear = SessionController().getLanguage() == 1
+      ? 'ADP Financial Year'
+      : 'اے ڈی پی مالی سال';
+  String committeeMember = SessionController().getLanguage() == 1
+      ? 'Committee Member'
+      : 'کمیٹی ممبر';
+  String viewFeedbackComplaint = SessionController().getLanguage() == 1
+      ? 'View Feedback/Complaint'
+      : 'فیڈبیک / شکایت دیکھیں';
+  String feedbackComplaint = SessionController().getLanguage() == 1
+      ? 'Feedback / Complaint'
+      : 'فیڈبیک / شکایت';
+  String unionCouncil =
+      SessionController().getLanguage() == 1 ? 'Union Council' : 'یونین کونسل';
+  String image = SessionController().getLanguage() == 1 ? 'Image' : 'تصویر';
+
+  String video = SessionController().getLanguage() == 1 ? 'Video' : 'ویڈیو';
+
+  String audio = SessionController().getLanguage() == 1 ? 'Audio' : 'آڈیو';
+  String playing =
+      SessionController().getLanguage() == 1 ? 'Playing...' : 'چل رہا ہے...';
+  String addMoreFeedbackComplaint = SessionController().getLanguage() == 1
+      ? 'Add More Feedback/Complaint'
+      : 'مزید فیڈبیک / شکایت شامل کریں';
+  String writeComplaint = SessionController().getLanguage() == 1
+      ? 'Write complaint...'
+      : 'شکایت لکھیں...';
+
+  String whatsappPhone = SessionController().getLanguage() == 1
+      ? 'WhatsApp / Phone'
+      : 'واٹس ایپ / فون';
+  String playAudio =
+      SessionController().getLanguage() == 1 ? 'Play Audio' : 'آڈیو چلائیں';
+  String uploadImage = SessionController().getLanguage() == 1
+      ? 'Upload Image'
+      : 'تصویر اپ لوڈ کریں';
+
+  String uploadVideo = SessionController().getLanguage() == 1
+      ? 'Upload Video'
+      : 'ویڈیو اپ لوڈ کریں';
+
+  String uploadAudio = SessionController().getLanguage() == 1
+      ? 'Upload Audio'
+      : 'آڈیو اپ لوڈ کریں';
+  String submit =
+      SessionController().getLanguage() == 1 ? 'Submit' : 'جمع کریں';
+  String startRecording = SessionController().getLanguage() == 1
+      ? 'Start recording'
+      : 'ریکارڈ شروع کریں';
+
+  String stopRecording = SessionController().getLanguage() == 1
+      ? 'Stop recording'
+      : 'ریکارڈنگ بند کریں';
+
+  String recordAgain = SessionController().getLanguage() == 1
+      ? 'Record again'
+      : 'دوبارہ ریکارڈ کریں';
+  String mediaRequiredMessage = SessionController().getLanguage() == 1
+      ? 'Please provide at least one of: text, image, video, or audio'
+      : 'براہ کرم کم از کم ایک چیز فراہم کریں: متن، تصویر، ویڈیو یا آڈیو';
+  String nameRequired = SessionController().getLanguage() == 1
+      ? 'Name is required'
+      : 'نام ضروری ہے';
+
+  String emailRequired = SessionController().getLanguage() == 1
+      ? 'Email is required'
+      : 'ای میل ضروری ہے';
+
+  String phoneRequired = SessionController().getLanguage() == 1
+      ? 'Phone is required'
+      : 'فون ضروری ہے';
 }
