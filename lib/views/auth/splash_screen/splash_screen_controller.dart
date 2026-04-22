@@ -60,8 +60,7 @@ class SplashScreenController extends GetxController {
       if (isBlocked) {
         Get.to(() => BlockedDeviceScreen());
       } else {
-        //  if (!setLanguage) {
-        if (setLanguage) {
+        if (!setLanguage) {
           await Get.to(() => const LanguageScreen(
                 cont: true,
                 loggedIn: false,
