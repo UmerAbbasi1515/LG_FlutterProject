@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/data/helpers/base_client.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
@@ -27,11 +28,11 @@ class ProfileController extends GetxController {
 
     // If only one name → return first letter
     if (parts.length == 1) {
-      return parts[0][0].toUpperCase();
+      return parts[0].characters.first.toUpperCase();
     }
 
     // If multiple names → take first letter of each word
-    String initials = parts.map((e) => e[0].toUpperCase()).join();
+    String initials = parts.map((e) => e.characters.first.toUpperCase()).join();
 
     return initials;
   }
@@ -46,10 +47,16 @@ class ProfileController extends GetxController {
       var result = await ProfileRepository.getProfile();
       if (result is ApiResponse<UserModel>) {
         error.value = '';
-        if (result.message == "user data found") {
+        if (result.message == "user profile data found") {
           model.value = result;
           SessionController().nameEn = result.data?.nameEn;
           SessionController().nameUr = result.data?.nameUr;
+        } else {
+          SnakBarWidget.getSnackBarErrorBlue(
+              AppMetaLabels().error,
+              SessionController().getLanguage() == 1
+                  ? result.message ?? ""
+                  : result.messageUr ?? "");
         }
         update();
       } else {
@@ -76,15 +83,20 @@ class ProfileController extends GetxController {
           await ProfileRepository.updateProfile(name, phone, email, address);
       if (result is ApiResponse<CommonMessageModel>) {
         error.value = '';
-        if (result.message == "Success" &&
-            result.data?.message == "Profile updated sucessfully") {
+        if (result.message != "Success" &&
+            result.data?.message != "Profile updated sucessfully") {
+          SnakBarWidget.getSnackBarErrorBlue(
+              AppMetaLabels().error,
+              SessionController().getLanguage() == 1
+                  ? result.data?.message ?? ""
+                  : result.data?.messageUr ?? "");
+        } else {
           SnakBarWidget.getSnackBarErrorBlue(
               AppMetaLabels().error,
               SessionController().getLanguage() == 1
                   ? result.data?.message ?? ""
                   : result.data?.messageUr ?? "");
         }
-        update();
       } else {
         SnakBarWidget.getSnackBarErrorBlue(
             AppMetaLabels().error,

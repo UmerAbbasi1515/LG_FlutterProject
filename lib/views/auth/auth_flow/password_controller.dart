@@ -56,7 +56,7 @@ class PasswordController extends GetxController {
     return "$start****$end";
   }
 
-  var passwordSetModel = ApiResponse<PasswordSetData>().obs;
+  var passwordSetModel = ApiResponse<CommonMessageModel>().obs;
   Future<void> setPassword() async {
     bool isInternetConnected = await BaseClientClass.isInternetConnected();
     if (!isInternetConnected) {
@@ -68,7 +68,7 @@ class PasswordController extends GetxController {
       var mobile = SessionController().getPhone();
       var result =
           await CommonRepository.setPassword(mobile, passwordController.text);
-      if (result is ApiResponse<PasswordSetData>) {
+      if (result is ApiResponse<CommonMessageModel>) {
         passwordSetModel.value = result;
 
         if (passwordSetModel.value.message == "Password update successfull" &&
@@ -130,8 +130,8 @@ class PasswordController extends GetxController {
             SnakBarWidget.getSnackBarErrorBlue(
                 AppMetaLabels().error,
                 SessionController().getLanguage() == 1
-                    ? passwordSetModel.value.message ?? ""
-                    : passwordSetModel.value.messageUr ?? "");
+                    ? loginWithPassModel.value.message ?? ""
+                    : loginWithPassModel.value.messageUr ?? "");
           }
           isLoading.value = false;
         } else {
@@ -139,8 +139,8 @@ class PasswordController extends GetxController {
           SnakBarWidget.getSnackBarErrorBlue(
               AppMetaLabels().error,
               SessionController().getLanguage() == 1
-                  ? passwordSetModel.value.message ?? ""
-                  : passwordSetModel.value.messageUr ?? "");
+                  ? loginWithPassModel.value.message ?? ""
+                  : loginWithPassModel.value.messageUr ?? "");
         }
       } else {
         errorWhileApiCall.value = result;
@@ -148,16 +148,16 @@ class PasswordController extends GetxController {
         SnakBarWidget.getSnackBarErrorBlue(
             AppMetaLabels().error,
             SessionController().getLanguage() == 1
-                ? passwordSetModel.value.message ?? ""
-                : passwordSetModel.value.messageUr ?? "");
+                ? loginWithPassModel.value.message ?? ""
+                : loginWithPassModel.value.messageUr ?? "");
       }
     } catch (e) {
       isLoading.value = false;
       SnakBarWidget.getSnackBarErrorBlue(
           AppMetaLabels().error,
           SessionController().getLanguage() == 1
-              ? passwordSetModel.value.message ?? ""
-              : passwordSetModel.value.messageUr ?? "");
+              ? loginWithPassModel.value.message ?? ""
+              : loginWithPassModel.value.messageUr ?? "");
     }
   }
 

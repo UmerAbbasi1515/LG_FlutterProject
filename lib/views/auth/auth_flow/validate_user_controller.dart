@@ -377,7 +377,7 @@ class ValidateFirebaseUserController extends GetxController {
           }
 
           loadingData.value = false;
-          if (isPasswordSetValue == "") {
+          if (isPasswordSetValue != "") {
             await verifyPhone(SessionController().getPhone() ?? "");
           } else {
             Get.offAll(

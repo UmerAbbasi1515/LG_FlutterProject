@@ -50,12 +50,12 @@ class AuthServices {
       final jsonData = jsonDecode(response.body);
 
       if (jsonData is Map<String, dynamic> && jsonData['data'] != null) {
-        return ApiResponse<OtpData>.fromJson(
+        return ApiResponse<CommonMessageModel>.fromJson(
           jsonData,
-          (data) => OtpData.fromJson(data),
+          (data) => CommonMessageModel.fromJson(data),
         );
       } else {
-        return ApiResponse<OtpData>(
+        return ApiResponse<CommonMessageModel>(
           data: null,
           message: jsonData['message']?.toString() ?? "Invalid response",
           statusCode: jsonData['statusCode'],
@@ -77,12 +77,12 @@ class AuthServices {
       final jsonData = jsonDecode(response.body);
 
       if (jsonData is Map<String, dynamic> && jsonData['data'] != null) {
-        return ApiResponse<PasswordSetData>.fromJson(
+        return ApiResponse<CommonMessageModel>.fromJson(
           jsonData,
-          (data) => PasswordSetData.fromJson(data),
+          (data) => CommonMessageModel.fromJson(data),
         );
       } else {
-        return ApiResponse<PasswordSetData>(
+        return ApiResponse<CommonMessageModel>(
           data: null,
           message: jsonData['message']?.toString() ?? "Invalid response",
           statusCode: jsonData['statusCode'],

@@ -5,7 +5,7 @@ import 'package:localgovernment_project/data/models/project_model/project_model.
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
 import 'package:localgovernment_project/views/Dashboard/Project/add_feedback_screen.dart';
-import 'package:localgovernment_project/views/Dashboard/Project/get_multiplefeedback_screen.dart';
+import 'package:localgovernment_project/views/Dashboard/Project/get_feedback_screen.dart';
 import 'package:localgovernment_project/views/Dashboard/Project/project_controller.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/button_widget.dart';
 import 'package:localgovernment_project/views/widgets/common_widgets/divider_widget.dart';
@@ -280,19 +280,20 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                                               buttonText: AppMetaLabels()
                                                   .viewFeedbackComplaint,
                                               onPress: () {
+                                                // Get.to(() =>
+                                                // GetMultipleFeedbackComplaintScreen(
+                                                //     projectId: widget
+                                                //         .selectedProject.id
+                                                //         .toString(),
+                                                //     selectproject: widget
+                                                //         .selectedProject));
                                                 Get.to(() =>
-                                                    GetMultipleFeedbackComplaintScreen(
+                                                    GetFeedbackComplaintScreen(
                                                         projectId: widget
                                                             .selectedProject.id
                                                             .toString(),
                                                         selectproject: widget
                                                             .selectedProject));
-                                                // Get.to(() =>
-                                                //     GetFeedbackComplaintScreen(
-                                                //       projectId: widget
-                                                //           .selectedProject.id
-                                                //           .toString(),
-                                                //     ));
                                               },
                                             ),
                                           ),

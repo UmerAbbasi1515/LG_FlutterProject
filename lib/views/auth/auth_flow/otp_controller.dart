@@ -21,7 +21,7 @@ import 'package:localgovernment_project/views/auth/blocked_device/block_device_s
 import 'package:localgovernment_project/views/common/no_internet_screen.dart';
 
 class OTPController extends GetxController {
-  var model = ApiResponse<OtpData>().obs;
+  var model = ApiResponse<CommonMessageModel>().obs;
   var validateUserModel = ApiResponse<OtpData>().obs;
   RxBool validOTP = true.obs;
   RxBool hasError = false.obs;
@@ -58,28 +58,14 @@ class OTPController extends GetxController {
     }
     var result =
         await CommonRepository.verifyOtp(otp, otpCodeForVerifyOTP, status);
-    if (result is ApiResponse<OtpData>) {
+    if (result is ApiResponse<CommonMessageModel>) {
       model.value = result;
 
-      if (model.value.message != "user verification failed" &&
-          model.value.data?.user != null) {
+      if (model.value.message != "user verification failed") {
         validOTP.value = true;
         changeColor = AppColors.whiteColor;
-
-        ////////////////////////////
-        /// SessionController ///
-        ////////////////////////////
-        SessionController().setUser(model.value.data?.user);
-        SessionController().setLoginToken(model.value.data?.token);
-        SessionController().setToken(model.value.data?.token);
         var phone = SessionController().getPhone();
         SessionController().setPhone(phone);
-
-        /////////////////////////////////////
-        /// GlobalPreferencesEncrypted ///
-        ////////////////////////////////////
-        saveDataLocally();
-
         Get.off(() => PasswordScreen(
               isPasswordSet: SessionController().isPasswordSet.obs,
             ));
@@ -104,38 +90,38 @@ class OTPController extends GetxController {
     loadingData.value = false;
   }
 
-  void saveDataLocally() async {
-    var phone = SessionController().getPhone();
-    GlobalPreferencesEncrypted.setString(
-      GlobalPreferencesLabels.phoneNumber,
-      phone ?? "",
-    );
+  // void saveDataLocally() async {
+  //   var phone = SessionController().getPhone();
+  //   GlobalPreferencesEncrypted.setString(
+  //     GlobalPreferencesLabels.phoneNumber,
+  //     phone ?? "",
+  //   );
 
-    GlobalPreferencesEncrypted.setString(
-      GlobalPreferencesLabels.loginToken,
-      model.value.data?.token ?? "",
-    );
+  //   GlobalPreferencesEncrypted.setString(
+  //     GlobalPreferencesLabels.loginToken,
+  //     model.value.data?.token ?? "", 
+  //   );
 
-    GlobalPreferencesEncrypted.setString(
-      GlobalPreferencesLabels.userName,
-      model.value.data?.user.nameEn ?? "",
-    );
+  //   GlobalPreferencesEncrypted.setString(
+  //     GlobalPreferencesLabels.userName,
+  //     model.value.data?.user.nameEn ?? "",
+  //   );
 
-    GlobalPreferencesEncrypted.setString(
-      GlobalPreferencesLabels.userNameAr,
-      model.value.data?.user.nameUr ?? "",
-    );
+  //   GlobalPreferencesEncrypted.setString(
+  //     GlobalPreferencesLabels.userNameAr,
+  //     model.value.data?.user.nameUr ?? "",
+  //   );
 
-    GlobalPreferencesEncrypted.setString(
-      GlobalPreferencesLabels.userID,
-      model.value.data?.user.id.toString() ?? "",
-    );
+  //   GlobalPreferencesEncrypted.setString(
+  //     GlobalPreferencesLabels.userID,
+  //     model.value.data?.user.id.toString() ?? "",
+  //   );
 
-    GlobalPreferences.setbool(
-      GlobalPreferencesLabels.isLoginBool,
-      true,
-    );
-  }
+  //   GlobalPreferences.setbool(
+  //     GlobalPreferencesLabels.isLoginBool,
+  //     true,
+  //   );
+  // }
 
   //////////////////////////////////////////
   /////   _getDeviceDetails

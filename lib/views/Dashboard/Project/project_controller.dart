@@ -148,6 +148,12 @@ class ProjectController extends GetxController {
                 projectId: feebackrquestModel.projectId.toString(),
                 selectproject: selectedProject,
               ));
+        } else {
+          SnakBarWidget.getSnackBarErrorBlue(
+              AppMetaLabels().error,
+              SessionController().getLanguage() == 1
+                  ? addFeedbackModel.value.data?.message ?? ""
+                  : addFeedbackModel.value.data?.messageUr ?? "");
         }
         update();
       } else {

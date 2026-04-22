@@ -13,13 +13,13 @@ class ValidateUserModel {
   }
 }
 
-class PasswordSetData {
+class PasswordSetData1 {
   final String message;
 
-  PasswordSetData({required this.message});
+  PasswordSetData1({required this.message});
 
-  factory PasswordSetData.fromJson(Map<String, dynamic> json) {
-    return PasswordSetData(
+  factory PasswordSetData1.fromJson(Map<String, dynamic> json) {
+    return PasswordSetData1(
       message: json['message'] ?? '',
     );
   }
