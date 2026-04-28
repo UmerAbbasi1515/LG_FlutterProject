@@ -84,9 +84,19 @@ class ProjectController extends GetxController {
       var result =
           await ProjectRepository.getProjectsWithFilter(searchType, search);
       if (result is ApiResponse<List<ProjectVM>>) {
-        error.value = '';
-        model.value = result;
-        update();
+        if (result.message == "Projects data not found") {
+          SnakBarWidget.getSnackBarError(
+              AppMetaLabels().error,
+              SessionController().getLanguage() == 1
+                  ? result.message ?? ""
+                  : result.messageUr ?? "");
+          error.value = SessionController().getLanguage() == 1
+              ? result.message ?? ""
+              : result.messageUr ?? "";
+        } else {
+          error.value = '';
+          model.value = result;
+        }
       } else {
         error.value = result;
       }

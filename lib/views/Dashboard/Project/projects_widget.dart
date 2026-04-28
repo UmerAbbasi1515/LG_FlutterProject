@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:localgovernment_project/data/helpers/session_controller.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
-import 'package:localgovernment_project/utils/styles/colors.dart';
 import 'package:localgovernment_project/utils/styles/text_styles.dart';
 import 'package:localgovernment_project/views/Dashboard/Project/project_controller.dart';
 import 'package:localgovernment_project/views/Dashboard/Project/project_detail.dart';
@@ -21,7 +20,7 @@ class ProjectsWidget extends StatefulWidget {
 }
 
 class _ProjectsWidgetState extends State<ProjectsWidget> {
-  final ProjectController getContractsController = Get.find();
+  final ProjectController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +32,7 @@ class _ProjectsWidgetState extends State<ProjectsWidget> {
       ),
       child: Column(
         children: [
+          // ================= SEARCH BOX =================
           Padding(
             padding: EdgeInsets.only(bottom: 1.h),
             child: Container(
@@ -53,6 +53,8 @@ class _ProjectsWidgetState extends State<ProjectsWidget> {
               child: ProjectSearchWidget(),
             ),
           ),
+
+          // ================= MAIN BOX =================
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -68,220 +70,163 @@ class _ProjectsWidgetState extends State<ProjectsWidget> {
             ),
             child: Column(
               children: [
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 2.h, horizontal: 3.5.w),
-                  child: Row(
-                    children: [
-                      Obx(() {
-                        return Text(
-                          "${AppMetaLabels().totalProjects}  (${getContractsController.model.value.data?.length})",
+                // ================= HEADER =================
+                Obx(() {
+                  final count = controller.model.value.data?.length ?? 0;
+
+                  return Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 2.h, horizontal: 3.5.w),
+                    child: Row(
+                      children: [
+                        Text(
+                          "${AppMetaLabels().totalProjects} ($count)",
                           style: AppTextStyle.semiBoldBlack14,
-                        );
-                      }),
-                    ],
-                  ),
-                ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+
                 Padding(
                   padding: EdgeInsets.only(bottom: 2.h, left: 5.h, right: 5.h),
                   child: const AppDivider(),
                 ),
+
+                // ================= LOADING =================
                 Obx(() {
-                  return getContractsController.loadingProjectsData.value ==
-                          true
-                      ? SizedBox(
-                          height: 10.h,
-                          width: 6.h,
-                          child: Center(
-                            child: const LoadingIndicatorBlue(),
-                          ),
-                        )
-                      : getContractsController.error.value != '' ||
-                              getContractsController.model.value.data!.isEmpty
-                          ? AppErrorWidget(
-                              errorText: AppMetaLabels().noDatafound,
-                            )
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: getContractsController
-                                  .model.value.data!.length,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () async {
-                                    await Get.to(() => ProjectDetailScreen(
-                                          selectedProject:
-                                              getContractsController
-                                                  .model.value.data![index],
-                                        ));
-                                  },
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 3.5.w, vertical: 1.5.h),
-                                        child: Row(
+                  if (controller.loadingProjectsData.value) {
+                    return SizedBox(
+                      height: 10.h,
+                      child: const Center(
+                        child: LoadingIndicatorBlue(),
+                      ),
+                    );
+                  }
+                  return const SizedBox();
+                }),
+
+                // ================= LIST / ERROR =================
+                Obx(() {
+                  final data = controller.model.value.data ?? [];
+
+                  if (controller.error.value.isNotEmpty || data.isEmpty) {
+                    return Padding(
+                      padding: EdgeInsets.all(6.h),
+                      child: AppErrorWidget(
+                        errorText: AppMetaLabels().noDatafound,
+                      ),
+                    );
+                  }
+
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      final item = data[index];
+
+                      return InkWell(
+                        onTap: () async {
+                          await Get.to(() => ProjectDetailScreen(
+                                selectedProject: item,
+                              ));
+                        },
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 3.5.w, vertical: 1.5.h),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 78.0.w,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // NAME + YEAR
+                                        Row(
                                           children: [
                                             SizedBox(
-                                              // height: 12.0.h,
-                                              width: 78.0.w,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 50.0.w,
-                                                        child: Text(
-                                                          SessionController()
-                                                                      .getLanguage() ==
-                                                                  1
-                                                              ? getContractsController
-                                                                      .model
-                                                                      .value
-                                                                      .data![
-                                                                          index]
-                                                                      .nameEn ??
-                                                                  ""
-                                                              : getContractsController
-                                                                      .model
-                                                                      .value
-                                                                      .data![
-                                                                          index]
-                                                                      .nameUr ??
-                                                                  "",
-                                                          style: AppTextStyle
-                                                              .semiBoldBlack13,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      ),
-                                                      const Spacer(),
-                                                      Text(
-                                                        getContractsController
-                                                                .model
-                                                                .value
-                                                                .data![index]
-                                                                .adpYear ??
-                                                            "",
-                                                        style: AppTextStyle
-                                                            .semiBoldBlack13,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 1.0.h,
-                                                  ),
-                                                  Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment.end,
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 30.0.w,
-                                                        child: Text(
-                                                          AppMetaLabels()
-                                                              .description,
-                                                          style: AppTextStyle
-                                                              .semiBoldBlack12,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      ),
-                                                      const Spacer(),
-                                                      Container(
-                                                        alignment: Alignment
-                                                            .centerRight,
-                                                        width: 40.0.w,
-                                                        child: Text(
-                                                          SessionController()
-                                                                      .getLanguage() ==
-                                                                  1
-                                                              ? getContractsController
-                                                                      .model
-                                                                      .value
-                                                                      .data![
-                                                                          index]
-                                                                      .descriptionEn ??
-                                                                  ""
-                                                              : getContractsController
-                                                                      .model
-                                                                      .value
-                                                                      .data![
-                                                                          index]
-                                                                      .descriptionUr ??
-                                                                  "",
-                                                          style: AppTextStyle
-                                                              .semiBoldBlack13,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 1.0.h,
-                                                  ),
-                                                  Text(
-                                                    SessionController()
-                                                                .getLanguage() ==
-                                                            1
-                                                        ? getContractsController
-                                                                .model
-                                                                .value
-                                                                .data![index]
-                                                                .locationEn ??
-                                                            ""
-                                                        : getContractsController
-                                                                .model
-                                                                .value
-                                                                .data![index]
-                                                                .locationUr ??
-                                                            "",
-                                                    style: AppTextStyle
-                                                        .normalGrey12,
-                                                  ),
-                                                ],
+                                              width: 50.0.w,
+                                              child: Text(
+                                                SessionController()
+                                                            .getLanguage() ==
+                                                        1
+                                                    ? item.nameEn ?? ""
+                                                    : item.nameUr ?? "",
+                                                overflow: TextOverflow.ellipsis,
+                                                style: AppTextStyle
+                                                    .semiBoldBlack13,
                                               ),
                                             ),
-                                            Padding(
-                                              padding: EdgeInsets.only(
-                                                  right: 0.5.h, left: 2.0.h),
-                                              child: SizedBox(
-                                                width: 0.15.w,
-                                                child: Icon(
-                                                  Icons
-                                                      .arrow_forward_ios_rounded,
-                                                  color: AppColors.grey1,
-                                                  size: 20,
-                                                ),
-                                              ),
-                                            )
+                                            const Spacer(),
+                                            Text(
+                                              item.adpYear ?? "",
+                                              style:
+                                                  AppTextStyle.semiBoldBlack13,
+                                            ),
                                           ],
                                         ),
-                                      ),
-                                      getContractsController.model.value.data!
-                                                      .length -
-                                                  1 ==
-                                              index
-                                          ? SizedBox()
-                                          : Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 1.0.h, right: 1.0.h),
-                                              child: const AppDivider(),
+
+                                        SizedBox(height: 1.0.h),
+
+                                        // DESCRIPTION
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 30.0.w,
+                                              child: Text(
+                                                AppMetaLabels().description,
+                                                style: AppTextStyle
+                                                    .semiBoldBlack12,
+                                              ),
                                             ),
-                                    ],
+                                            const Spacer(),
+                                            SizedBox(
+                                              width: 40.0.w,
+                                              child: Text(
+                                                SessionController()
+                                                            .getLanguage() ==
+                                                        1
+                                                    ? item.descriptionEn ?? ""
+                                                    : item.descriptionUr ?? "",
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.right,
+                                                style: AppTextStyle
+                                                    .semiBoldBlack13,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                        SizedBox(height: 1.0.h),
+
+                                        // LOCATION
+                                        Text(
+                                          SessionController().getLanguage() == 1
+                                              ? item.locationEn ?? ""
+                                              : item.locationUr ?? "",
+                                          style: AppTextStyle.normalGrey12,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                );
-                              },
-                            );
+                                ],
+                              ),
+                            ),
+                            if (index != data.length - 1)
+                              Padding(
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: 1.0.h),
+                                child: const AppDivider(),
+                              ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
                 }),
               ],
             ),

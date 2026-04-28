@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:localgovernment_project/utils/constants/assets_path.dart';
 import 'package:localgovernment_project/utils/styles/colors.dart';
@@ -30,7 +29,7 @@ class AppErrorWidget extends StatelessWidget {
           ),
           Text(
             errorText,
-            style: AppTextStyle.semiBoldGrey10,
+            style: AppTextStyle.semiBoldGrey14,
           ),
           SizedBox(
             height: 1.h,
