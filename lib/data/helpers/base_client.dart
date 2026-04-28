@@ -109,14 +109,21 @@ class BaseClientClass {
       if (kDebugMode) {
         print('Request: ${response.request}');
         print('End: $url');
-      }
-      if (kDebugMode) {
         print('response:: ${response.statusCode}');
       }
-
       final jsonData = jsonDecode(response.body);
       if (kDebugMode) {
-        print(jsonData['message']);
+        print(jsonData['Message']);
+      }
+      if (jsonData['Message']
+          .toString()
+          .contains("Unencrypted requests are not allowed.")) {
+        SnakBarWidget.getSnackBarError(
+            AppMetaLabels().error,
+            SessionController().getLanguage() == 1
+                ? jsonData['Message']
+                : jsonData['MessageUr']);
+        return;
       }
 
       if (jsonData['message'] == 'unauthorized') {
@@ -193,6 +200,16 @@ class BaseClientClass {
       final jsonData = jsonDecode(response.body);
       if (kDebugMode) {
         print(jsonData['message']);
+      }
+      if (jsonData['Message']
+          .toString()
+          .contains("Unencrypted requests are not allowed.")) {
+        SnakBarWidget.getSnackBarError(
+            AppMetaLabels().error,
+            SessionController().getLanguage() == 1
+                ? jsonData['Message']
+                : jsonData['MessageUr']);
+        return;
       }
       if (jsonData['message'] == 'unauthorized') {
         SnakBarWidget.getSnackBarErrorBlue(
@@ -396,11 +413,15 @@ class BaseClientClass {
       }
 
       final jsonData = jsonDecode(res.body);
-      if (kDebugMode) {
-        print(jsonData);
-      }
-      if (kDebugMode) {
-        print(jsonData['message']);
+      if (jsonData['Message']
+          .toString()
+          .contains("Unencrypted requests are not allowed.")) {
+        SnakBarWidget.getSnackBarError(
+            AppMetaLabels().error,
+            SessionController().getLanguage() == 1
+                ? jsonData['Message']
+                : jsonData['MessageUr']);
+        return;
       }
       if (jsonData['message'] == 'unauthorized') {
         SnakBarWidget.getSnackBarErrorBlue(
