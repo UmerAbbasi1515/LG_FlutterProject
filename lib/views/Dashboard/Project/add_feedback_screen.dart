@@ -33,7 +33,7 @@ class AddFeedbackComplaintScreen extends StatefulWidget {
 class _AddFeedbackComplaintScreenState extends State<AddFeedbackComplaintScreen>
     with TickerProviderStateMixin {
   final controller = Get.put(ProjectController());
- 
+
   final ImagePicker picker = ImagePicker();
 
   // #region Pick Image
@@ -219,32 +219,32 @@ class _AddFeedbackComplaintScreenState extends State<AddFeedbackComplaintScreen>
 
   // #endregion
 
-@override
-void initState() {
-  super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  _blinkController =
-      AnimationController(vsync: this, duration: const Duration(seconds: 1))
-        ..repeat();
+    _blinkController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1))
+          ..repeat();
 
-  _waveController =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 800))
-        ..repeat();
+    _waveController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 800))
+      ..repeat();
 
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    final user = SessionController().getUser();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final user = SessionController().getUser();
 
-    setState(() {
-     controller. nameController.text = SessionController().getLanguage() == 1
-          ? (user.nameEn ?? "")
-          : (user.nameUr ?? "");
+      setState(() {
+        controller.nameController.text = SessionController().getLanguage() == 1
+            ? (user.nameEn ?? "")
+            : (user.nameUr ?? "");
 
-      controller.emailController.text = user.email ?? "";
-      controller.phoneController.text = user.phone ?? "";
+        controller.emailController.text = user.email ?? "";
+        controller.phoneController.text = user.phone ?? "";
+        controller.complaintController.text = "";
+      });
     });
-  });
-}
-
+  }
 
   @override
   void dispose() {
@@ -273,12 +273,14 @@ void initState() {
                   padding: EdgeInsets.all(3.w),
                   child: Column(
                     children: [
-                      buildTextField(AppMetaLabels().name, controller.nameController),
-                      buildTextField(AppMetaLabels().email, controller.emailController),
                       buildTextField(
-                          AppMetaLabels().whatsappPhone, controller.phoneController),
-                      buildTextFieldComplaint(
-                          AppMetaLabels().writeComplaint, controller.complaintController,
+                          AppMetaLabels().name, controller.nameController),
+                      buildTextField(
+                          AppMetaLabels().email, controller.emailController),
+                      buildTextField(AppMetaLabels().whatsappPhone,
+                          controller.phoneController),
+                      buildTextFieldComplaint(AppMetaLabels().writeComplaint,
+                          controller.complaintController,
                           maxLines: 5),
 
                       SizedBox(height: 2.h),
@@ -450,19 +452,25 @@ void initState() {
                                 buttonText: AppMetaLabels().submit,
                                 onPress: () {
                                   // Mandatory fields validation
-                                  if (controller.nameController.text.trim().isEmpty) {
+                                  if (controller.nameController.text
+                                      .trim()
+                                      .isEmpty) {
                                     SnakBarWidget.getSnackBarError(
                                         AppMetaLabels().error,
                                         AppMetaLabels().nameRequired);
                                     return;
                                   }
-                                  if (controller.emailController.text.trim().isEmpty) {
+                                  if (controller.emailController.text
+                                      .trim()
+                                      .isEmpty) {
                                     SnakBarWidget.getSnackBarError(
                                         AppMetaLabels().error,
                                         AppMetaLabels().emailRequired);
                                     return;
                                   }
-                                  if (controller.phoneController.text.trim().isEmpty) {
+                                  if (controller.phoneController.text
+                                      .trim()
+                                      .isEmpty) {
                                     SnakBarWidget.getSnackBarError(
                                         AppMetaLabels().error,
                                         AppMetaLabels().phoneRequired);
@@ -470,7 +478,8 @@ void initState() {
                                   }
 
                                   // At least one of these must be provided
-                                  final bool hasText = controller.complaintController.text
+                                  final bool hasText = controller
+                                      .complaintController.text
                                       .trim()
                                       .isNotEmpty;
                                   final bool hasImage = imageFile != null;
@@ -490,7 +499,7 @@ void initState() {
                                   FeedBackRequestModel feedbackRequestModel =
                                       FeedBackRequestModel(
                                     name: controller.nameController.text,
-                                    email:controller. emailController.text,
+                                    email: controller.emailController.text,
                                     phone: controller.phoneController.text,
                                     projectId:
                                         widget.selectproject.id.toString(),

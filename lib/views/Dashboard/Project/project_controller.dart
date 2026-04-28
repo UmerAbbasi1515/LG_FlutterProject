@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +10,7 @@ import 'package:localgovernment_project/data/models/common_response_model.dart';
 import 'package:localgovernment_project/data/models/project_model/project_model.dart';
 import 'package:localgovernment_project/data/repository/project_repository.dart';
 import 'package:localgovernment_project/utils/constants/meta_labels.dart';
-import 'package:localgovernment_project/views/Dashboard/Project/get_multiplefeedback_screen.dart';
+import 'package:localgovernment_project/views/Dashboard/Project/get_feedback_screen.dart';
 import 'package:localgovernment_project/views/common/no_internet_screen.dart';
 import 'package:localgovernment_project/views/widgets/snackbar_widget.dart';
 
@@ -42,6 +44,17 @@ class ProjectController extends GetxController {
     String initials = parts.map((e) => e.characters.first.toUpperCase()).join();
 
     return initials;
+  }
+
+  String getUrl(FeedbackMedia e) {
+    if (e == null) return "";
+    var url = "";
+    if (Platform.isIOS) {
+      url = e.previewUrlI ?? "";
+    } else {
+      url = e.previewUrl ?? "";
+    }
+    return url;
   }
 
   final nameController = TextEditingController();
@@ -154,7 +167,7 @@ class ProjectController extends GetxController {
               SessionController().getLanguage() == 1
                   ? addFeedbackModel.value.data?.message ?? ""
                   : addFeedbackModel.value.data?.messageUr ?? "");
-          Get.off(() => GetMultipleFeedbackComplaintScreen(
+          Get.off(() => GetFeedbackComplaintScreen(
                 projectId: feebackrquestModel.projectId.toString(),
                 selectproject: selectedProject,
               ));

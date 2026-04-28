@@ -256,8 +256,8 @@ class AppMetaLabels {
       ? 'Please do not start your phone number with zero'
       : 'براہ کرم اپنا فون نمبر صفر سے شروع نہ کریں';
   String badRequest = SessionController().getLanguage() == 1
-      ? 'Request Error'
-      : 'درخواست میں خرابی';
+      ? 'Request Error / Bad Reuquest, Make sure your are sending encrypted and correct requested body'
+      : 'درخواست میں خرابی ہے، براہ کرم یقینی بنائیں کہ آپ درست اور انکرپٹ شدہ درخواست body بھیج رہے ہیں۔';
   String notFound =
       SessionController().getLanguage() == 1 ? 'NotFound' : 'نہیں ملا';
   String anyError = SessionController().getLanguage() == 1

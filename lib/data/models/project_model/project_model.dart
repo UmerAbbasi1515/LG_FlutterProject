@@ -248,11 +248,13 @@ class FeedbackMedia {
   final String filePath;
   final String mediaType;
   final String? previewUrl;
+  final String? previewUrlI;
 
   FeedbackMedia({
     required this.filePath,
     required this.mediaType,
     required this.previewUrl,
+    required this.previewUrlI,
   });
 
   factory FeedbackMedia.fromJson(Map<String, dynamic> json) {
@@ -260,6 +262,7 @@ class FeedbackMedia {
       filePath: json['filePath'] ?? '',
       mediaType: json['mediaType'] ?? '',
       previewUrl: json['previewUrl'] ?? '',
+      previewUrlI: json['previewUrlI'] ?? '',
     );
   }
 
@@ -268,6 +271,7 @@ class FeedbackMedia {
       'filePath': filePath,
       'mediaType': mediaType,
       'previewUrl': previewUrl,
+      'previewUrlI': previewUrlI,
     };
   }
 }

@@ -171,8 +171,8 @@ class _GetFeedbackComplaintScreenState
                             padding: EdgeInsets.only(top: 20.h),
                             child: Text(
                               "No feedback found.",
-                              style: TextStyle(
-                                  fontSize: 14, color: Colors.grey),
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.grey),
                             ),
                           ),
                         )
@@ -226,7 +226,7 @@ class _GetFeedbackComplaintScreenState
                                         // ================= COMPLAINT TEXT =================
                                         buildTextComplaint(
                                           "Complaint",
-                                          data.textMessage ,
+                                          data.textMessage,
                                         ),
 
                                         SizedBox(height: 1.h),
@@ -310,7 +310,7 @@ class _GetFeedbackComplaintScreenState
                                   minScale: 0.5,
                                   maxScale: 4,
                                   child: Image.network(
-                                    e.previewUrl ?? "",
+                                    controller.getUrl(e),
                                     fit: BoxFit.contain,
                                   ),
                                 ),
@@ -332,7 +332,7 @@ class _GetFeedbackComplaintScreenState
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(
-                        e.previewUrl ?? "",
+                        controller.getUrl(e),
                         width: 40.w,
                         height: 12.h,
                         fit: BoxFit.cover,
@@ -367,7 +367,9 @@ class _GetFeedbackComplaintScreenState
               itemBuilder: (context, index) {
                 final e = videos[index];
                 return GestureDetector(
-                  onTap: () => _showVideoFromUrl(e.previewUrl ?? ""),
+                  onTap: () => _showVideoFromUrl(
+                    controller.getUrl(e),
+                  ),
                   child: Container(
                     width: 40.w,
                     margin: const EdgeInsets.only(right: 10),
@@ -411,7 +413,9 @@ class _GetFeedbackComplaintScreenState
                         : AppMetaLabels().playAudio,
                   ),
                   onTap: () {
-                    playAudioFromUrl(url);
+                    playAudioFromUrl(
+                      controller.getUrl(e),
+                    );
                     setState(() {});
                   },
                 ),

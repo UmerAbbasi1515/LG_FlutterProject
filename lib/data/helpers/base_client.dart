@@ -341,7 +341,7 @@ class BaseClientClass {
 
   static Future<dynamic> submitProjectFeedback(
       FeedBackRequestModel param) async {
-    var data = {
+    var data0 = {
       'NameEn': param.name ?? "",
       'NameUr': param.name ?? "", // adjust if needed
       'Email': param.email ?? "",
@@ -349,15 +349,20 @@ class BaseClientClass {
       'ProjectId': param.projectId ?? "",
       'TextMessage': param.complaintFeedbackText ?? "",
     };
-    // var data = {
-    //   'NameEn': encriptdatasingle(param.name).toString(),
-    //   'NameUr': encriptdatasingle(param.name).toString(), // adjust if needed
-    //   'Email': encriptdatasingle(param.email).toString(),
-    //   'Phone': encriptdatasingle(param.phone).toString(),
-    //   'ProjectId': encriptdatasingle(param.projectId.toString()).toString(),
-    //   'TextMessage': encriptdatasingle(param.complaintFeedbackText).toString(),
-    // };
-
+    var data = {
+      'NameEn': encriptdatasingle(param.name).toString(),
+      'NameUr': encriptdatasingle(param.name).toString(), // adjust if needed
+      'Email': encriptdatasingle(param.email).toString(),
+      'Phone': encriptdatasingle(param.phone).toString(),
+      'ProjectId': encriptdatasingle(param.projectId.toString()).toString(),
+      'TextMessage': param.complaintFeedbackText == ""
+          ? ""
+          : encriptdatasingle(param.complaintFeedbackText).toString(),
+    };
+    if (kDebugMode) {
+      print(data0);
+      print(data);
+    }
     String url = AppConfig().addProjectsFeedback ?? "";
 
     try {
@@ -400,40 +405,29 @@ class BaseClientClass {
 
       // ================= HEADERS =================
       String token = SessionController().getToken() ?? "";
-
       request.headers.addAll({
         'Authorization': 'Bearer $token',
       });
 
       var response = await request.send();
+      if (response.statusCode == 400) {
+        SnakBarWidget.getSnackBarError(
+            AppMetaLabels().error, AppMetaLabels().badRequest);
+        return;
+      }
+      if (response.statusCode == 401) {
+        bool isPasswordSet = await GlobalPreferences.getBool(
+                GlobalPreferencesLabels.isPasswordSet) ??
+            false;
+        Get.offAll(() => PasswordScreen(
+              isPasswordSet: isPasswordSet.toString().obs,
+            ));
+        return;
+      }
       var res = await http.Response.fromStream(response);
 
       if (kDebugMode) {
         print(res.body);
-      }
-
-      final jsonData = jsonDecode(res.body);
-      if (jsonData['Message']
-          .toString()
-          .contains("Unencrypted requests are not allowed.")) {
-        SnakBarWidget.getSnackBarError(
-            AppMetaLabels().error,
-            SessionController().getLanguage() == 1
-                ? jsonData['Message']
-                : jsonData['MessageUr']);
-        return;
-      }
-      if (jsonData['message'] == 'unauthorized') {
-        SnakBarWidget.getSnackBarErrorBlue(
-            AppMetaLabels().error, AppMetaLabels().unAuthPlzRelogin);
-        SessionController().resetSession();
-        bool isPasswordSet = await GlobalPreferences.getBool(
-                GlobalPreferencesLabels.isPasswordSet) ??
-            false;
-
-        Get.offAll(() => PasswordScreen(
-              isPasswordSet: isPasswordSet.toString().obs,
-            ));
       }
 
       return res;
